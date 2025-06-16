@@ -55,7 +55,7 @@
             </div>
 
             <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-                FOATER
+                GRUPO_7
             </footer>
         </main>
 
