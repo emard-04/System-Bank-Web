@@ -70,10 +70,16 @@ public class ServletAgregarCuentas extends HttpServlet {
         boolean exito = dao.Agregar(cuenta);
 
         // 6. Redirigir según resultado
+        String contextPath = request.getContextPath();
+        if (usuario == null) {
+            response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=UsuarioNoEncontrado");
+            return;
+        }
+
         if (exito) {
-            response.sendRedirect("cuentasAdmin.jsp?msg=CuentaAgregada");
+            response.sendRedirect(contextPath + "/AdminMode/cuentasAdmin.jsp?msg=CuentaAgregada");
         } else {
-            response.sendRedirect("cuentasAdmin_agregar.jsp?error=ErrorAlAgregar");
+            response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=ErrorAlAgregar");
         }
     }
 	
