@@ -51,7 +51,7 @@ public class Usuario {
 
 	    @Override
 	    public String toString() {
-	        return "Usuario: " + nombreUsuario + " | Persona: " + persona.getNombre() + " " + persona.getApellido() + " | Tipo: " + (tipoUsuario ? "Admin" : "Cliente");
+	        return "Usuario: " + nombreUsuario + " | Persona: " + persona.getDni() + " " + persona.getApellido() + " | Tipo: " + (tipoUsuario ? "Admin" : "Cliente");
 	    }
 	}
 

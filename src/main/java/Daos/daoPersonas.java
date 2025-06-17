@@ -11,13 +11,11 @@ import Entidades.Persona;
 import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona{
-		private final String  Agregar="insert into Personas(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia,Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
-		private final String Eliminar="Delete From Personas where Dni=?;";
+		private final String  Agregar="insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia,Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
+		private final String Eliminar="Delete From Persona where Dni=?;";
 		private final String Modificar="Update Personas set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?; ";
 		private final String ListarTodo="Select * from Persona;";
-		private final String Existe="Select * from Personas where dni=?;";
-		private final String callSpAd="CALL agregar(?,?,?);";
-		private final String callSpUp="CALL editar(?,?,?);";
+		private final String Existe="Select * from Persona where dni=?;";
 		public boolean Agregar(Persona persona) {
 			try {
 				Connection  cn=Conexion.getConexion().getSQLConnection();
@@ -156,14 +154,5 @@ public class daoPersonas implements inPersona{
 			return new Persona();
 			}
 
-		public static void main(String[] args) {
-			try {
-				daoPersonas dp=new daoPersonas();
-					ArrayList<Persona> lista=dp.ListarTodo();
-					for(Persona p: lista) {
-						System.out.println(p);
-					}
-			}catch(Exception e) {}
-		}
 }
 
