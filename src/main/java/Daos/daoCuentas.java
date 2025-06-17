@@ -13,15 +13,20 @@ import Entidades.Cuenta;
 import Entidades.Usuario;    // Necesario para el objeto Usuario dentro de Cuenta
 import Entidades.TipoCuenta; // Necesario para el objeto TipoCuenta dentro de Cuenta
 import Interfaces.Conexion;
+import Interfaces.inCuentas;
 
-public class daoCuentas {
+public class daoCuentas implements inCuentas{
     // SQL Queries adaptadas para la tabla Cuentas
     private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo) VALUES(?,?,?,?,?);";
     private final String Eliminar = "DELETE FROM Cuentas WHERE NroCuenta=?;";
     private final String Modificar = "UPDATE Cuentas SET IdUsuario=?, FechaCreacion=?, IdtipoCuenta=?, Cbu=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas;";
-    private final String Existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
-    private final String BuscarPorNroCuenta = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
+    private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
+    private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
+    
+    public  daoCuentas() {
+		// TODO Auto-generated constructor stub
+	}
 
     public boolean Agregar(Cuenta cuenta) {
         try {
@@ -89,10 +94,11 @@ public class daoCuentas {
         return cuenta;
     }
 
-    public boolean Eliminar(Cuenta cuenta) {
+    public boolean Eliminar(int nroCuenta) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = valoresQuery(cn, Eliminar, cuenta);
+            PreparedStatement ps = cn.prepareStatement("DELETE FROM Cuentas WHERE NroCuenta=?;");
+            ps.setInt(1, nroCuenta);
             if (ps.executeUpdate() > 0) {
                 cn.commit();
                 return true;
@@ -136,31 +142,35 @@ public class daoCuentas {
         return listaCuentas;
     }
 
-    public boolean existe(Cuenta cuenta) {
-        try {
+    public boolean existe(int nroCuenta) {
+    	try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = valoresQuery(cn, Existe, cuenta);
+            PreparedStatement ps = cn.prepareStatement("SELECT 1 FROM Cuentas WHERE NroCuenta=?;");
+            ps.setInt(1, nroCuenta);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
+            return rs.next();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public Cuenta BuscarPorNroCuenta(Cuenta cuenta) {
+
+	@Override
+	public Cuenta BuscarPorNro(int nroCuenta) {
+		Cuenta cue = new Cuenta();
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = valoresQuery(cn, BuscarPorNroCuenta, cuenta);
+            PreparedStatement ps = cn.prepareStatement("SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;");
+            ps.setInt(1, nroCuenta);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return valoresCuenta(rs);
+                cue = valoresCuenta(rs);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error al buscar la cuenta por número.");
         }
-        return new Cuenta(); // Retorna un objeto Cuenta vacío si no se encuentra o hay un error
-    }
+        return cue;
+	}
 }
