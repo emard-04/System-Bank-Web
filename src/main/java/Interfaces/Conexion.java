@@ -12,7 +12,7 @@ public class Conexion {
 	{
 		try
 		{
-	this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/BancoParcial","root","0606");
+	this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/bancoparcial","root","root");
 	this.connection.setAutoCommit(false);
 	}
 	catch(Exception e) {

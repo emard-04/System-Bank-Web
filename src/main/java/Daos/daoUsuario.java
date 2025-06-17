@@ -161,6 +161,29 @@ public class daoUsuario  {
         }
         return new Usuario(); // Return an empty Usuario object if not found or an error occurs
     }
+    public Usuario BuscarPorDni(String dni) {
+        Usuario usuario = null;
+        try {
+            Connection cn = Conexion.getConexion().getSQLConnection();
+            PreparedStatement ps = cn.prepareStatement(
+                "SELECT u.IdUsuario, u.NombreUsuario, u.Contraseña, u.IdPersona " +
+                "FROM Usuarios u INNER JOIN Personas p ON u.IdPersona = p.IdPersona " +
+                "WHERE p.Dni = ?;"
+            );
+            ps.setString(1, dni);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("IdUsuario"));
+                usuario.setNombreUsuario(rs.getString("NombreUsuario"));
+                usuario.setContrasena(rs.getString("Contraseña"));
+                // Podés agregar también el objeto Persona si querés
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return usuario;
+    }
 
     public Usuario Login(String nombreUsuario, String contrasena) {
         try {
@@ -177,6 +200,7 @@ public class daoUsuario  {
         }
         return null; // Return null if login fails
     }
+    
     public static void main(String[] args) {
 		daoUsuario du=new daoUsuario();
 		for(Usuario u: du.ListarTodo()) {

@@ -60,6 +60,7 @@ public class daoPersonas implements inPersona{
 		private Persona valoresPersona(ResultSet rs) {
 			Persona persona=new Persona();
 			try {
+			persona.setIdUsuario(rs.getInt("IdUsuario"));
 			persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
 			persona.setCuil(rs.getString("Cuil"));
 			persona.setNombre(rs.getString("Nombre"));
