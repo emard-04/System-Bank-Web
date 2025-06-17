@@ -32,7 +32,7 @@
             </a>
         </aside>
 
-        <main class="flex-1 flex flex-col overflow-y-auto">¿
+        <main class="flex-1 flex flex-col overflow-y-auto">
             
             <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
                 <h1 class="text-xl font-semibold text-gray-800">HEADER</h1>
@@ -40,7 +40,7 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-                <ul class="flex space-x-4">
+                <ul class="flex space-x-10 justify-center">
                     <li><a href="clientesAdmin.jsp" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
                     <li><a href="cuentasAdmin.jsp" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
                     <li><a href="prestamosAdmin.jsp" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>

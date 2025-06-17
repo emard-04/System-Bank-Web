@@ -39,10 +39,10 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-                <ul class="flex space-x-4">
+                <ul class="flex space-x-10 justify-center">
                     <li><a href="clientesAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
                     <li><a href="clientesAdmin_agregar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
-                    <li><a href="clientesAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
+                    <li><a href="clienteAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
                     <li><a href="clientesAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
                 </ul>
             </nav>

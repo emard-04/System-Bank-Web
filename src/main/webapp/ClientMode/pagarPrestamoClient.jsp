@@ -1,0 +1,128 @@
+ss<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar Préstamo - Tu Banco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
+        }
+        .profile-photo-placeholder {
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen overflow-hidden">
+    <div class="flex h-full">
+
+        <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
+            
+            <div class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+                </div>
+            
+            <div class="text-gray-800 text-center mb-6">
+                <p class="font-bold text-lg">CUENTAS</p>
+                <select name="cuenta_seleccionada" id="cuenta_seleccionada" class="mt-2 p-2 border border-gray-300 rounded-md w-full text-base bg-white">
+                    <option value="cuenta1">Nombre Apellido</option>
+                    <option value="cuenta2">Cuenta Corriente 202156</option>
+                    <option value="cuenta3">Caja de Ahorro 202157</option>
+                </select>
+                <p class="text-sm mt-2">Saldo: $$$</p>
+            </div>
+            
+            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+                Salir
+            </a>
+        </aside>
+
+        <main class="flex-1 flex flex-col overflow-y-auto">
+            
+            <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
+                <h1 class="text-xl font-semibold text-gray-800">PRESTAMOS</h1>
+                <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
+            </header>
+
+            <nav class="bg-gray-50 border-b border-gray-200 p-4">
+                <ul class="flex space-x-4">
+                    <li><a href="transferenciasClient.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
+                    <li><a href="movimientosClient.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
+                    <li><a href="prestamosClient.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
+                    <li><a href="personalClient.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
+                </ul>
+            </nav>
+
+            <nav class="bg-gray-100 border-b border-gray-200 p-3">
+                <ul class="flex space-x-4 justify-start pl-4">
+                    <li><a href="prestamosClient.jsp" class="hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pedir Préstamos</a></li>
+                    <li><a href="pagarPrestamosClient.jsp" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pagar Préstamos</a></li>
+                </ul>
+            </nav>
+
+            <div class="p-6 flex-1 flex flex-col justify-center items-center">
+                <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl text-center">
+                    <form action="PagarCuotaPrestamoServlet" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-end">
+                        
+                        <div>
+                            <label for="cuenta_a_debitar" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione una cuenta</label>
+                            <select
+                                id="cuenta_a_debitar"
+                                name="cuenta_a_debitar"
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+                                required
+                            >
+                                <option value="">-- Seleccione cuenta a debitar --</option>
+                                <option value="202156">Cuenta Corriente 202156</option>
+                                <option value="202157">Caja de Ahorro 202157</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="nro_cuota_a_pagar" class="block text-gray-700 text-lg font-semibold mb-2">Cuota a pagar</label>
+                            <input
+                                type="number"
+                                id="nro_cuota_a_pagar"
+                                name="nro_cuota_a_pagar"
+                                placeholder="Ej: 1, 2, 3..."
+                                min="1"
+                                max="36"
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                required
+                            >
+                        </div>
+                        
+                        <div>
+                            <label for="importe_cuota" class="block text-gray-700 text-lg font-semibold mb-2">Importe</label>
+                            <p id="importe_cuota" class="text-gray-900 text-2xl font-bold"> $5000.00 </p>
+                            <input type="hidden" name="importe_hardcodeado" value="5000.00"> </div>
+
+                        <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
+                            <button
+                                type="submit"
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-green focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
+                            >
+                                PAGAR
+                            </button>
+                            <button
+                                type="button"
+                                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
+                            >
+                                CANCELAR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
+                FOATER
+            </footer>
+        </main>
+
+    </div>
+</body>
+</html>

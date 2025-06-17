@@ -50,7 +50,7 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-                <ul class="flex space-x-4">
+                <ul class="flex space-x-10 justify-center">
                     <li><a href="clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
                     <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
                     <li><a href="prestamosAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
@@ -128,7 +128,7 @@
             </div>
 
             <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-                FOATER
+                GRUPO_N7
             </footer>
         </main>
 

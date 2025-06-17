@@ -3,10 +3,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	 <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Cuenta Admin - Tu Banco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
+        }
+        .profile-photo-placeholder {
+            background-size: cover;
+            background-position: center;
+        }
+        /* Estilo para inputs de solo lectura si aplica */
+        .read-only-input {
+            background-color: #e2e8f0; /* bg-gray-200 */
+            color: #4a5568; /* text-gray-700 */
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 h-screen overflow-hidden">
+    <div class="flex h-full">
 
+        <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
+            
+            <div class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+                </div>
+            
+            <h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
+            
+            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+                Salir
+            </a>
+        </aside>
+
+        <main class="flex-1 flex flex-col overflow-y-auto">
+            
+            <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
+                <h1 class="text-xl font-semibold text-gray-800">CUENTAS</h1>
+                <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
+            </header>
+
+            <nav class="bg-gray-50 border-b border-gray-200 p-4">
+                <ul class="flex space-x-10 justify-center">
+                    <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
+                    <li><a href="cuentasAdmin_agregar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
+                    <li><a href="cuentasAdmin_modificar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
+                    <li><a href="cuentasAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
+                </ul>
+            </nav>
+
+            <div class="p-6 flex-1 flex flex-col items-center">
+                <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+                    <div class="mb-8 pb-4 border-b border-gray-200 flex items-center justify-center">
+                        <label for="seleccionar_cuenta_dni" class="block text-gray-700 text-lg font-semibold mr-4">Seleccionar Nº de Cuenta:</label>
+                        <select
+                            id="seleccionar_cuenta_dni"
+                            name="seleccionar_cuenta_dni"
+                            class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white w-64"
+                            >
+                            <option value="">-- Seleccione un Nº de Cuenta --</option>
+                            <option value="202156">202156 (Cliente: 21569840)</option>
+                            <option value="202157">202157 (Cliente: 12345678)</option>
+                            <option value="202158">202158 (Cliente: 98765432)</option>
+                        </select>
+                    </div>
+
+                    <form action="ModificarCuentaServlet" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                        <input type="hidden" id="cuenta_id_modificar" name="cuenta_id_modificar" value="">
+
+                        <div>
+                            <label for="nro_cuenta_mod" class="block text-gray-700 text-lg font-semibold mb-2">Nro de Cuenta</label>
+                            <input
+                                type="text"
+                                id="nro_cuenta_mod"
+                                name="nro_cuenta_mod"
+                                placeholder=""
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg read-only-input"
+                                readonly
+                            >
+                        </div>
+                        <div>
+                            <label for="dni_cliente_mod" class="block text-gray-700 text-lg font-semibold mb-2">DNI del Cliente</label>
+                            <input
+                                type="text"
+                                id="dni_cliente_mod"
+                                name="dni_cliente_mod"
+                                placeholder=""
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                required
+                            >
+                        </div>
+                        <div>
+                            <label for="fecha_creacion_mod" class="block text-gray-700 text-lg font-semibold mb-2">Fec Creacion</label>
+                            <input
+                                type="date"
+                                id="fecha_creacion_mod"
+                                name="fecha_creacion_mod"
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+                                required
+                            >
+                        </div>
+
+                        <div class="col-span-1 md:col-span-1 flex flex-col justify-end">
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">TIPO</label>
+                            <div class="flex items-center space-x-6">
+                                <div class="flex items-center">
+                                    <input type="radio" id="cuenta_corriente_mod" name="tipo_cuenta_mod" value="Corriente" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                                    <label for="cuenta_corriente_mod" class="ml-2 text-gray-800 text-lg">Cuenta Corriente</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="caja_ahorro_mod" name="tipo_cuenta_mod" value="Ahorro" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                    <label for="caja_ahorro_mod" class="ml-2 text-gray-800 text-lg">Caja de Ahorro</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="cbu_mod" class="block text-gray-700 text-lg font-semibold mb-2">CBU</label>
+                            <input
+                                type="text"
+                                id="cbu_mod"
+                                name="cbu_mod"
+                                placeholder=""
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label for="saldo_mod" class="block text-gray-700 text-lg font-semibold mb-2">SALDO</label>
+                            <input
+                                type="number"
+                                id="saldo_mod"
+                                name="saldo_mod"
+                                placeholder=""
+                                class="p-3 border border-gray-300 rounded-md w-full text-lg"
+                                required
+                            >
+                        </div>
+
+                        <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
+                            <button
+                                type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
+                            >
+                                Guardar Cambios
+                            </button>
+                            <button
+                                type="button"
+                                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
+                FOATER
+            </footer>
+        </main>
+
+    </div>
 </body>
 </html>

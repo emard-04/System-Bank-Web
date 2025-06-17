@@ -55,6 +55,19 @@
                 <h1 class="text-xl font-semibold text-gray-800">PERSONAL</h1>
                 <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
             </header>
+            
+            <nav class="bg-gray-50 border-b border-gray-200 p-4">
+				<ul class="flex space-x-4 justify-center">
+					<li><a href="TransferenciaClient.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
+					<li><a href="movientosClient.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
+					<li><a href="prestamosClient.jsp"
+						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
+					<li><a href="personalClient.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
+				</ul>
+			</nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl"> <form class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
@@ -185,7 +198,7 @@
             </div>
 
             <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-                FOATER
+                GRUPO_N7
             </footer>
         </main>
 
