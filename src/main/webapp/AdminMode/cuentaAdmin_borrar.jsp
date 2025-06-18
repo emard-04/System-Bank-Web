@@ -41,6 +41,7 @@
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 <ul class="flex space-x-10 justify-center">
                     <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
         			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
@@ -49,6 +50,8 @@
                 </ul>
            </nav>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 				<ul class="flex items-center justify-between w-full">
@@ -71,6 +74,9 @@
 				</ul>
 			</nav>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

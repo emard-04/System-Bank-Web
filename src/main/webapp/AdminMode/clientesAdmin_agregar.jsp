@@ -41,6 +41,7 @@
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
                     <li><a href="/BancoParcial/clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
@@ -50,6 +51,8 @@
                 </ul>
             </nav>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
            <nav class="bg-gray-50 border-b border-gray-200 p-4">
@@ -73,6 +76,9 @@
 				</ul>
 			</nav>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
