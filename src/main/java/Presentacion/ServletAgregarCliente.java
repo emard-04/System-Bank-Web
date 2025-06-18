@@ -38,7 +38,7 @@ public class ServletAgregarCliente extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		System.out.println("entro al post");
 		String dni = request.getParameter("dni");
 		String cuil = request.getParameter("cuil"); // Podés capturarlo si lo agregás al front
 		String nombre = request.getParameter("nombre");
@@ -58,7 +58,7 @@ public class ServletAgregarCliente extends HttpServlet {
 		
 		boolean existe = usuarioNeg.existeDni(dni);
 		if (existe) {
-		    response.sendRedirect("/BancoParcial/AdminMode/clientesAdmin_agregar.jsp?error=DNI ya registrado");
+		    response.sendRedirect("AdminMode/clientesAdmin_agregar.jsp?error=DNI ya registrado");
 		    return;
 		}
 
