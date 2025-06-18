@@ -45,6 +45,7 @@
             </header>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
                     <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
@@ -54,6 +55,8 @@
                 </ul>
             </nav>
 =======
+=======
+>>>>>>> Stashed changes
               <nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
 					<li><a href="HomeAdmin.jsp"
@@ -74,6 +77,9 @@
 					<li></li>
 				</ul>
 			</nav>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             <div class="p-6 flex-1 flex flex-col items-center">

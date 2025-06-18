@@ -28,6 +28,7 @@ body {
 			</div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
                     <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
@@ -36,6 +37,9 @@ body {
         			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
                 </ul>
             </nav>
+=======
+			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
+>>>>>>> Stashed changes
 =======
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
 >>>>>>> Stashed changes
