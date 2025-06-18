@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import Entidades.Usuario;
 import Entidades.Persona; // Assuming you still need to interact with Persona
 import Interfaces.Conexion;
+import Interfaces.InUsuario;
 
-public class daoUsuario  {
+public class daoUsuario  implements InUsuario{
     // SQL Queries adapted for the Usuario table
     private final String Agregar = "INSERT INTO Usuarios( Contraseña, dni, TipoUsuario, NombreUsuario) VALUES(?,?,?,?);";
     private final String Eliminar = "DELETE FROM Usuarios WHERE NombreUsuario=?;"; // Using NombreUsuario as PK for operations
@@ -198,6 +199,23 @@ public class daoUsuario  {
             e.printStackTrace();
         }
         return null; // Return null if login fails
+    }
+    public int obtenerIdUsuarioPorNombre(String nombreUsuario) {
+        int id = -1; // valor por defecto si no se encuentra
+        String sql = "SELECT IdUsuario FROM Usuarios WHERE NombreUsuario = ?";
+        try {
+            Connection cn = Conexion.getConexion().getSQLConnection();
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, nombreUsuario);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("IdUsuario");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al obtener ID de usuario por nombre.");
+        }
+        return id;
     }
     
     public static void main(String[] args) {

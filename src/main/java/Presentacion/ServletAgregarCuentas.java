@@ -37,7 +37,6 @@ public class ServletAgregarCuentas extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. Obtener parámetros del formulario
-		
         int nroCuenta = Integer.parseInt(request.getParameter("nro_cuenta"));
         String dniCliente = request.getParameter("dni_cliente");
         LocalDate fechaCreacion = LocalDate.parse(request.getParameter("fecha_creacion"));

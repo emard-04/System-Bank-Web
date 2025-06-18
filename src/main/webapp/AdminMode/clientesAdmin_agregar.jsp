@@ -41,16 +41,16 @@
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
-                    <li><a href="clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
-                    <li><a href="clientesAdmin_agregar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
-                    <li><a href="clientesAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
-                    <li><a href="clientesAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
+                    <li><a href="/BancoParcial/clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
+                    <li><a href="/BancoParcial/clientesAdmin_agregar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
+                    <li><a href="/BancoParcial/clientesAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
+                    <li><a href="/BancoParcial/clientesAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
                 </ul>
             </nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-                    <form action="AgregarClienteServlet" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                    <form action="/BancoParcial/ServletAgregarCliente" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                         <div>
                             <label for="nombre" class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
                             <input
