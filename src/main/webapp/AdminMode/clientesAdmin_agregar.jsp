@@ -50,6 +50,8 @@
                 </ul>
             </nav>
 =======
+=======
+>>>>>>> Stashed changes
            <nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
 					<li><a href="HomeAdmin.jsp"
