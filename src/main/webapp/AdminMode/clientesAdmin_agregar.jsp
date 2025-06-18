@@ -70,6 +70,9 @@
 					<li></li>
 				</ul>
 			</nav>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
