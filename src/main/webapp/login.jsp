@@ -17,7 +17,7 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
         <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Iniciar Sesión</h2>
 
-        <form action="LoginServlet" method="post"> <%-- La acción del formulario sigue apuntando a tu Servlet --%>
+        <form action="/BancoParcial/ServletLogin" method="post"> <%-- La acción del formulario sigue apuntando a tu Servlet --%>
             <div class="mb-6">
                 <label for="username" class="block text-gray-700 text-sm font-medium mb-2">
                     Usuario

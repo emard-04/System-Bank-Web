@@ -33,4 +33,8 @@ public class UsuarioNegImpl implements UsuarioNeg {
         // Insertar persona
         return daoPersona.Agregar(persona);
     }
+    @Override
+    public Usuario Login(String nombreUsuario, String contrasena) {
+        return daoUsuario.Login(nombreUsuario, contrasena);
+    }
 }
