@@ -46,10 +46,10 @@
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
-                    <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
-                    <li><a href="cuentasAdmin_agregar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
-                    <li><a href="cuentasAdmin_modificar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
-                    <li><a href="cuentasAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
+                    <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
+        			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
                 </ul>
             </nav>
 

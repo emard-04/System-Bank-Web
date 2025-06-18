@@ -10,7 +10,6 @@ import java.math.BigDecimal; // Import for BigDecimal
 
 //import Interfaces.inCuenta; // Assuming you will create this interface
 import Entidades.Cuenta;
-import Entidades.Usuario;    // Necesario para el objeto Usuario dentro de Cuenta
 import Entidades.TipoCuenta; // Necesario para el objeto TipoCuenta dentro de Cuenta
 import Interfaces.Conexion;
 import Interfaces.inCuentas;
@@ -18,6 +17,7 @@ import Interfaces.inCuentas;
 public class daoCuentas implements inCuentas{
     // SQL Queries adaptadas para la tabla Cuentas
     private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo) VALUES(?,?,?,?,?);";
+    private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "DELETE FROM Cuentas WHERE NroCuenta=?;";
     private final String Modificar = "UPDATE Cuentas SET IdUsuario=?, FechaCreacion=?, IdtipoCuenta=?, Cbu=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas;";
@@ -27,6 +27,20 @@ public class daoCuentas implements inCuentas{
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub
 	}
+    public int obtenerIdCuenta() {
+        try {
+            Connection cn = Conexion.getConexion().getSQLConnection();
+            PreparedStatement ps = cn.prepareStatement(obtenerIdCuenta);
+            ResultSet rs=ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("AUTO_INCREMENT");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR AL BUSCAR ID.");
+        }
+        return 0;
+    }
 
     public boolean Agregar(Cuenta cuenta) {
         try {
@@ -62,9 +76,7 @@ public class daoCuentas implements inCuentas{
                 ps.setBigDecimal(5, cuenta.getSaldo());
                 ps.setInt(6, cuenta.getNroCuenta()); // WHERE clause
                 
-            }else {
-            ps.setInt(1, cuenta.getNroCuenta()); 
-            }// WHERE clause
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +109,7 @@ public class daoCuentas implements inCuentas{
     public boolean Eliminar(int nroCuenta) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = cn.prepareStatement("DELETE FROM Cuentas WHERE NroCuenta=?;");
+            PreparedStatement ps = cn.prepareStatement(Eliminar);
             ps.setInt(1, nroCuenta);
             if (ps.executeUpdate() > 0) {
                 cn.commit();
@@ -145,7 +157,7 @@ public class daoCuentas implements inCuentas{
     public boolean existe(int nroCuenta) {
     	try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT 1 FROM Cuentas WHERE NroCuenta=?;");
+            PreparedStatement ps = cn.prepareStatement(existe);
             ps.setInt(1, nroCuenta);
             ResultSet rs = ps.executeQuery();
             return rs.next();
@@ -161,7 +173,7 @@ public class daoCuentas implements inCuentas{
 		Cuenta cue = new Cuenta();
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;");
+            PreparedStatement ps = cn.prepareStatement(BuscarPorNro);
             ps.setInt(1, nroCuenta);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

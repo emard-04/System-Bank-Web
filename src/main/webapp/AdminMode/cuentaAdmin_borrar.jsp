@@ -39,13 +39,13 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-				<ul class="flex space-x-10 justify-center">
-                    <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
-                    <li><a href="cuentaAdmin_agregar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
-                    <li><a href="cuentaAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
-                    <li><a href="cuentaAdmin_borrar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
+                <ul class="flex space-x-10 justify-center">
+                    <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
+        			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
                 </ul>
-            </nav>
+           </nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

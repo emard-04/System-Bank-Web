@@ -20,6 +20,7 @@ public class daoUsuario  {
     private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
     private final String BuscarPorNombreUsuario = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
+    private final String BuscarDniUsuario = "SELECT * FROM Usuarios WHERE dni=?;";
     private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
 
 
@@ -42,6 +43,7 @@ public class daoUsuario  {
         PreparedStatement ps = null;
         try {
             ps = cn.prepareStatement(query);
+            System.out.println(usuario);
             if (query.equals(Agregar)) {
                 ps.setString(1, usuario.getContrasena());
                 ps.setString(2, usuario.getPersona().getDni());
@@ -147,6 +149,26 @@ public class daoUsuario  {
         }
         return new Usuario(); // Return an empty Usuario object if not found or an error occurs
     }
+    public Usuario BuscarDni(String Dni) {
+        try {
+            Connection cn = Conexion.getConexion().getSQLConnection();
+            if(cn==null) {
+            	System.out.println("lcdtm");
+            }
+            
+            PreparedStatement ps = cn.prepareStatement(BuscarDniUsuario);
+            ps.setString(1, Dni);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return valoresUsuario(rs);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Usuario(); // Return an empty Usuario object if not found or an error occurs}
+       
+    }
+     
     public Usuario BuscarIdusuario(int id) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
@@ -160,29 +182,6 @@ public class daoUsuario  {
             e.printStackTrace();
         }
         return new Usuario(); // Return an empty Usuario object if not found or an error occurs
-    }
-    public Usuario BuscarPorDni(String dni) {
-        Usuario usuario = null;
-        try {
-            Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = cn.prepareStatement(
-                "SELECT u.IdUsuario, u.NombreUsuario, u.Contraseña, u.IdPersona " +
-                "FROM Usuarios u INNER JOIN Personas p ON u.IdPersona = p.IdPersona " +
-                "WHERE p.Dni = ?;"
-            );
-            ps.setString(1, dni);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                usuario = new Usuario();
-                usuario.setIdUsuario(rs.getInt("IdUsuario"));
-                usuario.setNombreUsuario(rs.getString("NombreUsuario"));
-                usuario.setContrasena(rs.getString("Contraseña"));
-                // Podés agregar también el objeto Persona si querés
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return usuario;
     }
 
     public Usuario Login(String nombreUsuario, String contrasena) {

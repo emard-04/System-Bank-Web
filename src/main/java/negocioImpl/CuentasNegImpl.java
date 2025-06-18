@@ -34,6 +34,9 @@ public class CuentasNegImpl implements CuentasNeg{
     public Cuenta BuscarPorNro(int nroCuenta) {
         return dao.BuscarPorNro(nroCuenta);
     }
+    public int obtenerId() {
+    	return dao.obtenerIdCuenta();
+    }
 
     @Override
     public boolean existe(int nroCuenta) {

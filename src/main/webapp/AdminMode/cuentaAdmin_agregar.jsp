@@ -40,12 +40,12 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-               <ul class="flex space-x-10 justify-center">
-                    <li><a href="AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
-        <li><a href="AdminMode/cuentasAdmin_agregar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
-        <li><a href="AdminMode/cuentasAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
-        <li><a href="AdminMode/cuentasAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
-    </ul>
+                <ul class="flex space-x-10 justify-center">
+                    <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
+        			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
+        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
+                </ul>
             </nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
@@ -60,16 +60,24 @@
         <div class="bg-green-100 text-green-700 p-4 rounded-md mb-4 text-center font-semibold">
             <%= request.getParameter("msg") %>
         </div>
-    <% } %>
-                    <form action="/System-Bank-web/ServletAgregarCuentas" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+    <% } 
+    int nroCuenta=0;
+    if(request.getAttribute("nroCuenta")!=null){
+    	
+    	 nroCuenta=(int)request.getAttribute("nroCuenta");
+    }
+    %>
+                    <form action="/BancoParcial/ServletAgregarCuentas" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                         <div>
                             <label for="nro_cuenta" class="block text-gray-700 text-lg font-semibold mb-2">Nro de Cuenta</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="nro_cuenta"
                                 name="nro_cuenta"
+                                value=<%=nroCuenta%>
                                 placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input"
+                                readonly
                                 required
                             >
                         </div>

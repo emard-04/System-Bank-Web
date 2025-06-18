@@ -9,6 +9,7 @@ package Interfaces;
 	        boolean Eliminar(int nroCuenta);
 	        ArrayList<Cuenta> ListarTodo();
 	        Cuenta BuscarPorNro(int nroCuenta);
+	        int obtenerIdCuenta();
 	        boolean existe(int nroCuenta);
 	}
 

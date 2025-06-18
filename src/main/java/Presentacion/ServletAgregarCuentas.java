@@ -3,6 +3,8 @@ package Presentacion;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Daos.daoCuentas;
 import Entidades.*;
+import negocioImpl.CuentasNegImpl;
 import Daos.*;
 
 /**
@@ -19,19 +22,22 @@ import Daos.*;
 @WebServlet("/ServletAgregarCuentas")
 public class ServletAgregarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private static final CuentasNegImpl negCuenta= new CuentasNegImpl(); 
     public ServletAgregarCuentas() {
         super();
         // TODO Auto-generated constructor stub
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		if(request.getParameter("openAgregar")!=null) {
+			windowDefault(request,response);
+			}
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. Obtener parámetros del formulario
-		System.out.println("SERvlet");
+		
         int nroCuenta = Integer.parseInt(request.getParameter("nro_cuenta"));
         String dniCliente = request.getParameter("dni_cliente");
         LocalDate fechaCreacion = LocalDate.parse(request.getParameter("fecha_creacion"));
@@ -44,11 +50,12 @@ public class ServletAgregarCuentas extends HttpServlet {
 
         // 3. Buscar el usuario por DNI (suponiendo que tenés un método para eso)
         daoUsuario daoU = new daoUsuario();
-        Usuario usuario = daoU.BuscarPorDni(dniCliente);// Este método lo tenés que tener implementado
+        Usuario usuario = daoU.BuscarDni(dniCliente);// Este método lo tenés que tener implementado
 
         // Validación simple por si no se encuentra
+        
         if (usuario == null) {
-            response.sendRedirect("cuentasAdmin_agregar.jsp?error=UsuarioNoEncontrado");
+            response.sendRedirect("/BancoParcial/AdminMode/cuentaAdmin_agregar.jsp?error=Usuario no encontrado ");
             return;
         }
 
@@ -72,7 +79,7 @@ public class ServletAgregarCuentas extends HttpServlet {
         // 6. Redirigir según resultado
         String contextPath = request.getContextPath();
         if (usuario == null) {
-            response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=UsuarioNoEncontrado");
+            response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=UsuarioNoEncontrado2");
             return;
         }
 
@@ -82,6 +89,10 @@ public class ServletAgregarCuentas extends HttpServlet {
             response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=ErrorAlAgregar");
         }
     }
-	
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		 request.setAttribute("nroCuenta",negCuenta.obtenerId());
+		 RequestDispatcher rd= request.getRequestDispatcher("/AdminMode/cuentaAdmin_agregar.jsp");
+		 rd.forward(request, response);
+	}
 
 }
