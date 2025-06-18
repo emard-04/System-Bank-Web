@@ -23,8 +23,7 @@ body {
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div
-				class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">Nombre

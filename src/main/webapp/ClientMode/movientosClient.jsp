@@ -24,13 +24,12 @@ body {
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div
-				class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">Nombre
 				Apellido</h3>
-			<p class="text-md text-gray-600 text-center mb-6">Saldo: $$$</p>
+			<p class="text-md text-gray-600 text-center mb-6">Saldo: $$$XXX</p>
 
 			<div class="relative w-full mb-6">
 				<button
@@ -71,9 +70,9 @@ body {
 					<li><a href="TransferenciaClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
 					<li><a href="movientosClient.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
+						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
 					<li><a href="PrestamosClient.jsp"
-						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
 					<li><a href="personalClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
 				</ul>

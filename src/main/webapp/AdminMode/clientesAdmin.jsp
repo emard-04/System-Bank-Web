@@ -21,7 +21,7 @@
 
         <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
             
-            <div class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+            <div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
                 </div>
             
             <h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
@@ -39,13 +39,25 @@
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-                <ul class="flex space-x-10 justify-center">
-                    <li><a href="clientesAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a></li>
-                    <li><a href="clientesAdmin_agregar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a></li>
-                    <li><a href="clienteAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a></li>
-                    <li><a href="clientesAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a></li>
-                </ul>
-            </nav>
+				<ul class="flex items-center justify-between w-full">
+					<li><a href="HomeAdmin.jsp"
+						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
+					</li>
+
+					<li class="flex space-x-10 mx-auto"><a
+						href="clientesAdmin.jsp"
+						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
+						<a href="clientesAdmin_agregar.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
+						<a href="clienteAdmin_modificar.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
+						<a href="clientesAdmin_borrar.jsp"
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
+					</li>
+
+					<li></li>
+				</ul>
+			</nav>
 
             <div class="p-6 flex-1 overflow-y-auto">
                 <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -101,7 +113,7 @@
             </div>
 
             <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-                FOATER
+                GRUPO_N7
             </footer>
         </main>
 

@@ -20,21 +20,20 @@ body {
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div
-				class="w-28 h-28 rounded-full bg-gray-300 mx-auto mb-4 profile-photo-placeholder">
+			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">Nombre
 				Apellido</h3>
-			<p class="text-md text-gray-600 text-center mb-6">Saldo: $XXXX.XX</p>
+			<p class="text-md text-gray-600 text-center mb-6">Saldo: $$$XXX</p>
 
 			<div class="relative w-full mb-6">
 				<button
 					class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between"
 					id="dropdown-button">
 					Cuentas
-					<svg class="w-4 h-4 fill-current ml-2" viewBox="0 0 20 20">
-						<path
+					<svg class="w-4 h-4 fill-current ml-2" viewBox="0 0 20 20"
+						fill="currentColor"> <path
 							d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
 				</button>
 				<div id="dropdown-list"
@@ -58,27 +57,35 @@ body {
 
 			<header
 				class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
-				<div class="text-gray-700 font-bold">LOGO / NOMBRE DEL BANCO</div>
+				<h1 class="text-xl font-semibold text-gray-800">HOME</h1>
+				<div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
 			</header>
 
 			<nav class="bg-gray-50 border-b border-gray-200 p-4">
-				<ul class="flex space-x-10 justify-center">
+				<ul class="flex space-x-8 justify-center">
 					<li><a href="TransferenciaClient.jsp"
-						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
 					<li><a href="movientosClient.jsp"
-						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
 					<li><a href="PrestamosClient.jsp"
-						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
 					<li><a href="personalClient.jsp"
-						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
 				</ul>
 			</nav>
 
-			<div class="p-6 flex-1 overflow-y-auto"></div>
+			<div class="p-6 flex-1 flex flex-col justify-center items-center">
+				<div
+					class="bg-white p-8 rounded-lg shadow-md w-full h-full flex flex-col items-center justify-center text-center">
+					<p class="text-gray-800 text-3xl font-bold mb-2">¡Bienvenido al
+						Banco GRUPO N°7!</p>
+					<p class="text-gray-600 text-xl">Tu banco de confianza!</p>
+				</div>
+			</div>
 
 			<footer
 				class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-			</footer>
+				GRUPO_N7 </footer>
 		</main>
 
 	</div>
@@ -93,6 +100,5 @@ body {
             });
         }
     </script>
-
 </body>
 </html>
