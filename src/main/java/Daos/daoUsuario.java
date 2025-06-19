@@ -18,10 +18,10 @@ public class daoUsuario  implements InUsuario{
     private final String Eliminar = "DELETE FROM Usuarios WHERE NombreUsuario=?;"; // Using NombreUsuario as PK for operations
     private final String Modificar = "UPDATE Usuario SET Contraseña=?, dni=?, TipoUsuario=? WHERE NombreUsuario=?;";
     private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios;";
-    private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
-    private final String BuscarPorNombreUsuario = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=?;";
+    private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";//Para verificar siempre vamops a querer tomar el nombre de usuasrio ya que elñ dni lo verificamos en persona y el id es inescesario 
+  //  private final String BuscarPorNombreUsuario = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
-    private final String BuscarDniUsuario = "SELECT * FROM Usuarios WHERE dni=?;";
+   // private final String BuscarDniUsuario = "SELECT * FROM Usuarios WHERE dni=?;";
     private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
 
 
@@ -136,7 +136,7 @@ public class daoUsuario  implements InUsuario{
         return false;
     }
 
-    public Usuario BuscarPorNombreUsuario(String nombreUsuario) {
+  /*  public Usuario BuscarPorNombreUsuario(String nombreUsuario) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
             PreparedStatement ps = cn.prepareStatement(BuscarPorNombreUsuario);
@@ -149,15 +149,11 @@ public class daoUsuario  implements InUsuario{
             e.printStackTrace();
         }
         return new Usuario(); // Return an empty Usuario object if not found or an error occurs
-    }
-    public Usuario BuscarDni(String Dni) {
+    }*/
+   public Usuario BuscarDni(String Dni) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();
-            if(cn==null) {
-            	System.out.println("lcdtm");
-            }
-            
-            PreparedStatement ps = cn.prepareStatement(BuscarDniUsuario);
+            PreparedStatement ps = cn.prepareStatement(Existe);
             ps.setString(1, Dni);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

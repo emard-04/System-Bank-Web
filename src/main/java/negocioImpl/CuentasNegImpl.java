@@ -42,5 +42,8 @@ public class CuentasNegImpl implements CuentasNeg{
     public boolean existe(int nroCuenta) {
         return dao.existe(nroCuenta);
     }
-
+	public String generarCBU() {
+		return dao.generarCBUAleatorio();
+	}
 }
+

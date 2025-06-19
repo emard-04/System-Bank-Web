@@ -9,29 +9,24 @@ public class UsuarioNegImpl implements UsuarioNeg {
     private inPersona daoPersona = new daoPersonas();
 
     @Override
-    public boolean existeDni(String dni) {
-        return daoPersona.existe(dni);
-    }
-
-    @Override
-    public boolean AgregarConPersona(Usuario usuario) {
+    public boolean AgregarUsuario(Usuario usuario) {
         Persona persona = usuario.getPersona();
-        
-        if (daoPersona.existe(persona.getDni())) {
-            return false;
+        if (daoPersona.existe(persona.getDni()))return false;
+        if(daoPersona.verificarMail(persona.getCorreoElectronico()))return false;
+        if(daoUsuario.existe(usuario.getNombreUsuario())) return false;
+        boolean exitoPersona=daoPersona.Agregar(persona);
+        if(!exitoPersona) {
+        	System.out.println("No se agrego persona");
+        	return false;
         }
+        boolean exitoUsuario=daoUsuario.Agregar(usuario);
+        if(!exitoUsuario) {
+        	return false;
+        }
+        return true;
+        
 
-        // Insertar usuario
-        boolean exitoUsuario = daoUsuario.Agregar(usuario);
-        if (!exitoUsuario) return false;
-
-        // Obtener el ID del usuario recién insertado
-        daoUsuario.BuscarPorNombreUsuario(null);
-        int idGenerado = daoUsuario.obtenerIdUsuarioPorNombre(usuario.getNombreUsuario());
-        persona.setIdUsuario(idGenerado);
-
-        // Insertar persona
-        return daoPersona.Agregar(persona);
+        
     }
     @Override
     public Usuario Login(String nombreUsuario, String contrasena) {

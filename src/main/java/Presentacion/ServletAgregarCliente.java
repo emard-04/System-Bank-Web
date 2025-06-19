@@ -21,7 +21,7 @@ import negocioImpl.*;
 public class ServletAgregarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	//private static final PersonaNegImpl usuarioNeg = new PersonaNegImpl();
+	private static final PersonaNegImpl personaNeg = new PersonaNegImpl();
 	private static final UsuarioNeg usuarioNeg = new UsuarioNegImpl();
        
   
@@ -40,7 +40,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("entro al post");
 		String dni = request.getParameter("dni");
-		String cuil = request.getParameter("cuil"); // Podés capturarlo si lo agregás al front
+		String cuil = "202020"; // Podés capturarlo si lo agregás al front
 		String nombre = request.getParameter("nombre");
 		String apellido = request.getParameter("apellido");
 		String sexo = request.getParameter("sexo");
@@ -56,9 +56,9 @@ public class ServletAgregarCliente extends HttpServlet {
 		String contrasena = request.getParameter("contrasena");
 		// Validar que el DNI no exista
 		
-		boolean existe = usuarioNeg.existeDni(dni);
+		boolean existe = personaNeg.existe(dni);
 		if (existe) {
-		    response.sendRedirect("AdminMode/clientesAdmin_agregar.jsp?error=DNI ya registrado");
+		    response.sendRedirect("/AdminMode/clientesAdmin_agregar.jsp?error=DNI ya registrado");
 		    return;
 		}
 
@@ -86,12 +86,12 @@ public class ServletAgregarCliente extends HttpServlet {
 
 		usuario.setPersona(persona); // Asignar persona al usuario
 
-		boolean exito = usuarioNeg.AgregarConPersona(usuario); // método especial
+		boolean exito = usuarioNeg.AgregarUsuario(usuario); // método especial
 
 		if (exito) {
-			response.sendRedirect("/AdminMode/clientesAdmin.jsp?msg=Cliente agregado correctamente");
+			response.sendRedirect("AdminMode/clientesAdmin.jsp?msg=Cliente agregado correctamente");
 		} else {
-			response.sendRedirect("/AdminMode/clientesAdmin_agregar.jsp?error=No se pudo agregar el cliente");
+			response.sendRedirect("AdminMode/clientesAdmin_agregar.jsp?error=No se pudo agregar el cliente");
 		}
 	}
 }

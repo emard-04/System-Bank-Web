@@ -52,7 +52,7 @@ body {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="cuentaAdmin_agregar.jsp"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="cuentaAdmin_modificar.jsp"
+						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" 
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="cuentaAdmin_borrar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
@@ -78,9 +78,11 @@ body {
 					</div>
 					<% } 
     int nroCuenta=0;
-    if(request.getAttribute("nroCuenta")!=null){
+    String nroCBU="0";
+    if(request.getAttribute("nroCuenta")!=null&&request.getAttribute("nroCBU")!=null){
     	
     	 nroCuenta=(int)request.getAttribute("nroCuenta");
+    	 nroCBU=(String)request.getAttribute("nroCBU");
     }
     %>
 					<form action="/BancoParcial/ServletAgregarCuentas" method="post"
@@ -133,11 +135,10 @@ body {
 						<div>
 							<label for="cbu"
 								class="block text-gray-700 text-lg font-semibold mb-2">CBU</label>
-							<input type="text" id="cbu" name="cbu" placeholder=""
+							<input type="text" id="cbu" name="cbu" value=<%=nroCBU%> placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
-
 						<div>
 							<label for="saldo"
 								class="block text-gray-700 text-lg font-semibold mb-2">SALDO</label>
