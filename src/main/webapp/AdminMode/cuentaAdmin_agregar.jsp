@@ -28,10 +28,10 @@ body {
 			</div>
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
-
-			<a href="logout.jsp"
-				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-				Salir </a>
+      	<a href="<%=request.getContextPath()%>/ServletLogout"
+   		class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   			Salir
+</a>
 		</aside>
 
 		<main class="flex-1 flex flex-col overflow-y-auto">
@@ -89,7 +89,7 @@ body {
 							<label for="nro_cuenta"
 								class="block text-gray-700 text-lg font-semibold mb-2">Nro
 								de Cuenta</label> <input type="number" id="nro_cuenta" name="nro_cuenta"
-								value=<%=nroCuenta%> placeholder=""
+								value="<%=nroCuenta%>" placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input"
 								readonly required>
 						</div>

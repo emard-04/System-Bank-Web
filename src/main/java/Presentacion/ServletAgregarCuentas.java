@@ -83,7 +83,7 @@ public class ServletAgregarCuentas extends HttpServlet {
         }
 
         if (exito) {
-            response.sendRedirect(contextPath + "/AdminMode/cuentasAdmin.jsp?msg=CuentaAgregada");
+            response.sendRedirect(contextPath + "/AdminMode/HomeAdmin.jsp?msg=CuentaAgregada");
         } else {
             response.sendRedirect(contextPath + "/AdminMode/cuentaAdmin_agregar.jsp?error=ErrorAlAgregar");
         }
@@ -93,5 +93,6 @@ public class ServletAgregarCuentas extends HttpServlet {
 		 RequestDispatcher rd= request.getRequestDispatcher("/AdminMode/cuentaAdmin_agregar.jsp");
 		 rd.forward(request, response);
 	}
+	
 
 }
