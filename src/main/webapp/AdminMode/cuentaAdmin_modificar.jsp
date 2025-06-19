@@ -1,4 +1,13 @@
+<%@ page import="java.util.List" %>
+<%@ page import="Entidades.Cuenta" %>
+<%@ page import="Daos.daoCuentas" %>
+
+<%
+    daoCuentas dao = new daoCuentas();
+    List<Cuenta> cuentas = dao.ListarTodo(); // método que lista todas las cuentas
+%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
+
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -32,9 +41,10 @@
             
             <h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
             
-            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-                Salir
-            </a>
+            <a href="<%=request.getContextPath()%>/ServletLogout"
+   		class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   			Salir
+</a>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto">
@@ -74,14 +84,16 @@
                             name="seleccionar_cuenta_dni"
                             class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white w-64"
                             >
-                            <option value="">-- Seleccione un Nº de Cuenta --</option>
-                            <option value="202156">202156 (Cliente: 21569840)</option>
-                            <option value="202157">202157 (Cliente: 12345678)</option>
-                            <option value="202158">202158 (Cliente: 98765432)</option>
+                             <option value="">-- Seleccione un Nº de Cuenta --</option>
+    <% for (Cuenta c : cuentas) { %>
+        <option value="<%= c.getNroCuenta() %>">
+            <%= c.getNroCuenta() %> (Cliente: <%= c.getUsuario().getPersona().getDni() %>)
+        </option>
+    <% } %>
                         </select>
                     </div>
 
-                    <form action="ModificarCuentaServlet" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                    <form action="/BancoParcial/ServletModificarCuentas" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                         <input type="hidden" id="cuenta_id_modificar" name="cuenta_id_modificar" value="">
 
                         <div>
@@ -180,4 +192,47 @@
 
     </div>
 </body>
+<script>
+    document.getElementById('seleccionar_cuenta_dni').addEventListener('change', function() {
+        var nroCuenta = this.value;
+        if (!nroCuenta) {
+            // limpiar campos si se deselecciona
+            limpiarCampos();
+            return;
+        }
+
+        fetch('CargarCuentaServlet?nroCuenta=' + nroCuenta)
+            .then(response => {
+                if (!response.ok) throw new Error('Cuenta no encontrada');
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('nro_cuenta_mod').value = data.nroCuenta;
+                document.getElementById('dni_cliente_mod').value = data.dniCliente;
+                document.getElementById('fecha_creacion_mod').value = data.fechaCreacion;
+                // marcar radio según tipo de cuenta
+                if(data.tipoCuenta == "1") {
+                    document.getElementById('cuenta_corriente_mod').checked = true;
+                } else {
+                    document.getElementById('caja_ahorro_mod').checked = true;
+                }
+                document.getElementById('cbu_mod').value = data.cbu;
+                document.getElementById('saldo_mod').value = data.saldo;
+            })
+            .catch(error => {
+                alert(error.message);
+                limpiarCampos();
+            });
+    });
+
+    function limpiarCampos() {
+        document.getElementById('nro_cuenta_mod').value = '';
+        document.getElementById('dni_cliente_mod').value = '';
+        document.getElementById('fecha_creacion_mod').value = '';
+        document.getElementById('cuenta_corriente_mod').checked = false;
+        document.getElementById('caja_ahorro_mod').checked = false;
+        document.getElementById('cbu_mod').value = '';
+        document.getElementById('saldo_mod').value = '';
+    }
+</script>
 </html>

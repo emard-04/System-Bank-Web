@@ -1,3 +1,8 @@
+<%@ page import="Daos.daoCuentas, Entidades.Cuenta, java.util.List" %>
+<%
+    daoCuentas dao = new daoCuentas();
+    List<Cuenta> cuentas = dao.ListarTodo(); // tu método que lista todas las cuentas
+%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -26,9 +31,10 @@
             
             <h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
             
-            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-                Salir
-            </a>
+            <a href="<%=request.getContextPath()%>/ServletLogout"
+   		class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   			Salir
+</a>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto">
@@ -61,7 +67,7 @@
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                    <form action="BorrarClienteServlet" method="post" class="space-y-6 text-center">
+                    <form action="/BancoParcial/ServletModificarCuentas" method="post" class="space-y-6 text-center">
                         <p class="text-gray-700 text-lg font-semibold mb-4">Seleccione un Nro de cuenta que quieras eliminar:</p>
                         
                         <div class="mb-6">
@@ -73,10 +79,12 @@
                                 required
                             >
                                 <option value="">Seleccione el numero de cuenta</option>
-                                <option value="12345678">12345678</option>
-                                <option value="87654321">87654321</option>
-                                <option value="11223344">11223344</option>
-                            </select>
+    <% for (Cuenta c : cuentas) { %>
+        <option value="<%= c.getNroCuenta() %>">
+    <%= c.getNroCuenta() %> - Cliente DNI: <%= c.getUsuario().getPersona().getDni() %>
+</option>
+    <% } %>
+</select>
                         </div>
 
                         <button

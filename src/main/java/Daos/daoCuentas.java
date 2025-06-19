@@ -197,19 +197,23 @@ public class daoCuentas implements inCuentas{
 
 	@Override
 	public Cuenta BuscarPorNro(int nroCuenta) {
-		Cuenta cue = new Cuenta();
-        try {
-            Connection cn = Conexion.getConexion().getSQLConnection();
-            PreparedStatement ps = cn.prepareStatement(BuscarPorNro);
-            ps.setInt(1, nroCuenta);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                cue = valoresCuenta(rs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error al buscar la cuenta por número.");
-        }
-        return cue;
+		 Cuenta cue = null;
+		    try {
+		        Connection cn = Conexion.getConexion().getSQLConnection();
+		        PreparedStatement ps = cn.prepareStatement(BuscarPorNro);
+		        ps.setInt(1, nroCuenta);
+		        ResultSet rs = ps.executeQuery();
+		        if (rs.next()) {
+		            cue = valoresCuenta(rs); // si encuentra, carga la cuenta
+		        }
+		        if (rs.next()) {
+		            cue = valoresCuenta(rs);
+		            System.out.println("Cuenta encontrada: " + cue.getNroCuenta());
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.println("Error al buscar la cuenta por número.");
+		    }
+		    return cue;
 	}
 }
