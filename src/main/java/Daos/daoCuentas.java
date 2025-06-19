@@ -21,7 +21,7 @@ public class daoCuentas implements inCuentas{
     private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "DELETE FROM Cuentas WHERE NroCuenta=?;";
     private final String Modificar = "UPDATE Cuentas SET IdUsuario=?, FechaCreacion=?, IdtipoCuenta=?, Cbu=?, Saldo=? WHERE NroCuenta=?;";
-    private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas;";
+    private final String ListarTodo = "SELECT c.NroCuenta, c.FechaCreacion, c.IdTipoCuenta, c.Cbu, c.Saldo, u.IdUsuario, p.Dni FROM Cuentas c JOIN Usuarios u ON c.IdUsuario = u.IdUsuario JOIN Personas p ON u.IdPersona = p.IdPersona;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";

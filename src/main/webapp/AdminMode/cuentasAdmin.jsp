@@ -1,3 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="Entidades.Cuenta" %>
+<%
+    List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
+%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -28,9 +33,10 @@ body {
 			</div>
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
 
-			<a href="logout.jsp"
-				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-				Salir </a>
+			<a href="<%=request.getContextPath()%>/ServletLogout"
+   		class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   			Salir
+</a>
 		</aside>
 
 		<main class="flex-1 flex flex-col overflow-y-auto">
@@ -47,16 +53,16 @@ body {
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
-					<li class="flex space-x-10 mx-auto"><a href="cuentasAdmin.jsp"
-						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="cuentaAdmin_modificar.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="cuentaAdmin_borrar.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
-					</li>
-
+					<li class="flex space-x-10 mx-auto">
+    <a href="/BancoParcial/ServletListarCuentas"
+       class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
+    <a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
+       class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
+    <a href="cuentaAdmin_modificar.jsp"
+       class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
+    <a href="cuentaAdmin_borrar.jsp"
+       class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
+</li>
 					<li></li>
 				</ul>
 			</nav>
@@ -84,17 +90,21 @@ body {
 							</tr>
 						</thead>
 						<tbody class="bg-white divide-y divide-gray-200">
-							<tr>
-								<td
-									class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">202156</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">21569840</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">04-11-2024</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Cuenta
-									corriente</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">2189050469840</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">410000</td>
-							</tr>
-						</tbody>
+<% if (cuentas != null) {
+     for (Cuenta c : cuentas) { %>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= c.getNroCuenta() %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getUsuario().getPersona().getDni() %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getFechaCreacion() %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+            <%= (c.getTipoCuenta().getIdTipoCuenta() == 1) ? "Cuenta corriente" : "Caja de ahorro" %>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getCbu() %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getSaldo() %></td>
+    </tr>
+<%  }
+} %>
+</tbody>
 					</table>
 				</div>
 
