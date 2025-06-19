@@ -2,11 +2,18 @@ package Presentacion;
 
 import java.io.IOException;
 import Entidades.*;
+import negocio.CuentasNeg;
+import negocioImpl.CuentasNegImpl;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sun.jdi.request.InvalidRequestStateException;
+
 import Daos.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +24,7 @@ import java.time.LocalDate;
 public class ServletModificarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private daoCuentas daoCuenta = new daoCuentas();
+	private CuentasNeg cuentaNeg= new CuentasNegImpl();
    
     public ServletModificarCuentas() {
         super();
@@ -26,7 +34,25 @@ public class ServletModificarCuentas extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		System.out.println(request.getParameter("nroCuenta"));
+		if(request.getParameter("nroCuenta")!=null) {
+			Cuenta cuenta= new Cuenta();
+			int nroCuenta=Integer.parseInt(request.getParameter("nroCuenta"));
+			cuenta=cuentaNeg.BuscarPorNro(nroCuenta);
+			 String json = "{"
+                     + "\"nroCuenta\": \"" + cuenta.getNroCuenta() + "\","
+                     + "\"dniCliente\": \"" + cuenta.getUsuario().getPersona().getDni() + "\","
+                     + "\"fechaCreacion\": \"" + cuenta.getFechaCreacion() + "\","
+                     + "\"tipoCuenta\": \"" + cuenta.getTipoCuenta() + "\","
+                     + "\"cbu\": \"" + cuenta.getCbu() + "\","
+                     + "\"saldo\": \"" + cuenta.getSaldo() + "\""
+                     + "}";
+			 response.setContentType("application/json");
+             response.setCharacterEncoding("UTF-8");
+             response.getWriter().write(json);
+			
+		}
 	}
 
 	

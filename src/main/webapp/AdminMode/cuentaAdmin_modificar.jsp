@@ -63,7 +63,7 @@
 					<li class="flex space-x-10 mx-auto"><a
 						href="cuentasAdmin.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="cuentaAdmin_agregar.jsp"
+						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="cuentaAdmin_modificar.jsp"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
@@ -201,7 +201,7 @@
             return;
         }
 
-        fetch('CargarCuentaServlet?nroCuenta=' + nroCuenta)
+        fetch('/BancoParcial/ServletModificarCuentas?nroCuenta=' + nroCuenta)
             .then(response => {
                 if (!response.ok) throw new Error('Cuenta no encontrada');
                 return response.json();

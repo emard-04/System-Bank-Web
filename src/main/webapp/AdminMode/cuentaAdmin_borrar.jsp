@@ -53,7 +53,7 @@
 					<li class="flex space-x-10 mx-auto"><a
 						href="cuentasAdmin.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="cuentaAdmin_agregar.jsp"
+						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="cuentaAdmin_modificar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
@@ -67,7 +67,7 @@
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                    <form action="/BancoParcial/ServletModificarCuentas" method="post" class="space-y-6 text-center">
+                    <form action="/BancoParcial/ServletBorrarCuenta" method="post" class="space-y-6 text-center">
                         <p class="text-gray-700 text-lg font-semibold mb-4">Seleccione un Nro de cuenta que quieras eliminar:</p>
                         
                         <div class="mb-6">
@@ -78,7 +78,7 @@
                                 class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
                                 required
                             >
-                                <option value="">Seleccione el numero de cuenta</option>
+                                <option value="" required>Seleccione el numero de cuenta</option>
     <% for (Cuenta c : cuentas) { %>
         <option value="<%= c.getNroCuenta() %>">
     <%= c.getNroCuenta() %> - Cliente DNI: <%= c.getUsuario().getPersona().getDni() %>

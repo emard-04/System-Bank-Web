@@ -2,6 +2,8 @@ package Presentacion;
 
 import java.io.IOException;
 import Daos.*;
+import negocioImpl.CuentasNegImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ServletBorrarCuenta")
 public class ServletBorrarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private daoCuentas daoCuenta = new daoCuentas();
+	private CuentasNegImpl negCuenta = new CuentasNegImpl();
        
     
     public ServletBorrarCuenta() {
@@ -41,9 +43,9 @@ public class ServletBorrarCuenta extends HttpServlet {
         }
 
         try {
+        	System.out.println(nroCuentaStr);
             int nroCuenta = Integer.parseInt(nroCuentaStr);
-
-            boolean exito = daoCuenta.Eliminar(nroCuenta);
+            boolean exito = negCuenta.Eliminar(nroCuenta);
 
             if (exito) {
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentasAdmin.jsp?msg=CuentaEliminada");
