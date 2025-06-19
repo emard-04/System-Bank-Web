@@ -35,7 +35,7 @@ public class PersonaNegImpl implements ClientesNeg{
 
 	    // Obtener ID generado
 	    int idGenerado = daoU.obtenerIdUsuarioPorNombre(usuario.getNombreUsuario());
-	    persona.setIdUsuario(idGenerado);
+	    //persona.setIdUsuario(idGenerado);
 
 	    // Luego agregar la persona con la FK del usuario
 	    return daoP.Agregar(persona);
@@ -63,7 +63,7 @@ public class PersonaNegImpl implements ClientesNeg{
 
 	@Override
 	public Persona Buscardni(String dni) {
-		return daoP.Buscardni(dni);
+		return daoP.existeObj(dni);
 	}
 }
 

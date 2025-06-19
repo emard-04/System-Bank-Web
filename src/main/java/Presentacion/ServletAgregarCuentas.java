@@ -90,6 +90,7 @@ public class ServletAgregarCuentas extends HttpServlet {
     }
 	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		 request.setAttribute("nroCuenta",negCuenta.obtenerId());
+		 request.setAttribute("nroCBU", negCuenta.generarCBU());
 		 RequestDispatcher rd= request.getRequestDispatcher("/AdminMode/cuentaAdmin_agregar.jsp");
 		 rd.forward(request, response);
 	}

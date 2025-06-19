@@ -1,7 +1,6 @@
 package negocio;
 import Entidades.*;
 public interface UsuarioNeg {
-	 boolean AgregarConPersona(Usuario usuario);
-	    boolean existeDni(String dni);
+	 boolean AgregarUsuario(Usuario usuario);
 	    Usuario Login(String nombreUsuario, String contrasena); 
 }

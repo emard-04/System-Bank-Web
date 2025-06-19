@@ -14,12 +14,11 @@ public class Persona {
 	    private String localidad;
 	    private String provincia;
 	    private String correoElectronico;
-	    private int idUsuario;
 
 	    public Persona() {}
 
 	    public Persona(String dni, String cuil, String nombre, String apellido, String sexo, String nacionalidad,
-	                   LocalDate fechaNacimiento, String direccion, String localidad, String provincia, String correoElectronico, int idUsu) {
+	                   LocalDate fechaNacimiento, String direccion, String localidad, String provincia, String correoElectronico) {
 	        this.dni = dni;
 	        this.cuil = cuil;
 	        this.nombre = nombre;
@@ -31,17 +30,9 @@ public class Persona {
 	        this.localidad = localidad;
 	        this.provincia = provincia;
 	        this.correoElectronico = correoElectronico;
-	        this.idUsuario= idUsu;
 	    }
 
-	    // Getters y Setters
-	    public int getIdUsuario() {
-	        return idUsuario;
-	    }
 
-	    public void setIdUsuario(int idUsuario) {
-	        this.idUsuario = idUsuario;
-	    }
 	    public String getDni() {
 	        return dni;
 	    }

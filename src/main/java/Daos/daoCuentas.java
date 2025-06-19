@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 import java.math.BigDecimal; // Import for BigDecimal
 
 //import Interfaces.inCuenta; // Assuming you will create this interface
@@ -22,6 +23,7 @@ public class daoCuentas implements inCuentas{
     private final String Modificar = "UPDATE Cuentas SET IdUsuario=?, FechaCreacion=?, IdtipoCuenta=?, Cbu=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
+    private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
     
     public  daoCuentas() {
@@ -41,7 +43,32 @@ public class daoCuentas implements inCuentas{
         }
         return 0;
     }
-
+    public String generarCBUAleatorio() {
+        Random random = new Random();
+        String cbu;
+        do {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 22; i++) {
+                sb.append(random.nextInt(10));
+            }
+            cbu = sb.toString();
+        } while (verificarCbu(cbu));
+        return cbu;
+        
+    }
+    private boolean verificarCbu(String cbu) {
+    	try {
+            Connection cn = Conexion.getConexion().getSQLConnection();
+            PreparedStatement ps = cn.prepareStatement(existeCBU);
+            ps.setString(1, cbu);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean Agregar(Cuenta cuenta) {
         try {
             Connection cn = Conexion.getConexion().getSQLConnection();

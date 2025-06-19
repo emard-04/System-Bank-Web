@@ -11,5 +11,6 @@ package Interfaces;
 	        Cuenta BuscarPorNro(int nroCuenta);
 	        int obtenerIdCuenta();
 	        boolean existe(int nroCuenta);
+	        String generarCBUAleatorio();
 	}
 

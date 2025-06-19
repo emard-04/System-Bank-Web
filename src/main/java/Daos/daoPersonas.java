@@ -11,11 +11,12 @@ import Entidades.Persona;
 import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona{
-		private final String  Agregar="insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia,Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
+		private final String  Agregar="insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
 		private final String Eliminar="Delete From Persona where Dni=?;";
-		private final String Modificar="Update Personas set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?; ";
+		private final String Modificar="Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?; ";
 		private final String ListarTodo="Select * from Persona;";
 		private final String Existe="Select * from Persona where dni=?;";
+		private final String ExisteMail="Select * from Persona where CorreoElectronico=?;";
 		public boolean Agregar(Persona persona) {
 			try {
 				Connection  cn=Conexion.getConexion().getSQLConnection();
@@ -38,7 +39,7 @@ public class daoPersonas implements inPersona{
 		private PreparedStatement valoresQuery(Connection cn,String query,Persona persona) {
 			PreparedStatement cs=null;
 			try {
-		    cs=cn.prepareCall(query);
+		    cs=cn.prepareStatement(query);
 		    cs.setString(1, persona.getCorreoElectronico());
 		    cs.setString(2, persona.getCuil());
 		    cs.setString(3, persona.getNombre());
@@ -50,6 +51,7 @@ public class daoPersonas implements inPersona{
 		    cs.setString(9, persona.getLocalidad());
 		    cs.setString(10, persona.getProvincia());
 		    cs.setString(11, persona.getDni());
+		    return cs;
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -60,7 +62,6 @@ public class daoPersonas implements inPersona{
 		private Persona valoresPersona(ResultSet rs) {
 			Persona persona=new Persona();
 			try {
-			persona.setIdUsuario(rs.getInt("IdUsuario"));
 			persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
 			persona.setCuil(rs.getString("Cuil"));
 			persona.setNombre(rs.getString("Nombre"));
@@ -137,16 +138,14 @@ public class daoPersonas implements inPersona{
 				  }
 			return false;
 			}
-
-		public Persona Buscardni(String dni) {
+		public Persona existeObj(String dni) {
 			try {
 				  Connection cn= Conexion.getConexion().getSQLConnection();
 				  PreparedStatement ps=cn.prepareStatement(Existe);
 				  ps.setString(1, dni);
 				  ResultSet rs=ps.executeQuery();
 				  if(rs.next()) {
-					  Persona persona=valoresPersona(rs);
-					  return persona;
+					  return valoresPersona(rs);
 				  }
 			}
 				  catch(Exception e) {			  
@@ -154,6 +153,20 @@ public class daoPersonas implements inPersona{
 				  }
 			return new Persona();
 			}
-
+		public boolean verificarMail(String mail) {
+			try {
+				  Connection cn= Conexion.getConexion().getSQLConnection();
+				  PreparedStatement ps=cn.prepareStatement(ExisteMail);
+				  ps.setString(1, mail);
+				  ResultSet rs=ps.executeQuery();
+				  if(rs.next()) {
+					  return true;
+				  }
+			}
+				  catch(Exception e) {			  
+					  e.printStackTrace();
+				  }
+			return false;
+			}
 }
 

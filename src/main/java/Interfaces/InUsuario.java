@@ -7,8 +7,8 @@ public interface InUsuario {
     boolean Modificar(Usuario usuario);
     ArrayList<Usuario> ListarTodo();
     boolean existe(String nombreUsuario);
-    Usuario BuscarPorNombreUsuario(String nombreUsuario);
-    Usuario BuscarDni(String dni);
+   // Usuario BuscarPorNombreUsuario(String nombreUsuario);
+    //Usuario BuscarDni(String dni);
     Usuario BuscarIdusuario(int id);
     Usuario Login(String nombreUsuario, String contrasena);
     int obtenerIdUsuarioPorNombre(String nombreUsuario);
