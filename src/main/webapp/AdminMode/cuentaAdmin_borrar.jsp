@@ -34,26 +34,11 @@
         <main class="flex-1 flex flex-col overflow-y-auto">
             
             <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
-                <h1 class="text-xl font-semibold text-gray-800">CLIENTES</h1>
+                <h1 class="text-xl font-semibold text-gray-800">CUENTAS</h1>
                 <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
             </header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                <ul class="flex space-x-10 justify-center">
-                    <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
-        			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
-        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
-        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
-                </ul>
-           </nav>
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 				<ul class="flex items-center justify-between w-full">
 					<li><a href="HomeAdmin.jsp"
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
@@ -73,13 +58,6 @@
 					<li></li>
 				</ul>
 			</nav>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

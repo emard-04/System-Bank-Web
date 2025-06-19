@@ -26,27 +26,7 @@ body {
 
 			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            <nav class="bg-gray-50 border-b border-gray-200 p-4">
-                <ul class="flex space-x-10 justify-center">
-                    <li><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ...">Listado</a></li>
-        			<li><a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Agregar</a></li>
-        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Modificar</a></li>
-        			<li><a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md ...">Borrar</a></li>
-                </ul>
-            </nav>
-=======
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
->>>>>>> Stashed changes
-=======
-			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
->>>>>>> Stashed changes
-=======
-			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
->>>>>>> Stashed changes
 
 			<a href="logout.jsp"
 				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
@@ -61,14 +41,13 @@ body {
 				<div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
 			</header>
 
-			 <nav class="bg-gray-50 border-b border-gray-200 p-4">
+			<nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
 					<li><a href="HomeAdmin.jsp"
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
-					<li class="flex space-x-10 mx-auto"><a
-						href="cuentaAdmin.jsp"
+					<li class="flex space-x-10 mx-auto"><a href="cuentaAdmin.jsp"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="cuentaAdmin_agregar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
