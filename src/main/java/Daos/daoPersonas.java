@@ -10,163 +10,196 @@ import Interfaces.inPersona;
 import Entidades.Persona;
 import Interfaces.Conexion;
 
-public class daoPersonas implements inPersona{
-		private final String  Agregar="insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
-		private final String Eliminar="Delete From Persona where Dni=?;";
-		private final String Modificar="Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?; ";
-		private final String ListarTodo="Select * from Persona;";
-		private final String Existe="Select * from Persona where dni=?;";
-		private final String ExisteMail="Select * from Persona where CorreoElectronico=?;";
-		public boolean Agregar(Persona persona) {
-			try {
-				Connection  cn=Conexion.getConexion().getSQLConnection();
-				//PreparedStatement st=valoresxParametro(cn,Agregar,persona);
-				/*if(st.executeUpdate()>0){// lo tengo que cambiar a un procedimiento almacenado
-				cn.commit();//guarda los cambios
-				return true;
-				}*/
-				PreparedStatement cs= valoresQuery(cn,Agregar,persona);
-				if(cs.executeUpdate()>0) {
-				cn.commit();
-				return true;
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
-				System.out.println("No se pudo conectar");
-			}
-			return false;
-		}
-		private PreparedStatement valoresQuery(Connection cn,String query,Persona persona) {
-			PreparedStatement cs=null;
-			try {
-		    cs=cn.prepareStatement(query);
-		    cs.setString(1, persona.getCorreoElectronico());
-		    cs.setString(2, persona.getCuil());
-		    cs.setString(3, persona.getNombre());
-		    cs.setString(4, persona.getApellido());
-		    cs.setString(5, persona.getSexo());
-		    cs.setString(6, persona.getNacionalidad());
-		    cs.setDate(7, java.sql.Date.valueOf(persona.getFechaNacimiento())); 
-		    cs.setString(8, persona.getDireccion());
-		    cs.setString(9, persona.getLocalidad());
-		    cs.setString(10, persona.getProvincia());
-		    cs.setString(11, persona.getDni());
-		    return cs;
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			return cs;
-		}
-		private Persona valoresPersona(ResultSet rs) {
-			Persona persona=new Persona();
-			try {
-			persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
-			persona.setCuil(rs.getString("Cuil"));
-			persona.setNombre(rs.getString("Nombre"));
-			persona.setApellido(rs.getString("Apellido"));
-			persona.setSexo(rs.getString("Sexo"));
-			persona.setNacionalidad(rs.getString("Nacionalidad"));
-			persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate()); // suponiendo que usás LocalDate
-			persona.setDireccion(rs.getString("Direccion"));
-			persona.setLocalidad(rs.getString("Localidad"));
-			persona.setProvincia(rs.getString("Provincia"));
-			persona.setDni(rs.getString("Dni"));
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			return persona;
-		}
-		public boolean Eliminar(String dni) {
-			try{
-				Connection  cn=Conexion.getConexion().getSQLConnection();
-				PreparedStatement ps=cn.prepareStatement(Eliminar);
-				ps.setString(1, dni);
-				if(ps.executeUpdate()>0) {
-					cn.commit();
-					return true;
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-		public boolean Modificar(Persona persona) {
-			try {
-				Connection  cn=Conexion.getConexion().getSQLConnection();
-			PreparedStatement cs=valoresQuery(cn, Modificar, persona);
-			if(cs.executeUpdate()>0) {
-				cn.commit();
-				return true;
-			}
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-		public ArrayList<Persona> ListarTodo() {
-			ArrayList<Persona> ListaPersona=new ArrayList<Persona>();
-			try {
-				Connection cn= Conexion.getConexion().getSQLConnection();
-				Statement st=cn.createStatement();
-				ResultSet rs=st.executeQuery(ListarTodo);
-				while(rs.next()) {
-					Persona persona=valoresPersona(rs);
-					ListaPersona.add(persona);
-				}
-				
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			return ListaPersona;
-		}
-		public boolean existe(String dni) {
-			try {
-				  Connection cn= Conexion.getConexion().getSQLConnection();
-				  PreparedStatement ps=cn.prepareStatement(Existe);
-				  ps.setString(1, dni);
-				  ResultSet rs=ps.executeQuery();
-				  if(rs.next()) {
-					  return true;
-				  }
-			}
-				  catch(Exception e) {			  
-					  e.printStackTrace();
-				  }
-			return false;
-			}
-		public Persona existeObj(String dni) {
-			try {
-				  Connection cn= Conexion.getConexion().getSQLConnection();
-				  PreparedStatement ps=cn.prepareStatement(Existe);
-				  ps.setString(1, dni);
-				  ResultSet rs=ps.executeQuery();
-				  if(rs.next()) {
-					  return valoresPersona(rs);
-				  }
-			}
-				  catch(Exception e) {			  
-					  e.printStackTrace();
-				  }
-			return new Persona();
-			}
-		public boolean verificarMail(String mail) {
-			try {
-				  Connection cn= Conexion.getConexion().getSQLConnection();
-				  PreparedStatement ps=cn.prepareStatement(ExisteMail);
-				  ps.setString(1, mail);
-				  ResultSet rs=ps.executeQuery();
-				  if(rs.next()) {
-					  return true;
-				  }
-			}
-				  catch(Exception e) {			  
-					  e.printStackTrace();
-				  }
-			return false;
-			}
-}
+public class daoPersonas implements inPersona {
+    private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
+    private final String Eliminar = "Delete From Persona where Dni=?;";
+    private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
+    private final String ListarTodo = "Select * from Persona;";
+    private final String Existe = "Select * from Persona where dni=?;";
+    private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
 
+    public boolean Agregar(Persona persona) {
+        Connection cn = null;
+        PreparedStatement cs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            cs = valoresQuery(cn, Agregar, persona);
+            if (cs.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("No se pudo conectar");
+        } finally {
+            try { if (cs != null) cs.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+
+    private PreparedStatement valoresQuery(Connection cn, String query, Persona persona) {
+        PreparedStatement cs = null;
+        try {
+            cs = cn.prepareStatement(query);
+            cs.setString(1, persona.getCorreoElectronico());
+            cs.setString(2, persona.getCuil());
+            cs.setString(3, persona.getNombre());
+            cs.setString(4, persona.getApellido());
+            cs.setString(5, persona.getSexo());
+            cs.setString(6, persona.getNacionalidad());
+            cs.setDate(7, java.sql.Date.valueOf(persona.getFechaNacimiento()));
+            cs.setString(8, persona.getDireccion());
+            cs.setString(9, persona.getLocalidad());
+            cs.setString(10, persona.getProvincia());
+            cs.setString(11, persona.getDni());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cs;
+    }
+
+    private Persona valoresPersona(ResultSet rs) {
+        Persona persona = new Persona();
+        try {
+            persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
+            persona.setCuil(rs.getString("Cuil"));
+            persona.setNombre(rs.getString("Nombre"));
+            persona.setApellido(rs.getString("Apellido"));
+            persona.setSexo(rs.getString("Sexo"));
+            persona.setNacionalidad(rs.getString("Nacionalidad"));
+            persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
+            persona.setDireccion(rs.getString("Direccion"));
+            persona.setLocalidad(rs.getString("Localidad"));
+            persona.setProvincia(rs.getString("Provincia"));
+            persona.setDni(rs.getString("Dni"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return persona;
+    }
+
+    public boolean Eliminar(String dni) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(Eliminar);
+            ps.setString(1, dni);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+
+    public boolean Modificar(Persona persona) {
+        Connection cn = null;
+        PreparedStatement cs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            cs = valoresQuery(cn, Modificar, persona);
+            if (cs.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (cs != null) cs.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+
+    public ArrayList<Persona> ListarTodo() {
+        ArrayList<Persona> ListaPersona = new ArrayList<>();
+        Connection cn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            st = cn.createStatement();
+            rs = st.executeQuery(ListarTodo);
+            while (rs.next()) {
+                Persona persona = valoresPersona(rs);
+                ListaPersona.add(persona);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (st != null) st.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return ListaPersona;
+    }
+
+    public boolean existe(String dni) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(Existe);
+            ps.setString(1, dni);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+
+    public Persona existeObj(String dni) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(Existe);
+            ps.setString(1, dni);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return valoresPersona(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return new Persona();
+    }
+
+    public boolean verificarMail(String mail) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(ExisteMail);
+            ps.setString(1, mail);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+}

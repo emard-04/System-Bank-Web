@@ -54,13 +54,14 @@ body {
 					</li>
 
 					<li class="flex space-x-10 mx-auto">
-    <a href="/BancoParcial/ServletListarCuentas"
+					<!-- Se utiliza la ruta completa ya que de otro modo al hacer varios cambios de ventana genera error. En cambio con la ruta completa siempre redirige bien att:Juan -->
+    <a href="/BancoParcial/ServletListarCuentas?openListar=1"
        class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
     <a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
        class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-    <a href="cuentaAdmin_modificar.jsp"
+    <a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp"
        class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-    <a href="cuentaAdmin_borrar.jsp"
+    <a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp"
        class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 </li>
 					<li></li>

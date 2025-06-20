@@ -61,13 +61,13 @@
 					</li>
 
 					<li class="flex space-x-10 mx-auto"><a
-						href="cuentasAdmin.jsp"
+						href="/BancoParcial/ServletListarCuentas?openListar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="cuentaAdmin_modificar.jsp"
+						<a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="cuentaAdmin_borrar.jsp"
+						<a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -169,7 +169,7 @@
 
                         <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
                             <button
-                                type="submit"
+                                type="submit" name="btnModificar"
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
                             >
                                 Guardar Cambios

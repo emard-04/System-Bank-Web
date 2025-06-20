@@ -26,20 +26,9 @@ public class ServletListarCuentas extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			List<Cuenta> listaCuentas = daoCuenta.ListarTodo(); 
-
-			
-			request.setAttribute("cuentas", listaCuentas);
-
-		
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
-			dispatcher.forward(request, response);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendRedirect("error.jsp"); 
-		}
+    	if(request.getParameter("openListar")!=null) {
+    	windowDefault(request, response);
+    	}
 	}
 
 	
@@ -47,5 +36,16 @@ public class ServletListarCuentas extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
+		try {
+			List<Cuenta> listaCuentas = daoCuenta.ListarTodo(); 
+			request.setAttribute("cuentas", listaCuentas);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("error.jsp"); 
+		}
+	}
+	}
 
-}

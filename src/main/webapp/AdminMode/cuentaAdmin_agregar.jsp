@@ -49,7 +49,7 @@ body {
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
-					<li class="flex space-x-10 mx-auto"><a href="/BancoParcial/AdminMode/cuentasAdmin.jsp"
+					<li class="flex space-x-10 mx-auto"><a href="/BancoParcial/ServletListarCuentas?openListar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
