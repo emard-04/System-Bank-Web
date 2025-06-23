@@ -44,7 +44,8 @@ public class ServletModificarCuentas extends HttpServlet {
                      + "\"nroCuenta\": \"" + cuenta.getNroCuenta() + "\","
                      + "\"dniCliente\": \"" + cuenta.getUsuario().getPersona().getDni() + "\","
                      + "\"fechaCreacion\": \"" + cuenta.getFechaCreacion() + "\","
-                     + "\"tipoCuenta\": \"" + cuenta.getTipoCuenta() + "\","
+                     + "\"tipoCuenta\": \"" + cuenta.getTipoCuenta().getIdTipoCuenta() + "\","
+                     + "\"tipoCuentaDescripcion\": \"" + cuenta.getTipoCuenta().getDescripcion() + "\","
                      + "\"cbu\": \"" + cuenta.getCbu() + "\","
                      + "\"saldo\": \"" + cuenta.getSaldo() + "\""
                      + "}";
