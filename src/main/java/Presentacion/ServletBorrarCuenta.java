@@ -48,7 +48,7 @@ public class ServletBorrarCuenta extends HttpServlet {
             boolean exito = negCuenta.Eliminar(nroCuenta);
 
             if (exito) {
-                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentasAdmin.jsp?msg=CuentaEliminada");
+                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?msg=CuentaEliminada");
             } else {
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?error=Error al eliminar cuenta");
             }

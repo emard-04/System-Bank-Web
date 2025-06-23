@@ -133,11 +133,11 @@
                             <label class="block text-gray-700 text-lg font-semibold mb-2">TIPO</label>
                             <div class="flex items-center space-x-6">
                                 <div class="flex items-center">
-                                    <input type="radio" id="cuenta_corriente_mod" name="tipo_cuenta_mod" value="Corriente" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                                    <input type="radio" id="cuenta_corriente_mod" name="tipo_cuenta_mod" value="Cuenta Corriente" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500" required>
                                     <label for="cuenta_corriente_mod" class="ml-2 text-gray-800 text-lg">Cuenta Corriente</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input type="radio" id="caja_ahorro_mod" name="tipo_cuenta_mod" value="Ahorro" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
+                                    <input type="radio" id="caja_ahorro_mod" name="tipo_cuenta_mod" value="Caja de Ahorro" class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
                                     <label for="caja_ahorro_mod" class="ml-2 text-gray-800 text-lg">Caja de Ahorro</label>
                                 </div>
                             </div>
@@ -212,9 +212,9 @@
                 document.getElementById('fecha_creacion_mod').value = data.fechaCreacion;
                 // marcar radio según tipo de cuenta
                 if(data.tipoCuenta == "1") {
-                    document.getElementById('cuenta_corriente_mod').checked = true;
-                } else {
                     document.getElementById('caja_ahorro_mod').checked = true;
+                } else {
+                    document.getElementById('cuenta_corriente_mod').checked = true;
                 }
                 document.getElementById('cbu_mod').value = data.cbu;
                 document.getElementById('saldo_mod').value = data.saldo;

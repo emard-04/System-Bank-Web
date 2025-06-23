@@ -77,9 +77,9 @@ public class ServletAgregarCuentas extends HttpServlet {
         boolean exito = negCuenta.Agregar(cuenta);
 
         // 6. Redirigir según resultado
-        String contextPath = request.getContextPath();
         if (exito) {
-            response.sendRedirect(contextPath + "/AdminMode/HomeAdmin.jsp?msg=CuentaAgregada");
+        	 String ventana="/AdminMode/cuentaAdmin_agregar.jsp";
+            windowDefault(request, response, ventana);
         } else {
             String ventana="/AdminMode/cuentaAdmin_agregar.jsp?error=Error al agregar";
             windowDefault(request, response, ventana);

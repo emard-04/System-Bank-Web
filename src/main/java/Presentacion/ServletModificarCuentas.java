@@ -3,7 +3,9 @@ package Presentacion;
 import java.io.IOException;
 import Entidades.*;
 import negocio.CuentasNeg;
+import negocio.TipoCuentaNeg;
 import negocioImpl.CuentasNegImpl;
+import negocioImpl.TipoCuentaNegImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,8 +26,8 @@ import java.util.Formatter.BigDecimalLayoutForm;
 @WebServlet("/ServletModificarCuentas")
 public class ServletModificarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private daoCuentas daoCuenta = new daoCuentas();
 	private CuentasNeg cuentaNeg= new CuentasNegImpl();
+	private TipoCuentaNeg TipocuentaNeg= new TipoCuentaNegImpl();
    
     public ServletModificarCuentas() {
         super();
@@ -70,7 +72,6 @@ public class ServletModificarCuentas extends HttpServlet {
             BigDecimal saldo = new BigDecimal(request.getParameter("saldo_mod"));
 
             // 2. Obtener idTipoCuenta según texto
-            int idTipoCuenta = tipoCuentaTexto.equalsIgnoreCase("Corriente") ? 1 : 2;
 
             // 3. Buscar usuario por DNI (asumiendo que tienes daoUsuario y método BuscarDni)
             daoUsuario daoU = new daoUsuario();
@@ -80,26 +81,22 @@ public class ServletModificarCuentas extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Usuario no encontrado");
                 return;
             }
-
             // 4. Armar objeto Cuenta con los datos actualizados
             Cuenta cuenta = new Cuenta();
             cuenta.setNroCuenta(nroCuenta);
             cuenta.setUsuario(usuario);
             cuenta.setFechaCreacion(fechaCreacion);
-
-            TipoCuenta tipoCuenta = new TipoCuenta();
-            tipoCuenta.setIdTipoCuenta(idTipoCuenta);
+            TipoCuenta tipoCuenta = TipocuentaNeg.buscarXDescripcion(tipoCuentaTexto);
             cuenta.setTipoCuenta(tipoCuenta);
-
             cuenta.setCbu(cbu);
             cuenta.setSaldo(saldo);
 
             // 5. Actualizar cuenta en base de datos (debe estar implementado daoCuentas.Modificar o similar)
-            boolean exito = daoCuenta.Modificar(cuenta);
+            boolean exito = cuentaNeg.Modificar(cuenta);
 
             // 6. Redirigir según resultado
             if (exito) {
-                response.sendRedirect(request.getContextPath() + "/BancoParcial/ServletListarCuentas?openListar=1");
+                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp");
             } else {
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Error al modificar la cuenta");
             }

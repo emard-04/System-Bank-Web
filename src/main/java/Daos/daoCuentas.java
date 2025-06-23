@@ -25,7 +25,7 @@ public class daoCuentas implements inCuentas{
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
-    
+    private daoTipoCuenta dTipoCuenta;
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub
 	}
@@ -142,10 +142,10 @@ public class daoCuentas implements inCuentas{
             // Similar al Usuario, solo seteamos el IdTipoCuenta por ahora.
             // Si necesitas la descripción del tipo de cuenta, necesitarías un daoTipoCuenta
             // o un JOIN en la consulta SQL.
+          //  TipoCuenta tipoCuenta = dTipoCuenta.buscarXID(rs.getInt("idTipoCuenta"));
             TipoCuenta tipoCuenta = new TipoCuenta();
             tipoCuenta.setIdTipoCuenta(rs.getInt("IdtipoCuenta"));
             cuenta.setTipoCuenta(tipoCuenta);
-
             cuenta.setCbu(rs.getString("Cbu"));
             cuenta.setSaldo(rs.getBigDecimal("Saldo"));
         } catch (Exception e) {
