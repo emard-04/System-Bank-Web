@@ -118,14 +118,14 @@ body {
 							<div class="flex items-center space-x-6">
 								<div class="flex items-center">
 									<input type="radio" id="cuenta_corriente" name="tipo_cuenta"
-										value="Corriente"
+										value="Cuenta Corriente"
 										class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
 										required> <label for="cuenta_corriente"
 										class="ml-2 text-gray-800 text-lg">Cuenta Corriente</label>
 								</div>
 								<div class="flex items-center">
 									<input type="radio" id="caja_ahorro" name="tipo_cuenta"
-										value="Ahorro"
+										value="Caja de Ahorro"
 										class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
 									<label for="caja_ahorro" class="ml-2 text-gray-800 text-lg">Caja
 										de Ahorro</label>

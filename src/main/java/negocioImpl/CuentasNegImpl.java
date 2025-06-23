@@ -1,6 +1,5 @@
 package negocioImpl;
 
-import Daos.daoCuentas;
 import Interfaces.inCuentas;
 import negocio.CuentasNeg;
 import java.util.ArrayList;
@@ -9,10 +8,13 @@ import Entidades.Cuenta;
 
 public class CuentasNegImpl implements CuentasNeg{
 	private inCuentas dao = new daoCuentas();
-
     @Override
     public boolean Agregar(Cuenta cuenta) {
+    	UsuarioNegImpl negUsuario= new UsuarioNegImpl();
+    	if(negUsuario.Existe(cuenta.getUsuario().getNombreUsuario())) {
         return dao.Agregar(cuenta);
+        }
+    	return false;
     }
 
     @Override

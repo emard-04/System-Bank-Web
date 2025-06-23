@@ -6,15 +6,15 @@ import Entidades.*;
 public class UsuarioNegImpl implements UsuarioNeg {
 
     private InUsuario daoUsuario = new daoUsuario();
-    private inPersona daoPersona = new daoPersonas();
+    private PersonaNegImpl negPersona = new PersonaNegImpl();
 
     @Override
     public boolean AgregarUsuario(Usuario usuario) {
         Persona persona = usuario.getPersona();
-        if (daoPersona.existe(persona.getDni()))return false;
-        if(daoPersona.verificarMail(persona.getCorreoElectronico()))return false;
+        if (negPersona.existe(persona.getDni()))return false;
+        if(negPersona.verificarMail(persona.getCorreoElectronico()))return false;
         if(daoUsuario.existe(usuario.getNombreUsuario())) return false;
-        boolean exitoPersona=daoPersona.Agregar(persona);
+        boolean exitoPersona=negPersona.Agregar(persona);
         if(!exitoPersona) {
         	System.out.println("No se agrego persona");
         	return false;
@@ -24,9 +24,12 @@ public class UsuarioNegImpl implements UsuarioNeg {
         	return false;
         }
         return true;
-        
-
-        
+    }
+    public boolean Existe(String nombreUsuaario) {
+    	return daoUsuario.existe(nombreUsuaario);
+    }
+    public Usuario BuscarDni(String dni) {
+    	return daoUsuario.BuscarDni(dni);
     }
     @Override
     public Usuario Login(String nombreUsuario, String contrasena) {

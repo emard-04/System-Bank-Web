@@ -17,6 +17,7 @@ public class daoUsuario implements InUsuario {
     private final String Modificar = "UPDATE Usuario SET Contraseña=?, dni=?, TipoUsuario=? WHERE NombreUsuario=?;";
     private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios;";
     private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
+    private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
     private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
 
@@ -163,7 +164,7 @@ public class daoUsuario implements InUsuario {
         ResultSet rs = null;
         try {
             cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(Existe);
+            ps = cn.prepareStatement(ExisteDni);
             ps.setString(1, Dni);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -176,7 +177,7 @@ public class daoUsuario implements InUsuario {
             try { if (ps != null) ps.close(); } catch (Exception e) {}
             try { if (cn != null) cn.close(); } catch (Exception e) {}
         }
-        return new Usuario();
+        return null;
     }
 
     public Usuario BuscarIdusuario(int id) {
