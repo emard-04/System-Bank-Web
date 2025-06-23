@@ -55,7 +55,7 @@ body {
 
 					<li class="flex space-x-10 mx-auto">
 					<!-- Se utiliza la ruta completa ya que de otro modo al hacer varios cambios de ventana genera error. En cambio con la ruta completa siempre redirige bien att:Juan -->
-    <a href="/BancoParcial/ServletListarCuentas?openListar=1"
+    <a href="/BancoParcial/ServletListarCuentas?openListar=1&pagina=1"
        class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
     <a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
        class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
@@ -108,25 +108,29 @@ body {
 </tbody>
 					</table>
 				</div>
+<%
+    Integer paginaActual = (Integer) request.getAttribute("paginaActual");
+    Integer totalPaginas = (Integer) request.getAttribute("totalPaginas");
+    if (paginaActual == null) paginaActual = 1;
+    if (totalPaginas == null) totalPaginas = 1;
+%>
+<div class="bg-red-700 p-3 rounded-b-lg shadow-lg flex justify-center items-center mt-0">
+    <% if (paginaActual > 1) { %>
+        <a href="ServletListarCuentas?openListar=1&pagina=<%= paginaActual - 1 %>" class="p-2 mx-1 text-white">&larr;</a>
+    <% } %>
 
-				<div
-					class="bg-red-700 p-3 rounded-b-lg shadow-lg flex justify-end items-center mt-0">
-					<button
-						class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-						&larr;</button>
-					<button
-						class="bg-red-500 text-white font-bold p-2 mx-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-						1</button>
-					<button
-						class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-						2</button>
-					<button
-						class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-						3</button>
-					<button
-						class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-						&rarr;</button>
-				</div>
+    <% for (int i = 1; i <= totalPaginas; i++) { %>
+        <a href="ServletListarCuentas?openListar=1&pagina=<%= i %>" class="p-2 mx-1 <%= (i == paginaActual) ? "bg-red-500" : "text-white" %> rounded-md">
+            <%= i %>
+        </a>
+    <% } %>
+
+    <% if (paginaActual < totalPaginas) { %>
+        <a href="ServletListarCuentas?openListar=1&pagina=<%= paginaActual + 1 %>" class="p-2 mx-1 text-white">&rarr;</a>
+    <% } %>
+</div>
+
+				
 			</div>
 
 			<footer

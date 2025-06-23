@@ -45,7 +45,8 @@ public class ServletLogin extends HttpServlet {
 			// Redireccionamos según tipo de usuario
 			if (usuario.isTipoUsuario()) {
 				// Admin
-				response.sendRedirect("AdminMode/HomeAdmin.jsp");
+				
+				response.sendRedirect("ServletListarCuentas?openListar=1.jsp");
 			} else {
 				// Cliente
 				response.sendRedirect("ClientMode/homeClient.jsp");

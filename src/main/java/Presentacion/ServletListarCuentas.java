@@ -36,16 +36,44 @@ public class ServletListarCuentas extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	private void windowDefault(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-		try {
-			List<Cuenta> listaCuentas = daoCuenta.ListarTodo(); 
-			request.setAttribute("cuentas", listaCuentas);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendRedirect("error.jsp"); 
-		}
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    try {
+	        List<Cuenta> listaCuentas = daoCuenta.ListarTodo();
+
+	        // Parámetros de paginación
+	        int cuentasPorPagina = 10;
+	        int paginaActual = 1;
+
+	        // Obtener número de página desde la URL
+	        String pagParam = request.getParameter("pagina");
+	        if (pagParam != null) {
+	            try {
+	                paginaActual = Integer.parseInt(pagParam);
+	            } catch (NumberFormatException e) {
+	                paginaActual = 1;
+	            }
+	        }
+
+	        // Calcular índices
+	        int totalCuentas = listaCuentas.size();
+	        int totalPaginas = (int) Math.ceil((double) totalCuentas / cuentasPorPagina);
+	        int desde = (paginaActual - 1) * cuentasPorPagina;
+	        int hasta = Math.min(desde + cuentasPorPagina, totalCuentas);
+
+	        // Sublista de la página actual
+	        List<Cuenta> cuentasPaginadas = listaCuentas.subList(desde, hasta);
+
+	        // Setear atributos
+	        request.setAttribute("cuentas", cuentasPaginadas);
+	        request.setAttribute("paginaActual", paginaActual);
+	        request.setAttribute("totalPaginas", totalPaginas);
+
+	        RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
+	        dispatcher.forward(request, response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.sendRedirect("error.jsp");
+	    }
 	}
 	}
 
