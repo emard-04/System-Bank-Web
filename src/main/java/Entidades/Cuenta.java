@@ -9,6 +9,7 @@ public class Cuenta {
     private TipoCuenta tipoCuenta;
     private String cbu;
     private BigDecimal saldo;
+    private boolean estado;
 
     public Cuenta() {}
 
@@ -57,8 +58,17 @@ public class Cuenta {
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
+    
 
-    @Override
+    public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	@Override
     public String toString() {
         return "Cuenta #" + nroCuenta + " | Usuario: " + usuario.getNombreUsuario() + " | Tipo: " + tipoCuenta.getDescripcion() + 
                " | Saldo: $" + saldo + " | CBU: " + cbu + " | Creada: " + fechaCreacion;

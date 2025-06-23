@@ -14,6 +14,7 @@ public class Persona {
 	    private String localidad;
 	    private String provincia;
 	    private String correoElectronico;
+	    private boolean estado;
 
 	    public Persona() {}
 
@@ -99,8 +100,17 @@ public class Persona {
 	    public void setCorreoElectronico(String correoElectronico) {
 	        this.correoElectronico = correoElectronico;
 	    }
+	    
 
-	    @Override
+	    public boolean isEstado() {
+			return estado;
+		}
+
+		public void setEstado(boolean estado) {
+			this.estado = estado;
+		}
+
+		@Override
 	    public String toString() {
 	        return nombre + " " + apellido + " | DNI: " + dni + " | CUIL: " + cuil + " | " + nacionalidad + " | Nacido: " + fechaNacimiento;
 	    }

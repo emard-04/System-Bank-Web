@@ -10,6 +10,7 @@ public class Prestamos {
     private BigDecimal importePedido;
     private String plazoDePago;
     private BigDecimal montoCuotasxMes;
+    private boolean estado;
 
     public Prestamos() {}
 
@@ -66,8 +67,17 @@ public class Prestamos {
     public void setMontoCuotasxMes(BigDecimal montoCuotasxMes) {
         this.montoCuotasxMes = montoCuotasxMes;
     }
+    
 
-    @Override
+    public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	@Override
     public String toString() {
         return "Préstamo ID: " + idPrestamo + " | Usuario: " + usuario.getNombreUsuario() + " | Fecha: " + fecha +
                 "\n  Importe Pedido: $" + importePedido + " | Importe a Pagar: $" + importeApagar +
