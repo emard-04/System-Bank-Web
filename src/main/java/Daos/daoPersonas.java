@@ -8,15 +8,21 @@ import java.util.ArrayList;
 
 import Interfaces.inPersona;
 import Entidades.Persona;
+import Entidades.TelefonoxPersona;
+import Entidades.TipoCuenta;
 import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona {
     private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
     private final String Eliminar = "Delete From Persona where Dni=?;";
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
-    private final String ListarTodo = "Select * from Persona;";
+    private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
+            + "(SELECT Telefono FROM TelefonoXPersonas WHERE Dni = Persona.Dni LIMIT 1) AS Telefono, "
+            + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento "
+            + "FROM Persona WHERE Estado = 'Activo';";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
+    private daoTelefono dTelefono;
 
     public boolean Agregar(Persona persona) {
         Connection cn = null;
@@ -61,6 +67,7 @@ public class daoPersonas implements inPersona {
 
     private Persona valoresPersona(ResultSet rs) {
         Persona persona = new Persona();
+        daoTelefono dTel = new daoTelefono();
         try {
             persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
             persona.setCuil(rs.getString("Cuil"));
@@ -68,6 +75,11 @@ public class daoPersonas implements inPersona {
             persona.setApellido(rs.getString("Apellido"));
             persona.setSexo(rs.getString("Sexo"));
             persona.setNacionalidad(rs.getString("Nacionalidad"));
+            TelefonoxPersona tel = dTel.buscarXTelefono(rs.getString("Telefono"));
+            if (tel != null) {
+                persona.setTelefono(tel.getTelefono());
+            }
+            //persona.setTelefono(rs.getString("Telefono"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
             persona.setLocalidad(rs.getString("Localidad"));

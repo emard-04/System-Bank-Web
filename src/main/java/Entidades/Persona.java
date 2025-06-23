@@ -9,6 +9,7 @@ public class Persona {
 	    private String apellido;
 	    private String sexo;
 	    private String nacionalidad;
+	    private String telefono;
 	    private LocalDate fechaNacimiento;
 	    private String direccion;
 	    private String localidad;
@@ -108,6 +109,14 @@ public class Persona {
 
 		public void setEstado(boolean estado) {
 			this.estado = estado;
+		}
+
+		public String getTelefono() {
+			return telefono;
+		}
+
+		public void setTelefono(String telefono) {
+			this.telefono = telefono;
 		}
 
 		@Override
