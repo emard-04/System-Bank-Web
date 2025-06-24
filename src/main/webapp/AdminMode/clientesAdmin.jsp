@@ -47,14 +47,14 @@
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
-					<li><a href="HomeAdmin.jsp"
+					<li><a href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp" 
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
 					<li class="flex space-x-10 mx-auto"><a
 						href="/BancoParcial/ServletListarClientes?openListar=1&pagina=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="clientesAdmin_agregar.jsp"
+						<a href="/BancoParcial/ServletAgregarCliente?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="clienteAdmin_modificar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
@@ -68,6 +68,7 @@
 
             <div class="p-6 flex-1 overflow-y-auto">
                 <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-red-700 text-white">
                             <tr>
@@ -103,6 +104,7 @@
 <% } } %>
                             </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <%

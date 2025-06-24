@@ -45,7 +45,7 @@ body {
 
 			<nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
-					<li><a href="HomeAdmin.jsp"
+					<li><a href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp" 
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 

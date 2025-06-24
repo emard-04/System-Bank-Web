@@ -18,7 +18,7 @@ public class daoPersonas implements inPersona {
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
     private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
             + "(SELECT Telefono FROM TelefonoXPersonas WHERE Dni = Persona.Dni LIMIT 1) AS Telefono, "
-            + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento "
+            + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento, Direccion "
             + "FROM Persona WHERE Estado = 'Activo';";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
