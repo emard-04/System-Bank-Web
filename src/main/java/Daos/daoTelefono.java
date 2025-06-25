@@ -138,6 +138,23 @@ public class daoTelefono implements inTelefono{
         }
         return false;
     }
-	
-	
+	public boolean existe(TelefonoxPersona telefono) {
+		Connection cn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			cn=Conexion.getConexion().getSQLConnection();
+			ps= cn.prepareStatement(buscarxTelefono);
+			ps.setString(1, telefono.getTelefono());
+			rs = ps.executeQuery();
+            return rs.next();
+		}catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+            try { if (rs != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
 }

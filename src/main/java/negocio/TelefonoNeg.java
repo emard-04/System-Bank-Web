@@ -1,15 +1,12 @@
-package Interfaces;
+package negocio;
 
 import java.util.ArrayList;
 
 import Entidades.TelefonoxPersona;
 
-
-public interface inTelefono {
-	public TelefonoxPersona buscarXTelefono(String telefono);
+public interface TelefonoNeg {
 	public boolean Modificar(String oldTelefono,TelefonoxPersona telefono);
 	public boolean Agregar(TelefonoxPersona telefono);
 	public boolean Eliminar(TelefonoxPersona telefono);
-	public boolean existe(TelefonoxPersona telefono);
 	public ArrayList<TelefonoxPersona> listarTelefonos(String dni);
 }

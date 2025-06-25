@@ -213,7 +213,7 @@ body {
 								<option value="">-- Seleccione un teléfono --</option>
 							</select> 
 							<input type="hidden" id="oldTelefono" name="oldTelefono">
-							<input type="hidden" id="Accion" name="Accion">
+							<input type="hidden" id="Accion" name="Accion" value="">
 							<div class="flex space-x-2">
 								<input type="text" id="telefono_input" name="telefono_input"
 									placeholder="Ej: 1123456789"
@@ -234,7 +234,7 @@ body {
 						<div class="md:col-span-3 flex justify-center space-x-6 pt-4">
 							<button type="submit"
 								class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md text-xl">Modificar</button>
-							<button type="button"
+							<button type="button"  id="btnCancelar"
 								class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md text-xl">Cancelar</button>
 						</div>
 
@@ -293,6 +293,9 @@ body {
                 limpiarCampos();
             });
     });
+    document.getElementById('btnCancelar').addEventListener('click', function () {
+        location.reload();
+    });
     document.getElementById('telefono_select').addEventListener('change', function() {
     	var telefono=this.value;
     	document.getElementById('telefono_input').value=telefono;
@@ -340,6 +343,6 @@ body {
     telefonoSeleccionado = '';
     actualizarBotonesTelefono();
     }
-    
+
 </script>
 </html>

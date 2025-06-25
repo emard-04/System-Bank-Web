@@ -18,8 +18,10 @@ import Entidades.TelefonoxPersona;
 import Entidades.Usuario;
 import Interfaces.inTelefono;
 import negocio.ClientesNeg;
+import negocio.TelefonoNeg;
 import negocio.UsuarioNeg;
 import negocioImpl.PersonaNegImpl;
+import negocioImpl.TelefonoNegImpl;
 import negocioImpl.UsuarioNegImpl;
 
 /**
@@ -30,7 +32,7 @@ public class ServletModificarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static UsuarioNeg negUsuario= new UsuarioNegImpl();
 	private static ClientesNeg negCliente= new PersonaNegImpl();
-    private static daoTelefono dT;
+    private static TelefonoNeg dT=new TelefonoNegImpl();
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -52,7 +54,6 @@ public class ServletModificarCliente extends HttpServlet {
 			Usuario us= new Usuario();
 			TelefonoxPersona  telefono=new TelefonoxPersona();
 			us=negUsuario.BuscarDni(dniCliente);
-			 dT=new daoTelefono();
 			ArrayList<TelefonoxPersona>Lista=dT.listarTelefonos(dniCliente);
 			 StringBuilder telefonosJson = new StringBuilder("[");
 			    for (int i = 0; i < Lista.size(); i++) {
@@ -109,7 +110,6 @@ public class ServletModificarCliente extends HttpServlet {
 		System.out.println(request.getParameter("Accion"));
 		
 		if(request.getParameter("Accion")!=null) {
-			dT=new daoTelefono();
 			if(request.getParameter("Accion").equals("Editar")) {
 				TelefonoxPersona tf=new TelefonoxPersona();
 				tf.setDni(persona);
