@@ -59,8 +59,7 @@ body {
 						href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 
-						<a
-						href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregar=1"
+						<a href="clientesAdmin_agregar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 
 						<a

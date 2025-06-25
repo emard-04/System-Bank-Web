@@ -75,11 +75,11 @@ public class daoPersonas implements inPersona {
             persona.setApellido(rs.getString("Apellido"));
             persona.setSexo(rs.getString("Sexo"));
             persona.setNacionalidad(rs.getString("Nacionalidad"));
-           // TelefonoxPersona tel = dTel.buscarXTelefono(rs.getString("Telefono"));
-            //if (tel != null) {
-              //  persona.setTelefono(tel.getTelefono());
-            //}
-            //persona.setTelefono(rs.getString("Telefono"));
+           TelefonoxPersona tel = dTel.buscarXTelefono(rs.getString("Telefono"));
+            if (tel != null) {
+                persona.setTelefono(tel.getTelefono());
+            }
+            persona.setTelefono(rs.getString("Telefono"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
             persona.setLocalidad(rs.getString("Localidad"));
