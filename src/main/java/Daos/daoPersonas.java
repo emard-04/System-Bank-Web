@@ -17,12 +17,10 @@ public class daoPersonas implements inPersona {
     private final String Eliminar = "Delete From Persona where Dni=?;";
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
     private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
-            + "(SELECT Telefono FROM TelefonoXPersonas WHERE Dni = Persona.Dni LIMIT 1) AS Telefono, "
             + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento, Direccion "
             + "FROM Persona WHERE Estado = 'Activo';";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
-    private daoTelefono dTelefono;
 
     public boolean Agregar(Persona persona) {
         Connection cn = null;
@@ -75,16 +73,18 @@ public class daoPersonas implements inPersona {
             persona.setApellido(rs.getString("Apellido"));
             persona.setSexo(rs.getString("Sexo"));
             persona.setNacionalidad(rs.getString("Nacionalidad"));
-           TelefonoxPersona tel = dTel.buscarXTelefono(rs.getString("Telefono"));
-            if (tel != null) {
-                persona.setTelefono(tel.getTelefono());
-            }
-            persona.setTelefono(rs.getString("Telefono"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
             persona.setLocalidad(rs.getString("Localidad"));
             persona.setProvincia(rs.getString("Provincia"));
             persona.setDni(rs.getString("Dni"));
+            ArrayList<TelefonoxPersona>Lista=dTel.listarTelefonos(persona.getDni());
+            ArrayList<String> telefonos = new ArrayList<>();
+            for (TelefonoxPersona t : Lista) {
+                telefonos.add(t.getTelefono());
+            }
+            persona.setTelefonos(telefonos);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

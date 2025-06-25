@@ -16,7 +16,7 @@ import javax.servlet.RequestDispatcher;
 @WebServlet("/ServletListarClientes")
 public class ServletListarClientes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private daoPersonas dao = new daoPersonas();  
+	private daoUsuario dao = new daoUsuario();  
   
     public ServletListarClientes() {
         super();
@@ -37,7 +37,7 @@ public class ServletListarClientes extends HttpServlet {
 	}
 	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    try {
-	        List<Persona> listaPersona = dao.ListarTodo();
+	        List<Usuario> listaPersona = dao.ListarTodo();
 
 	        // Parámetros de paginación
 	        int PersonaPorPagina = 10;
@@ -60,7 +60,7 @@ public class ServletListarClientes extends HttpServlet {
 	        int hasta = Math.min(desde + PersonaPorPagina, totalPersonas);
 
 	        // Sublista de la página actual
-	        List<Persona> personasPaginadas = listaPersona.subList(desde, hasta);
+	        List<Usuario> personasPaginadas = listaPersona.subList(desde, hasta);
 
 	        // Setear atributos
 	        request.setAttribute("personas", personasPaginadas);

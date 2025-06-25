@@ -1,6 +1,7 @@
 package Entidades;
 
 import java.time.LocalDate;
+import java.util.List;
 public class Persona {
 
 	    private String dni;
@@ -9,7 +10,7 @@ public class Persona {
 	    private String apellido;
 	    private String sexo;
 	    private String nacionalidad;
-	    private String telefono;
+	    private List<String> telefonos;
 	    private LocalDate fechaNacimiento;
 	    private String direccion;
 	    private String localidad;
@@ -111,12 +112,12 @@ public class Persona {
 			this.estado = estado;
 		}
 
-		public String getTelefono() {
-			return telefono;
+		public List<String> getTelefonos() {
+		    return telefonos;
 		}
 
-		public void setTelefono(String telefono) {
-			this.telefono = telefono;
+		public void setTelefonos(List<String> telefonos) {
+		    this.telefonos = telefonos;
 		}
 
 		@Override

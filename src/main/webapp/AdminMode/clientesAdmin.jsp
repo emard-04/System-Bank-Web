@@ -1,8 +1,7 @@
+<%@page import="Entidades.Usuario"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
 <%@ page import="Entidades.Persona"%>
-<%
-    List<Persona> personas = (List<Persona>) request.getAttribute("personas");
-%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -104,20 +103,30 @@ body {
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200">
-								<% if (personas != null) {
-     for (Persona p : personas) { %>
+								<% if (request.getAttribute("personas")!=null) {
+									List<Usuario> usuario=(List<Usuario>)request.getAttribute("personas");
+     for (Usuario u : usuario) { %>
 								<tr>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getDni() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getCuil() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getNombre() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getApellido() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getCorreoElectronico() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getTelefono() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getLocalidad() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getProvincia() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getNacionalidad() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getSexo() %></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getFechaNacimiento() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getDni() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getCuil() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getNombre() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getApellido() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getCorreoElectronico() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+										<%
+										List<String> telefonos = u.getPersona().getTelefonos();
+										for (int i = 0; i < telefonos.size(); i++) {
+											out.print(telefonos.get(i));
+											if (i < telefonos.size() - 1)
+												out.print("<br>");
+										}
+										%>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getLocalidad() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getProvincia() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getNacionalidad() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getSexo() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getFechaNacimiento() %></td>
 								</tr>
 								<% } } %>
 							</tbody>
