@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="Entidades.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,7 +60,7 @@ body {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="clientesAdmin_agregar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="clienteAdmin_modificar.jsp"
+						<a href="/BancoParcial/ServletModificarCliente?openModificar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="clientesAdmin_borrar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
@@ -78,72 +80,81 @@ body {
 							name="seleccionar_cliente_dni"
 							class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white w-64">
 							<option value="">-- Seleccione un DNI --</option>
-							<option value="12345678">12345678 (Juan Pérez)</option>
-							<option value="87654321">87654321 (María García)</option>
-							<option value="11223344">11223344 (Pedro López)</option>
+							<%
+							if (request.getAttribute("ListaUsuario") != null) {
+								ArrayList<Usuario> lista = (ArrayList<Usuario>) request.getAttribute("ListaUsuario");
+								for (Usuario u : lista) {
+							%>
+							<option value=<%=u.getPersona().getDni()%>><%=u.getPersona().getDni()%></option>
+							<%
+							}
+							}
+							%>
 						</select>
 					</div>
 
-					<form action="ModificarClienteServlet" method="post"
+					<form action="/BancoParcial/ServletModificarCliente" method="post"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
-						<input type="hidden" id="dni_original_modificar"
-							name="dni_original_modificar" value="">
 
+						<!-- Fila 1 -->
 						<div>
 							<label for="dni_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
-							<input type="text" id="dni_mod" name="dni_mod" placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg read-only-input"
+							<input type="text" id="dni_mod" name="dni_mod"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input"
 								readonly>
+						</div>
+						<div>
+							<label for="cuil_mod"
+								class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
+							<input type="text" id="cuil_mod" name="cuil_mod"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
+								required>
 						</div>
 						<div>
 							<label for="nombre_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
 							<input type="text" id="nombre_mod" name="nombre_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
+
+						<!-- Fila 2 -->
 						<div>
 							<label for="apellido_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
 							<input type="text" id="apellido_mod" name="apellido_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
-
 						<div>
 							<label for="localidad_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
 							<input type="text" id="localidad_mod" name="localidad_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
 						<div>
 							<label for="provincia_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
 							<input type="text" id="provincia_mod" name="provincia_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-								required>
-						</div>
-						<div>
-							<label for="direccion_mod"
-								class="block text-gray-700 text-lg font-semibold mb-2">Direccion</label>
-							<input type="text" id="direccion_mod" name="direccion_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
 
+						<!-- Fila 3 -->
+						<div>
+							<label for="direccion_mod"
+								class="block text-gray-700 text-lg font-semibold mb-2">Dirección</label>
+							<input type="text" id="direccion_mod" name="direccion_mod"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
+								required>
+						</div>
 						<div>
 							<label for="nacionalidad_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
 							<input type="text" id="nacionalidad_mod" name="nacionalidad_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
 						<div>
@@ -151,55 +162,82 @@ body {
 								class="block text-gray-700 text-lg font-semibold mb-2">Fec
 								Nacimiento</label> <input type="date" id="fecha_nacimiento_mod"
 								name="fecha_nacimiento_mod"
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-								required>
-						</div>
-						<div>
-							<label for="correo_electronico_mod"
-								class="block text-gray-700 text-lg font-semibold mb-2">Correo
-								Electronico</label> <input type="email" id="correo_electronico_mod"
-								name="correo_electronico_mod" placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg bg-white"
 								required>
 						</div>
 
+						<!-- Fila 4 -->
 						<div>
 							<label for="sexo_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
 							<select id="sexo_mod" name="sexo_mod"
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg bg-white"
 								required>
 								<option value="">Seleccione</option>
-								<option value="M">Masculino</option>
-								<option value="F">Femenino</option>
-								<option value="X">Otro</option>
+								<option value="Masculino">Masculino</option>
+								<option value="Femenino">Femenino</option>
+								<option value="Otro">Otro</option>
 							</select>
+						</div>
+						<div>
+							<label for="correo_electronico_mod"
+								class="block text-gray-700 text-lg font-semibold mb-2">Correo
+								electrónico</label> <input type="email" id="correo_electronico_mod"
+								name="correo_electronico_mod"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
+								required>
 						</div>
 						<div>
 							<label for="usuario_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
 							<input type="text" id="usuario_mod" name="usuario_mod"
-								placeholder=""
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
-						<div>
+
+						<!-- Fila 5 -->
+						<div class="md:col-span-1">
 							<label for="contrasena_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Contraseña</label>
 							<input type="password" id="contrasena_mod" name="contrasena_mod"
 								placeholder="Dejar en blanco para no cambiar"
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+								class="p-3 border border-gray-300 rounded-md w-full text-lg">
 						</div>
 
-						<div
-							class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
-							<button type="submit"
-								class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-								Modificar</button>
-							<button type="button"
-								class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-								Cancelar</button>
+						<!-- Teléfonos -->
+						<div id="telefonosContainer" class="md:col-span-2">
+							<label for="telefono_select"
+								class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos
+								(máx 3)</label> <select id="telefono_select" name="telefono_select"
+								class="p-2 border border-gray-300 rounded-md w-full mb-2 bg-white">
+								<option value="">-- Seleccione un teléfono --</option>
+							</select> 
+							<input type="hidden" id="oldTelefono" name="oldTelefono">
+							<input type="hidden" id="Accion" name="Accion">
+							<div class="flex space-x-2">
+								<input type="text" id="telefono_input" name="telefono_input"
+									placeholder="Ej: 1123456789"
+									class="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+
+								<button type="button" id="btnAgregarTelefono"
+									class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">Agregar</button>
+
+								<button type="button" id="btnEditarTelefono"
+									class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md">Editar</button>
+
+								<button type="button" id="btnEliminarTelefono"
+									class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md">Eliminar</button>
+							</div>
 						</div>
+
+						<!-- Botones -->
+						<div class="md:col-span-3 flex justify-center space-x-6 pt-4">
+							<button type="submit"
+								class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md text-xl">Modificar</button>
+							<button type="button"
+								class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md text-xl">Cancelar</button>
+						</div>
+
 					</form>
 				</div>
 			</div>
@@ -210,4 +248,98 @@ body {
 		</main>
 
 	</div>
+</body>
+<script>
+    document.getElementById('seleccionar_cliente_dni').addEventListener('change', function() {
+        var dniCliente = this.value;
+        if (!dniCliente) {
+            // limpiar campos si se deselecciona
+            limpiarCampos();
+            return;
+        }
+
+        fetch('/BancoParcial/ServletModificarCliente?dniCliente=' + dniCliente)
+            .then(response => {
+                if (!response.ok) throw new Error('Usuario no encontrado');
+                return response.json();
+            })
+            .then(data => {
+            	 document.getElementById('dni_mod').value = data.dni;
+                 document.getElementById('cuil_mod').value = data.cuil;
+                 document.getElementById('nombre_mod').value = data.nombre;
+                 document.getElementById('apellido_mod').value = data.apellido;
+                 document.getElementById('localidad_mod').value = data.localidad;
+                 document.getElementById('provincia_mod').value = data.provincia;
+                 document.getElementById('direccion_mod').value = data.direccion;
+                 document.getElementById('nacionalidad_mod').value = data.nacionalidad;
+                 document.getElementById('fecha_nacimiento_mod').value = data.fechaNacimiento;
+                 document.getElementById('correo_electronico_mod').value = data.correoElectronico;
+                 //document.getElementById('telefono_mod').value = data.telefono;
+                 document.getElementById('sexo_mod').value = data.sexo;
+                 document.getElementById('usuario_mod').value = data.usuario;
+                 document.getElementById('contrasena_mod').value = data.contrasena;
+                 let selectTelefonos = document.getElementById('telefono_select');
+                 selectTelefonos.innerHTML = '<option value="">-- Seleccione un teléfono --</option>';
+
+                 data.telefonos.forEach(tel => {
+                     let option = document.createElement('option');
+                     option.value = tel.numero;
+                     option.textContent = tel.numero;
+                     selectTelefonos.appendChild(option);
+                 });
+            })
+            .catch(error => {
+                alert(error.message);
+                limpiarCampos();
+            });
+    });
+    document.getElementById('telefono_select').addEventListener('change', function() {
+    	var telefono=this.value;
+    	document.getElementById('telefono_input').value=telefono;
+    	document.getElementById('oldTelefono').value=telefono;
+    	document.getElementById('telefono_select').disabled=true;
+    });
+    document.getElementById('btnAgregarTelefono').addEventListener('click', function () {
+    	  document.getElementById('telefono_select').disabled = true;
+    	  document.getElementById('telefono_input').value = '';
+    	  document.getElementById('telefono_input').readOnly = false;
+    	  document.getElementById('Accion').value = 'Agregar';
+    	});
+
+    	document.getElementById('btnEditarTelefono').addEventListener('click', function () {
+    	  document.getElementById('telefono_select').disabled = false;
+    	  document.getElementById('telefono_input').value = '';
+    	  document.getElementById('telefono_input').readOnly = false;
+    	  document.getElementById('Accion').value = 'Editar';
+    	});
+
+    	document.getElementById('btnEliminarTelefono').addEventListener('click', function () {
+    	  document.getElementById('telefono_select').disabled = false;
+    	  document.getElementById('telefono_input').readOnly = true;
+    	  document.getElementById('Accion').value = 'Eliminar';
+    	});
+    function limpiarCampos() {
+    document.getElementById('dni_mod').value = '';
+    document.getElementById('cuil_mod').value = '';
+    document.getElementById('nombre_mod').value = '';
+    document.getElementById('apellido_mod').value = '';
+    document.getElementById('localidad_mod').value = '';
+    document.getElementById('provincia_mod').value = '';
+    document.getElementById('direccion_mod').value = '';
+    document.getElementById('nacionalidad_mod').value = '';
+    document.getElementById('fecha_nacimiento_mod').value = '';
+    document.getElementById('correo_electronico_mod').value = '';
+    // document.getElementById('telefono_mod').value = ''; // si es único
+    document.getElementById('sexo_mod').value = '';
+    document.getElementById('usuario_mod').value = '';
+    document.getElementById('contrasena_mod').value = '';
+    document.getElementById('telefono_input').value = '';
+    let selectTelefonos = document.getElementById('telefono_select');
+    selectTelefonos.innerHTML = '<option value="">-- Seleccione un teléfono --</option>';
+    telefonosPersona = []; // Limpiar el array de teléfonos
+    telefonoSeleccionado = '';
+    actualizarBotonesTelefono();
+    }
+    
+</script>
 </html>

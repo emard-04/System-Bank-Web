@@ -14,13 +14,13 @@ import Interfaces.InUsuario;
 public class daoUsuario implements InUsuario {
     private final String Agregar = "INSERT INTO Usuarios( Contraseña, dni, TipoUsuario, NombreUsuario) VALUES(?,?,?,?);";
     private final String Eliminar = "DELETE FROM Usuarios WHERE NombreUsuario=?;";
-    private final String Modificar = "UPDATE Usuario SET Contraseña=?, dni=?, TipoUsuario=? WHERE NombreUsuario=?;";
-    private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios;";
+    private final String Modificar = "UPDATE Usuarios SET NombreUsuario=?,Contraseña=? WHERE Dni=?;";
+    private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios where TipoUsuario=1;";
     private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
     private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
     private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
-
+    private static daoPersonas dp;
     public boolean Agregar(Usuario usuario) {
         Connection cn = null;
         PreparedStatement ps = null;
@@ -51,6 +51,11 @@ public class daoUsuario implements InUsuario {
                 ps.setBoolean(3, usuario.isTipoUsuario());
                 ps.setString(4, usuario.getNombreUsuario());
             }
+            if (query.equals(Modificar)) {
+            	ps.setString(1, usuario.getNombreUsuario());
+                ps.setString(2, usuario.getContrasena());
+                ps.setString(3, usuario.getPersona().getDni());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,8 +68,8 @@ public class daoUsuario implements InUsuario {
             usuario.setIdUsuario(rs.getInt("IdUsuario"));
             usuario.setNombreUsuario(rs.getString("NombreUsuario"));
             usuario.setContrasena(rs.getString("Contraseña"));
-            Persona persona = new Persona();
-            persona.setDni(rs.getString("dni"));
+            dp=new daoPersonas();
+            Persona persona =(dp.existeObj(rs.getString("dni")));
             usuario.setPersona(persona);
             usuario.setTipoUsuario(rs.getBoolean("TipoUsuario"));
         } catch (Exception e) {
@@ -162,6 +167,7 @@ public class daoUsuario implements InUsuario {
         Connection cn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
         try {
             cn = Conexion.getConexion().getSQLConnection();
             ps = cn.prepareStatement(ExisteDni);

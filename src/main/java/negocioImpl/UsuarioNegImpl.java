@@ -1,6 +1,9 @@
 package negocioImpl;
 import negocio.*;
 import Interfaces.*;
+
+import java.util.ArrayList;
+
 import Daos.*;
 import Entidades.*;
 public class UsuarioNegImpl implements UsuarioNeg {
@@ -34,5 +37,12 @@ public class UsuarioNegImpl implements UsuarioNeg {
     @Override
     public Usuario Login(String nombreUsuario, String contrasena) {
         return daoUsuario.Login(nombreUsuario, contrasena);
+    }
+    @Override
+    public ArrayList<Usuario> listarTodo(){
+    	return daoUsuario.ListarTodo();
+    }
+    public boolean Modificar(Usuario usuario) {
+    	return daoUsuario.Modificar(usuario);
     }
 }
