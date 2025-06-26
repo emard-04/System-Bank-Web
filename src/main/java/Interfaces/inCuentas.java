@@ -12,5 +12,6 @@ package Interfaces;
 	        int obtenerIdCuenta();
 	        boolean existe(int nroCuenta);
 	        String generarCBUAleatorio();
+	        int maximoCuentas(int Id);
 	}
 

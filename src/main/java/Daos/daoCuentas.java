@@ -25,6 +25,7 @@ public class daoCuentas implements inCuentas{
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
+    private final String maximoCuentas="Select sum(IdUsuario) as Cantidad from cuentas where idUsuario=? and estado=?";
     private daoTipoCuenta dTipoCuenta;
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub
@@ -105,7 +106,7 @@ public class daoCuentas implements inCuentas{
         }
         return false;
     }
-
+    
     private PreparedStatement valoresQuery(Connection cn, String query, Cuenta cuenta) {
         PreparedStatement ps = null;
         try {
@@ -243,7 +244,33 @@ public class daoCuentas implements inCuentas{
         return false;
     }
 
-
+    public int maximoCuentas(int id) {
+		 Connection cn = null;
+	    	PreparedStatement ps = null;
+	    	ResultSet rs = null;
+		    try {
+		       cn = Conexion.getConexion().getSQLConnection();
+		        ps = cn.prepareStatement(maximoCuentas);
+		        ps.setInt(1, id);
+		        ps.setString(2, "Activa");
+		        rs = ps.executeQuery();
+		        if (rs.next()) {
+		            return rs.getInt("Cantidad");
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.println("Error");
+		    }
+		    finally {
+	            try { if (rs != null) rs.close(); } catch (Exception e) {}
+	            try { if (ps != null) ps.close(); } catch (Exception e) {}
+	            try { if (cn != null) cn.close(); } catch (Exception e) {}
+	        }
+		    return -1;
+	}	
+    	
+    	
+    
 	@Override
 	public Cuenta BuscarPorNro(int nroCuenta) {
 		 Cuenta cue = null;

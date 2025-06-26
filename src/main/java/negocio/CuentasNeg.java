@@ -12,5 +12,6 @@ public interface CuentasNeg {
         Cuenta BuscarPorNro(int nroCuenta);
         boolean existe(int nroCuenta);
         String generarCBU();
+        
 }
 

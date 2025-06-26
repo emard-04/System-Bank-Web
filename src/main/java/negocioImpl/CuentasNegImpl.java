@@ -10,8 +10,9 @@ public class CuentasNegImpl implements CuentasNeg{
 	private inCuentas dao = new daoCuentas();
     @Override
     public boolean Agregar(Cuenta cuenta) {
-    	UsuarioNegImpl negUsuario= new UsuarioNegImpl();
-    	if(negUsuario.Existe(cuenta.getUsuario().getNombreUsuario())) {
+    	PersonaNegImpl negPersona= new PersonaNegImpl();
+    	if(negPersona.existe(cuenta.getUsuario().getPersona().getDni())) {
+    		if(dao.maximoCuentas(cuenta.getUsuario().getIdUsuario())<3)
         return dao.Agregar(cuenta);
         }
     	return false;
