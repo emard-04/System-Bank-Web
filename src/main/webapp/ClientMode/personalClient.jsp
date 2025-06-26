@@ -70,7 +70,8 @@
 			</nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
-                <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl"> <form class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+                    <form class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                         <div>
                             <label for="nombre" class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
                             <input
@@ -173,7 +174,33 @@
                             >
                         </div>
 
-                        <div class="col-span-1 md:col-span-2"> <label for="usuario" class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
+                        <div>
+                            <label for="telefono" class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
+                            <input
+                                type="text"
+                                id="telefono"
+                                name="telefono"
+                                value="+54 9 11 1234 5678" <%-- Valor de ejemplo --%>
+                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
+                                readonly
+                            >
+                        </div>
+                        <div>
+                            <label for="cuil" class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
+                            <input
+                                type="text"
+                                id="cuil"
+                                name="cuil"
+                                value="20-12345678-9" <%-- Valor de ejemplo --%>
+                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
+                                readonly
+                            >
+                        </div>
+                        <div></div> 
+                        
+                        <%-- Campos existentes que ocupan 1 o 2 columnas --%>
+                        <div class="col-span-1 md:col-span-2"> 
+                            <label for="usuario" class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
                             <input
                                 type="text"
                                 id="usuario"
@@ -183,7 +210,8 @@
                                 readonly
                             >
                         </div>
-                        <div class="col-span-1 md:col-span-1"> <label for="correo" class="block text-gray-700 text-lg font-semibold mb-2">Correo</label>
+                        <div class="col-span-1 md:col-span-1"> 
+                            <label for="correo" class="block text-gray-700 text-lg font-semibold mb-2">Correo</label>
                             <input
                                 type="email"
                                 id="correo"
