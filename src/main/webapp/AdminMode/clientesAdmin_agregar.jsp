@@ -53,7 +53,7 @@
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="clientesAdmin_borrar.jsp"
+						<a href="<%=request.getContextPath()%>/AdminMode/clientesAdmin_borrar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -63,7 +63,8 @@
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-                    <form action="/BancoParcial/ServletAgregarCliente" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                    <form action="/BancoParcial/ServletAgregarCliente" method="post" onsubmit="return validarContrasena()" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                    
                         <div>
                             <label for="nombre" class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
                             <input
@@ -97,6 +98,18 @@
                                 required
                             >
                         </div>
+                        
+                        <div>
+    <label for="cuil" class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
+    <input
+        type="text"
+        id="cuil"
+        name="cuil"
+        placeholder=""
+        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+        required
+    >
+</div>
 
                         <div>
                             <label for="localidad" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
@@ -164,6 +177,18 @@
                                 required
                             >
                         </div>
+                        
+                        <div>
+    <label for="telefono" class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
+    <input
+        type="text"
+        id="telefono"
+        name="telefono"
+        placeholder=""
+        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+        required
+    >
+</div>
 
                         <div>
                             <label for="sexo" class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
@@ -174,8 +199,8 @@
                                 required
                             >
                                 <option value="">Seleccione</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
                                 <option value="X">Otro</option>
                             </select>
                         </div>
@@ -201,6 +226,17 @@
                                 required
                             >
                         </div>
+                        <div>
+    <label for="confirmar_contrasena" class="block text-gray-700 text-lg font-semibold mb-2">Confirmar Contraseña</label>
+    <input
+        type="password"
+        id="confirmar_contrasena"
+        name="confirmar_contrasena"
+        placeholder=""
+        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+        required
+    >
+</div>
 
                         <div class="col-span-1 md:col-span-3 flex justify-center pt-4">
                             <button
@@ -220,5 +256,17 @@
         </main>
 
     </div>
+    <script>
+    function validarContrasena() {
+        var contrasena = document.getElementById("contrasena").value;
+        var confirmar = document.getElementById("confirmar_contrasena").value;
+
+        if (contrasena !== confirmar) {
+            alert("Las contraseñas no coinciden.");
+            return false; // evita el submit
+        }
+        return true; // permite el submit
+    }
+</script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package Presentacion;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Daos.daoPersonas;
 import Entidades.*;
-import negocioImpl.PersonaNegImpl;
 import negocio.*;
 import negocioImpl.*;
 
@@ -22,77 +22,91 @@ import negocioImpl.*;
 @WebServlet("/ServletAgregarCliente")
 public class ServletAgregarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	private static final PersonaNegImpl personaNeg = new PersonaNegImpl();
-	private static final UsuarioNeg usuarioNeg = new UsuarioNegImpl();
-       
-  
+	private static final PersonaNegImpl negPersona= new PersonaNegImpl(); 
+	private static final TelefonoNegImpl negTelefono = new TelefonoNegImpl();
+	private static final UsuarioNeg negUsuario = new UsuarioNegImpl();
     public ServletAgregarCliente() {
         super();
         // TODO Auto-generated constructor stub
     }
-
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		if(request.getParameter("openAgregarUsu")!=null) {
+			String ventana="AdminMode/clientesAdmin_agregar.jsp";
+			windowDefault(request,response, ventana);//Cargar ventana agregar cuenta
+			}
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	    try {
+	        // 1. Obtener datos del formulario
+	        String nombre = request.getParameter("nombre");
+	        String apellido = request.getParameter("apellido");
+	        String dni = request.getParameter("dni");
+	        String cuil = request.getParameter("cuil");
+	        String localidad = request.getParameter("localidad");
+	        String provincia = request.getParameter("provincia");
+	        String direccion = request.getParameter("direccion");
+	        String nacionalidad = request.getParameter("nacionalidad");
+	        LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fecha_nacimiento"));
+	        String correo = request.getParameter("correo_electronico");
+	        String sexo = request.getParameter("sexo");
+	        String telefono = request.getParameter("telefono");
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("entro al post");
-		String dni = request.getParameter("dni");
-		String cuil = "202020"; // Podés capturarlo si lo agregás al front
-		String nombre = request.getParameter("nombre");
-		String apellido = request.getParameter("apellido");
-		String sexo = request.getParameter("sexo");
-		String nacionalidad = request.getParameter("nacionalidad");
-		LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fecha_nacimiento"));
-		String direccion = request.getParameter("direccion");
-		String localidad = request.getParameter("localidad");
-		String provincia = request.getParameter("provincia");
-		String correo = request.getParameter("correo_electronico");
+	        String nombreUsuario = request.getParameter("usuario");
+	        String contrasena = request.getParameter("contrasena");
 
-		// Datos de Usuario
-		String nombreUsuario = request.getParameter("usuario");
-		String contrasena = request.getParameter("contrasena");
-		// Validar que el DNI no exista
-		
-		boolean existe = personaNeg.existe(dni);
-		if (existe) {
-		    response.sendRedirect("/AdminMode/clientesAdmin_agregar.jsp?error=DNI ya registrado");
-		    return;
-		}
+	        // 2. Crear objeto Persona
+	        Persona persona = new Persona();
+	        persona.setDni(dni);
+	        persona.setCuil(cuil);
+	        persona.setNombre(nombre);
+	        persona.setApellido(apellido);
+	        persona.setLocalidad(localidad);
+	        persona.setProvincia(provincia);
+	        persona.setDireccion(direccion);
+	        persona.setNacionalidad(nacionalidad);
+	        persona.setFechaNacimiento(fechaNacimiento);
+	        persona.setCorreoElectronico(correo);
+	        persona.setSexo(sexo);
+	        persona.setEstado(true);
 
-		
+	        // 3. Insertar persona
+	        boolean personaCreada = negPersona.Agregar(persona);
 
-		// Crear objeto Usuario
-		Usuario usuario = new Usuario();
-		usuario.setNombreUsuario(nombreUsuario);
-		usuario.setContrasena(contrasena);
-		usuario.setTipoUsuario(false); // Suponiendo que false = cliente
+	        // 4. Crear e insertar usuario
+	        Usuario usuario = new Usuario();
+	        usuario.setNombreUsuario(nombreUsuario);
+	        usuario.setContrasena(contrasena);
+	        usuario.setPersona(persona);
+	        usuario.setTipoUsuario(false); // asumimos que es cliente
 
-		// Crear objeto Persona
-		Persona persona = new Persona();
-		persona.setDni(dni);
-		persona.setCuil(cuil);
-		persona.setNombre(nombre);
-		persona.setApellido(apellido);
-		persona.setSexo(sexo);
-		persona.setNacionalidad(nacionalidad);
-		persona.setFechaNacimiento(fechaNacimiento);
-		persona.setDireccion(direccion);
-		persona.setLocalidad(localidad);
-		persona.setProvincia(provincia);
-		persona.setCorreoElectronico(correo);
+	        boolean usuarioCreado = negUsuario.AgregarUsuario(usuario);
 
-		usuario.setPersona(persona); // Asignar persona al usuario
+	        // 5. Insertar teléfono
+	        TelefonoxPersona telPersona = new TelefonoxPersona();
+	        telPersona.setDni(persona);
+	        telPersona.setTelefono(telefono);
 
-		boolean exito = usuarioNeg.AgregarUsuario(usuario); // método especial
+	        boolean telefonoGuardado = negTelefono.Agregar(telPersona);
 
-		if (exito) {
-			response.sendRedirect("AdminMode/clientesAdmin.jsp?msg=Cliente agregado correctamente");
-		} else {
-			response.sendRedirect("AdminMode/clientesAdmin_agregar.jsp?error=No se pudo agregar el cliente");
-		}
+	        // 6. Redirigir según resultado
+	        if (personaCreada && usuarioCreado && telefonoGuardado) {
+	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp?exito=1");
+	        } else {
+	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp?error=No se pudo registrar");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp?error=Excepcion");
+	    }
+	}
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException{
+		 
+		 RequestDispatcher rd= request.getRequestDispatcher(jsp);
+		 rd.forward(request, response);
 	}
 }
 
