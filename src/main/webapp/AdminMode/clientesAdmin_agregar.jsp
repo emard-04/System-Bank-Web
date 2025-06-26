@@ -18,6 +18,16 @@
         }
     </style>
 </head>
+<script>
+function confirmarLogout(e) {
+    e.preventDefault(); // Detiene la acción por defecto del enlace
+
+    if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        // Si el usuario confirma, redirige al servlet de logout
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
+</script>
 <body class="bg-gray-100 h-screen overflow-hidden">
     <div class="flex h-full">
 
@@ -28,9 +38,11 @@
             
             <h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
             
-            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-                Salir
-            </a>
+            <a href="#"
+   onclick="confirmarLogout(event)"
+   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   Salir
+</a>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto">
@@ -42,7 +54,7 @@
 
            <nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
-					<li><a href="HomeAdmin.jsp"
+					<li><a href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp"
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
@@ -63,6 +75,11 @@
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+                <% if (request.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+        <%= request.getAttribute("mensaje") %>
+    </div>
+<% } %>
                     <form action="/BancoParcial/ServletAgregarCliente" method="post" onsubmit="return validarContrasena()" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                     
                         <div>

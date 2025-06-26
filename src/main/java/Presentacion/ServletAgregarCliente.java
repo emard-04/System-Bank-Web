@@ -94,9 +94,11 @@ public class ServletAgregarCliente extends HttpServlet {
 
 	        // 6. Redirigir según resultado
 	        if (personaCreada && usuarioCreado && telefonoGuardado) {
-	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp?exito=1");
+	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");
+	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");
 	        } else {
-	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp?error=No se pudo registrar");
+	            request.setAttribute("mensaje", "❌ Error al agregar la persona.");
+	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();

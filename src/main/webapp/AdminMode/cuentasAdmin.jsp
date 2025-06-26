@@ -23,6 +23,16 @@ body {
 }
 </style>
 </head>
+<script>
+function confirmarLogout(e) {
+    e.preventDefault(); // Detiene la acción por defecto del enlace
+
+    if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        // Si el usuario confirma, redirige al servlet de logout
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
+</script>
 <body class="bg-gray-100 h-screen overflow-hidden">
 	<div class="flex h-full">
 
@@ -33,9 +43,10 @@ body {
 			</div>
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
 
-			<a href="<%=request.getContextPath()%>/ServletLogout"
-   		class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-   			Salir
+		<a href="#"
+   onclick="confirmarLogout(event)"
+   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   Salir
 </a>
 		</aside>
 
