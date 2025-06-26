@@ -198,7 +198,7 @@ public class daoCuentas implements inCuentas{
         }
         return false;
     }
-
+ 
     public ArrayList<Cuenta> ListarTodo() {
         ArrayList<Cuenta> listaCuentas = new ArrayList<>();
         Connection cn = null;

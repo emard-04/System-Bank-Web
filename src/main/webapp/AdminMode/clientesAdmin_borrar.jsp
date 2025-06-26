@@ -1,3 +1,9 @@
+<%@ page import="Daos.daoPersonas, Entidades.Persona, java.util.List,Daos.daoUsuario, Entidades.Usuario"%>
+<%
+	daoUsuario dao = new daoUsuario();
+    List<Usuario> usuarios = dao.ListarTodo(); //Use el listar de usuario para 
+%>
+	
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,7 +15,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body {
-	font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
+	font-family: 'Inter', sans-serif;
 }
 
 .profile-photo-placeholder {
@@ -86,10 +92,16 @@ function confirmarLogout(e) {
 							<select id="dni_eliminar" name="dni_eliminar"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
-								<option value="">Seleccione DNI</option>
-								<option value="12345678">12345678</option>
-								<option value="87654321">87654321</option>
-								<option value="11223344">11223344</option>
+								<option value="" required>Seleccione DNI</option>
+								<%for (Usuario u : usuarios) {%>
+								
+									<%if (true) {%>
+										<option value="<%=u.getPersona().getDni()%>">Dni =
+											<%=u.getPersona().getDni()%>
+										</option>
+									<%}%>
+								<%}%>
+
 							</select>
 						</div>
 
