@@ -2,12 +2,14 @@ package Presentacion;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import Daos.daoPersonas;
 import Entidades.*;
 import negocioImpl.PersonaNegImpl;
@@ -32,8 +34,6 @@ public class ServletAgregarCliente extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 

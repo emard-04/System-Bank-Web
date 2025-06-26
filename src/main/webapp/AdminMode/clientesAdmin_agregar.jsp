@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +49,7 @@
 					<li class="flex space-x-10 mx-auto">
 					<a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="clientesAdmin_agregar.jsp"
+						<a href="<%=request.getContextPath()%>/ServletAgregarCliente"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
@@ -131,7 +132,7 @@
                             >
                         </div>
 
-                        <div>
+                       <div>
                             <label for="nacionalidad" class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
                             <input
                                 type="text"
@@ -141,7 +142,7 @@
                                 class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                                 required
                             >
-                        </div>
+                        </div> 
                         <div>
                             <label for="fecha_nacimiento" class="block text-gray-700 text-lg font-semibold mb-2">Fec Nacimiento</label>
                             <input
