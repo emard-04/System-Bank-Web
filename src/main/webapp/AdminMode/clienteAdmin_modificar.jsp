@@ -6,6 +6,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Modificar Cliente Admin - Tu Banco</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -52,18 +55,18 @@ body {
 			<nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
 					<li><a href="HomeAdmin.jsp"
-						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>More actions
+						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
 					<li class="flex space-x-10 mx-auto">
 					<a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="clientesAdmin_agregar.jsp"
+						<a href="clientesAdmin_agregar"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="/BancoParcial/ServletModificarCliente?openModificar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="clientesAdmin_borrar.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>More actions
+						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
 					<li></li>
@@ -208,14 +211,14 @@ body {
 						<div id="telefonosContainer" class="md:col-span-2">
 							<label for="telefono_select"
 								class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos
-								(máx 3)</label> <select id="telefono_select" name="telefono_select"
-								class="p-2 border border-gray-300 rounded-md w-full mb-2 bg-white">
+								(máx 3)</label> <select id="telefono_select" style="background-color:silver;" name="telefono_select"
+								class="p-2 border border-gray-300 rounded-md w-full mb-2 bg-white" disabled="true">
 								<option value="">-- Seleccione un teléfono --</option>
 							</select> 
 							<input type="hidden" id="oldTelefono" name="oldTelefono">
 							<input type="hidden" id="Accion" name="Accion" value="">
 							<div class="flex space-x-2">
-								<input type="text" id="telefono_input" name="telefono_input"
+								<input type="text" id="telefono_input" style="background-color:silver;" name="telefono_input" readonly
 									placeholder="Ej: 1123456789"
 									class="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
 
@@ -248,9 +251,17 @@ body {
 		</main>
 
 	</div>
+
 </body>
 <script>
-    document.getElementById('seleccionar_cliente_dni').addEventListener('change', function() {
+$(document).ready(function() {
+    $('#seleccionar_cliente_dni').select2({
+      placeholder: "Seleccione un DNI",
+      allowClear: true,
+      width: '50%' // Se adapta al ancho del contenedor
+    });
+  });
+$('#seleccionar_cliente_dni').on('change', function ()  {
         var dniCliente = this.value;
         if (!dniCliente) {
             // limpiar campos si se deselecciona
@@ -303,21 +314,37 @@ body {
     	document.getElementById('telefono_select').disabled=true;
     });
     document.getElementById('btnAgregarTelefono').addEventListener('click', function () {
+    	document.getElementById('telefono_select').value = '';
+    	  document.getElementById('telefono_select').disabled = true;
+    	  document.getElementById('telefono_select').style.backgroundColor= 'silver';
     	  document.getElementById('telefono_select').disabled = true;
     	  document.getElementById('telefono_input').value = '';
+    	  document.getElementById('telefono_input').required = true;
     	  document.getElementById('telefono_input').readOnly = false;
+    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
     	  document.getElementById('Accion').value = 'Agregar';
     	});
 
     	document.getElementById('btnEditarTelefono').addEventListener('click', function () {
+    	document.getElementById('telefono_select').value = '';
     	  document.getElementById('telefono_select').disabled = false;
+    	  document.getElementById('telefono_select').style.backgroundColor= 'white';
+    	  document.getElementById('telefono_select').required = true;
+    	  document.getElementById('telefono_input').required = true;
     	  document.getElementById('telefono_input').value = '';
     	  document.getElementById('telefono_input').readOnly = false;
+    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
     	  document.getElementById('Accion').value = 'Editar';
     	});
 
     	document.getElementById('btnEliminarTelefono').addEventListener('click', function () {
+    		document.getElementById('telefono_select').value = '';
     	  document.getElementById('telefono_select').disabled = false;
+    	  document.getElementById('telefono_select').style.backgroundColor= 'white';
+    	  document.getElementById('telefono_select').required = true;
+    	  document.getElementById('telefono_input').value = '';
+    	  document.getElementById('telefono_input').required = true;
+    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
     	  document.getElementById('telefono_input').readOnly = true;
     	  document.getElementById('Accion').value = 'Eliminar';
     	});
@@ -337,11 +364,7 @@ body {
     document.getElementById('usuario_mod').value = '';
     document.getElementById('contrasena_mod').value = '';
     document.getElementById('telefono_input').value = '';
-    let selectTelefonos = document.getElementById('telefono_select');
-    selectTelefonos.innerHTML = '<option value="">-- Seleccione un teléfono --</option>';
-    telefonosPersona = []; // Limpiar el array de teléfonos
-    telefonoSeleccionado = '';
-    actualizarBotonesTelefono();
+    document.getElementById('telefono_select').value = '';
     }
 
 </script>
