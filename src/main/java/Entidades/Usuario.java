@@ -6,6 +6,7 @@ public class Usuario {
 	    private String contrasena;
 	    private Persona persona;  // referencia a Persona
 	    private boolean tipoUsuario;
+	    private boolean estado;
 
 	    public Usuario() {}
 
@@ -15,6 +16,7 @@ public class Usuario {
 	        this.contrasena = contrasena;
 	        this.persona = persona;
 	        this.tipoUsuario = tipoUsuario;
+	        
 	    }
 
 	    // Getters y Setters
@@ -49,7 +51,15 @@ public class Usuario {
 	        this.tipoUsuario = tipoUsuario;
 	    }
 
-	    @Override
+	    public boolean isEstado() {
+			return estado;
+		}
+
+		public void setEstado(boolean estado) {
+			this.estado = estado;
+		}
+
+		@Override
 	    public String toString() {
 	        return "Usuario: " + nombreUsuario + " | Persona: " + persona.getDni() + " " + persona.getApellido() + " | Tipo: " + (tipoUsuario ? "Admin" : "Cliente");
 	    }

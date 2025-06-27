@@ -13,9 +13,9 @@ import Interfaces.InUsuario;
 
 public class daoUsuario implements InUsuario {
     private final String Agregar = "INSERT INTO Usuarios( Contraseña, dni, TipoUsuario, NombreUsuario) VALUES(?,?,?,?);";
-    private final String Eliminar = "DELETE FROM Usuarios WHERE NombreUsuario=?;";
+    private final String Eliminar = "UPDATE Usuarios SET Estado = 'Inactivo' WHERE NombreUsuario = ?";
     private final String Modificar = "UPDATE Usuarios SET NombreUsuario=?,Contraseña=? WHERE Dni=?;";
-    private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios where TipoUsuario=0;";
+    private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios where TipoUsuario=0 AND Estado = 'Activo';";
     private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
     private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
@@ -71,6 +71,7 @@ public class daoUsuario implements InUsuario {
             dp=new daoPersonas();
             Persona persona =(dp.existeObj(rs.getString("dni")));
             usuario.setPersona(persona);
+            usuario.setEstado(rs.getBoolean("Estado")); 
             usuario.setTipoUsuario(rs.getBoolean("TipoUsuario"));
         } catch (Exception e) {
             e.printStackTrace();
