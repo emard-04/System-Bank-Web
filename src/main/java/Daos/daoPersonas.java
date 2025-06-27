@@ -14,7 +14,7 @@ import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona {
     private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
-    private final String Eliminar = "Delete From Persona where Dni=?;";
+    private final String Eliminar = "UPDATE Persona SET Estado = 'Inactiva' where Dni=?;";
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
     private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
             + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento, Direccion "
