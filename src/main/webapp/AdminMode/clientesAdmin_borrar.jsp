@@ -81,7 +81,7 @@ function confirmarLogout(e) {
 
 			<div class="p-6 flex-1 flex flex-col justify-center items-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-					<form action="BorrarClienteServlet" method="post"
+					<form action="/BancoParcial/ServletBorrarCliente" method="post"
 						class="space-y-6 text-center">
 						<p class="text-gray-700 text-lg font-semibold mb-4">Seleccione
 							el DNI del usuario que quieras eliminar:</p>

@@ -77,7 +77,7 @@ function confirmarLogout(e) {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="/BancoParcial/ServletModificarCliente?openModificar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="clientesAdmin_borrar.jsp"
+						<a href="<%=request.getContextPath()%>/AdminMode/clientesAdmin_borrar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 

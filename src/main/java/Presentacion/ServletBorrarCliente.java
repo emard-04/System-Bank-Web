@@ -1,6 +1,7 @@
 package Presentacion;
 
 import java.io.IOException;
+import negocioImpl.*;
 import Daos.*;
 import negocioImpl.PersonaNegImpl;
 
@@ -9,11 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Entidades.*;
 
 @WebServlet("/ServletBorrarCliente")
 public class ServletBorrarCliente extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private PersonaNegImpl negPersona = new PersonaNegImpl();
+	private UsuarioNegImpl negUsuario = new UsuarioNegImpl();
+	
 	
 	public ServletBorrarCliente () {
 		
@@ -27,30 +31,42 @@ public class ServletBorrarCliente extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String nroDniStr = request.getParameter("dni_eliminar"); // ojo con el name en el select
+		String nroDniStr = request.getParameter("dni_eliminar");
+
 		if (nroDniStr == null || nroDniStr.isEmpty()) {
-			// Redirigir con error o mensaje
-			response.sendRedirect(
-					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó cuenta");
+			response.sendRedirect(request.getContextPath()
+					+ "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó DNI");
 			return;
 		}
 
 		try {
-			System.out.println(nroDniStr);
-			boolean exito = negPersona.Eliminar(nroDniStr);
+			// Buscar el usuario por DNI
+			Usuario usuario = negUsuario.BuscarDni(nroDniStr);
+			
+			if (usuario == null || usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()) {
+				response.sendRedirect(request.getContextPath()
+						+ "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
+				return;
+			}
+			
+			String nombreUsuario = usuario.getNombreUsuario();
 
-			if (exito) {
-				response.sendRedirect(
-						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
+			// Eliminar usuario y marcar persona como inactiva
+			boolean exitoPersona = negPersona.Eliminar(nroDniStr);
+			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
+
+			if (exitoPersona && exitoUsuario) {
+				response.sendRedirect(request.getContextPath()
+						+ "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
 			} else {
 				response.sendRedirect(request.getContextPath()
 						+ "/AdminMode/clientesAdmin_borrar.jsp?error=Error al eliminar cuenta");
 			}
 
-		} catch (NumberFormatException e) {
-			// DNI invalido
-			response.sendRedirect(
-					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=NroCuenta inválido");
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect(request.getContextPath()
+					+ "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
 		}
 	}
 }

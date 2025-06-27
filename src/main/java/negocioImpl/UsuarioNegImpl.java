@@ -45,4 +45,8 @@ public class UsuarioNegImpl implements UsuarioNeg {
     public boolean Modificar(Usuario usuario) {
     	return daoUsuario.Modificar(usuario);
     }
+    @Override
+    public boolean Eliminar(String nombreUsuario) {
+        return daoUsuario.Eliminar(nombreUsuario);
+    }
 }

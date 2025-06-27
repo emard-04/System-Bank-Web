@@ -8,4 +8,5 @@ public interface UsuarioNeg {
 	    public Usuario BuscarDni(String dni);
 	    public ArrayList<Usuario> listarTodo();
 	    public boolean Modificar(Usuario usuario);
+	    public boolean Eliminar(String nombreUsuario);
 }
