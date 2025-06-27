@@ -13,16 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.*;
 
 @WebServlet("/ServletBorrarCliente")
-public class ServletBorrarCliente extends HttpServlet{
+public class ServletBorrarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonaNegImpl negPersona = new PersonaNegImpl();
 	private UsuarioNegImpl negUsuario = new UsuarioNegImpl();
-	
-	
-	public ServletBorrarCliente () {
-		
+
+	public ServletBorrarCliente() {
+
 	}
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.sendRedirect(request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp");
@@ -33,21 +32,21 @@ public class ServletBorrarCliente extends HttpServlet{
 		String nroDniStr = request.getParameter("dni_eliminar");
 
 		if (nroDniStr == null || nroDniStr.isEmpty()) {
-			response.sendRedirect(request.getContextPath()
-					+ "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó DNI");
+			response.sendRedirect(
+					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó DNI");
 			return;
 		}
 
 		try {
 			// Buscar el usuario por DNI
 			Usuario usuario = negUsuario.BuscarDni(nroDniStr);
-			
+
 			if (usuario == null || usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()) {
-				response.sendRedirect(request.getContextPath()
-						+ "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
+				response.sendRedirect(
+						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
 				return;
 			}
-			
+
 			String nombreUsuario = usuario.getNombreUsuario();
 
 			// Eliminar usuario y marcar persona como inactiva
@@ -55,8 +54,8 @@ public class ServletBorrarCliente extends HttpServlet{
 			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
 
 			if (exitoPersona && exitoUsuario) {
-				response.sendRedirect(request.getContextPath()
-						+ "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
+				response.sendRedirect(
+						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
 			} else {
 				response.sendRedirect(request.getContextPath()
 						+ "/AdminMode/clientesAdmin_borrar.jsp?error=Error al eliminar cuenta");
@@ -64,9 +63,8 @@ public class ServletBorrarCliente extends HttpServlet{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect(request.getContextPath()
-					+ "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
+			response.sendRedirect(
+					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
 		}
 	}
 }
-
