@@ -1,9 +1,9 @@
-<%@ page import="Daos.daoPersonas, Entidades.Persona, java.util.List,Daos.daoUsuario, Entidades.Usuario"%>
+<%@ page import="java.util.List,Daos.daoUsuario, Entidades.Usuario"%>
 <%
-	daoUsuario dao = new daoUsuario();
-    List<Usuario> usuarios = dao.ListarTodo(); //Use el listar de usuario para 
+daoUsuario dao = new daoUsuario();
+List<Usuario> usuarios = dao.ListarTodo(); //Se usa el metodo listar de usuario para que no aparezcan admins
 %>
-	
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,11 +44,9 @@ function confirmarLogout(e) {
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
 
-			<a href="#"
-   onclick="confirmarLogout(event)"
-   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-   Salir
-</a>
+			<a href="#" onclick="confirmarLogout(event)"
+				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+				Salir </a>
 		</aside>
 
 		<main class="flex-1 flex flex-col overflow-y-auto">
@@ -65,12 +63,13 @@ function confirmarLogout(e) {
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
-					<li class="flex space-x-10 mx-auto">
-					<a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
+					<li class="flex space-x-10 mx-auto"><a
+						href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="clientesAdmin_agregar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="clientesAdmin_borrar.jsp"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
@@ -85,7 +84,7 @@ function confirmarLogout(e) {
 					<form action="BorrarClienteServlet" method="post"
 						class="space-y-6 text-center">
 						<p class="text-gray-700 text-lg font-semibold mb-4">Seleccione
-							un DNI que quieras eliminar:</p>
+							el DNI del usuario que quieras eliminar:</p>
 
 						<div class="mb-6">
 							<label for="dni_eliminar" class="sr-only">Seleccione DNI</label>
@@ -94,12 +93,12 @@ function confirmarLogout(e) {
 								required>
 								<option value="" required>Seleccione DNI</option>
 								<%for (Usuario u : usuarios) {%>
-								
-									<%if (true) {%>
-										<option value="<%=u.getPersona().getDni()%>">Dni =
-											<%=u.getPersona().getDni()%>
-										</option>
-									<%}%>
+
+								<%if (true) {%>
+								<option value="<%=u.getPersona().getDni()%>">Dni =
+									<%=u.getPersona().getDni()%>
+								</option>
+								<%}%>
 								<%}%>
 
 							</select>

@@ -156,27 +156,34 @@ public class daoCuentas implements inCuentas{
         return cuenta;
     }
 
-    public boolean Eliminar(int nroCuenta) {
-    	Connection cn = null;
-    	PreparedStatement ps = null;
-        try {
-            cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(Eliminar);
-            ps.setInt(1, nroCuenta);
-            if (ps.executeUpdate() > 0) {
-                cn.commit();
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("No se pudo eliminar la cuenta.");
-        }
-        finally {
-            try { if (ps != null) ps.close(); } catch (Exception e) {}
-            try { if (cn != null) cn.close(); } catch (Exception e) {}
-        }
-        return false;
-    }
+	public boolean Eliminar(int nroCuenta) {
+		Connection cn = null;
+		PreparedStatement ps = null;
+		try {
+			cn = Conexion.getConexion().getSQLConnection();
+			ps = cn.prepareStatement(Eliminar);
+			ps.setInt(1, nroCuenta);
+			if (ps.executeUpdate() > 0) {
+				cn.commit();
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("No se pudo eliminar la cuenta.");
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (cn != null)
+					cn.close();
+			} catch (Exception e) {
+			}
+		}
+		return false;
+	}
 
     public boolean Modificar(Cuenta cuenta) {
     	Connection cn = null;
