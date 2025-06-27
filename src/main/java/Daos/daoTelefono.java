@@ -55,7 +55,29 @@ public class daoTelefono implements inTelefono{
         }
         return false;
     }	
-	
+	public int maximoTelefonos(TelefonoxPersona telefono) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int contador=0;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(buscarxDni);
+            ps.setString(1, telefono.getDni().getDni());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+            	contador++;
+                cn.commit();
+            }
+            return contador;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return -1;
+    }	
 	@Override
 	public TelefonoxPersona buscarXTelefono(String telefono) {
 		TelefonoxPersona telPersona = null;

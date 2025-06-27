@@ -14,14 +14,8 @@ public class UsuarioNegImpl implements UsuarioNeg {
     @Override
     public boolean AgregarUsuario(Usuario usuario) {
         Persona persona = usuario.getPersona();
-        if (negPersona.existe(persona.getDni()))return false;
-        if(negPersona.verificarMail(persona.getCorreoElectronico()))return false;
+        if (!negPersona.existe(persona.getDni()))return false;
         if(daoUsuario.existe(usuario.getNombreUsuario())) return false;
-        boolean exitoPersona=negPersona.Agregar(persona);
-        if(!exitoPersona) {
-        	System.out.println("No se agrego persona");
-        	return false;
-        }
         boolean exitoUsuario=daoUsuario.Agregar(usuario);
         if(!exitoUsuario) {
         	return false;
@@ -43,6 +37,13 @@ public class UsuarioNegImpl implements UsuarioNeg {
     	return daoUsuario.ListarTodo();
     }
     public boolean Modificar(Usuario usuario) {
+    	Usuario us=new Usuario();
+    	boolean existe= false;
+    	us=daoUsuario.BuscarDni(usuario.getPersona().getDni());
+    	if(!us.getNombreUsuario().equals(usuario.getNombreUsuario())) {
+    		existe=daoUsuario.existe(usuario.getNombreUsuario());
+    	}
+    	if(existe)return false;
     	return daoUsuario.Modificar(usuario);
     }
     @Override

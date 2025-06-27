@@ -195,16 +195,21 @@ function confirmarLogout(e) {
                             >
                         </div>
                         
-                        <div>
-    <label for="telefono" class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
-    <input
+<div>
+  <label class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos (máx 3)</label>
+  <div id="telefonosContainer">
+    <div class="flex items-center space-x-2 mb-2" id="telefono_group_1">
+      <input
         type="text"
-        id="telefono"
-        name="telefono"
-        placeholder=""
+        id="telefono_1"
+        name="telefonos"
+        placeholder="Teléfono 1"
         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+        oninput="mostrarSiguiente(1)"
         required
-    >
+      >
+    </div>
+  </div>
 </div>
 
                         <div>
@@ -284,6 +289,46 @@ function confirmarLogout(e) {
         }
         return true; // permite el submit
     }
+    function mostrarSiguiente(n) {
+    		  const actual = document.getElementById('telefono_' + n);
+    		  const contenedor = document.getElementById('telefonosContainer');
+
+    		  // Si el campo está lleno y el siguiente no existe aún, y hay menos de 3
+    		  if (actual.value.trim() !== "" && !document.getElementById('telefono_' + (n + 1)) && n < 3) {
+    		    const div = document.createElement('div');
+    		    div.className = 'flex items-center space-x-2 mb-2';
+    		    div.id = 'telefono_group_' + (n + 1);
+
+    		    const input = document.createElement('input');
+    		    input.type = 'text';
+    		    input.id = 'telefono_' + (n + 1);
+    		    input.name = 'telefonos';
+    		    input.placeholder = 'Teléfono ' + (n + 1);
+    		    input.className = 'p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg';
+    		    input.oninput = function () {
+    		      mostrarSiguiente(n + 1);
+    		    };
+
+    		    const btn = document.createElement('button');
+    		    btn.type = 'button';
+    		    btn.textContent = '−';
+    		    btn.className = 'text-red-600 font-bold text-xl hover:text-red-800';
+    		    btn.onclick = function () {
+    		      // Eliminar este y todos los posteriores
+    		      for (let i = n + 1; i <= 3; i++) {
+    		        const grupoPosterior = document.getElementById('telefono_group_' + i);
+    		        if (grupoPosterior) {
+    		          contenedor.removeChild(grupoPosterior);
+    		        }
+    		      }
+    		      contenedor.removeChild(div); // eliminar el actual también
+    		    };
+
+    		    div.appendChild(input);
+    		    div.appendChild(btn);
+    		    contenedor.appendChild(div);
+    		  }
+    		}
 </script>
 </body>
 </html>

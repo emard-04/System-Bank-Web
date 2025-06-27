@@ -13,7 +13,7 @@ public class PersonaNegImpl implements ClientesNeg{
 	public boolean Agregar(Persona persona) {
 		// Primero verificamos si ya existe el DNI
 		if (daoP.existe(persona.getDni()))return false;
-		if(daoP.verificarMail(persona.getCorreoElectronico()))return false;
+		if(verificarMail(persona.getCorreoElectronico()))return false;
 		return daoP.Agregar(persona);
 	}
 	public boolean verificarMail(String mail) {
@@ -22,6 +22,16 @@ public class PersonaNegImpl implements ClientesNeg{
 
 	@Override
 	public boolean Modificar(Persona persona) {
+		Persona pers= new Persona();
+		boolean existe =false;
+		pers= daoP.existeObj(persona.getDni());
+		if(!persona.getCorreoElectronico().equals(pers.getCorreoElectronico())) {
+			existe=verificarMail(persona.getCorreoElectronico());
+		}
+		if(existe) {
+			return false;
+		}
+		
 		return daoP.Modificar(persona);
 	}
 

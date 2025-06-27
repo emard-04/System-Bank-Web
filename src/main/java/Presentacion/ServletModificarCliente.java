@@ -33,17 +33,9 @@ public class ServletModificarCliente extends HttpServlet {
 	private static UsuarioNeg negUsuario= new UsuarioNegImpl();
 	private static ClientesNeg negCliente= new PersonaNegImpl();
     private static TelefonoNeg negTelefono=new TelefonoNegImpl();
-	/**
-     * @see HttpServlet#HttpServlet()
-     */
     public ServletModificarCliente() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("openModificar")!=null) {
 			String ventana="AdminMode/clienteAdmin_modificar.jsp";

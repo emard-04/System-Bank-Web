@@ -53,7 +53,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fecha_nacimiento"));
 	        String correo = request.getParameter("correo_electronico");
 	        String sexo = request.getParameter("sexo");
-	        String telefono = request.getParameter("telefono");
+	        String[] telefonos = request.getParameterValues("telefonos");
 
 	        String nombreUsuario = request.getParameter("usuario");
 	        String contrasena = request.getParameter("contrasena");
@@ -84,15 +84,16 @@ public class ServletAgregarCliente extends HttpServlet {
 	        usuario.setTipoUsuario(false); // asumimos que es cliente
 
 	        boolean usuarioCreado = negUsuario.AgregarUsuario(usuario);
-
+	        boolean telefonoGuardado=true;
 	        // 5. Insertar teléfono
+	        for(String numero: telefonos) {
 	        TelefonoxPersona telPersona = new TelefonoxPersona();
 	        telPersona.setDni(persona);
-	        telPersona.setTelefono(telefono);
-
-	        boolean telefonoGuardado = negTelefono.Agregar(telPersona);
-
+	        telPersona.setTelefono(numero.trim());
+	        telefonoGuardado = negTelefono.Agregar(telPersona);
+	        }
 	        // 6. Redirigir según resultado
+	        System.out.println(personaCreada+" "+usuarioCreado+ " "+telefonoGuardado);
 	        if (personaCreada && usuarioCreado && telefonoGuardado) {
 	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");
 	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");
