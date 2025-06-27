@@ -12,9 +12,8 @@ public class PersonaNegImpl implements ClientesNeg{
 	@Override
 	public boolean Agregar(Persona persona) {
 		// Primero verificamos si ya existe el DNI
-		if (daoP.existe(persona.getDni())) {
-			return false;
-		}
+		if (daoP.existe(persona.getDni()))return false;
+		if(daoP.verificarMail(persona.getCorreoElectronico()))return false;
 		return daoP.Agregar(persona);
 	}
 	public boolean verificarMail(String mail) {

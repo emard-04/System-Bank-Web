@@ -20,7 +20,7 @@ public class daoCuentas implements inCuentas{
     private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo) VALUES(?,?,?,?,?);";
     private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
-    private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Cbu=?, Saldo=? WHERE NroCuenta=?;";
+    private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa';";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
@@ -121,9 +121,8 @@ public class daoCuentas implements inCuentas{
             } else if (query.equals(Modificar)) {
                 ps.setDate(1, java.sql.Date.valueOf(cuenta.getFechaCreacion()));
                 ps.setInt(2, cuenta.getTipoCuenta().getIdTipoCuenta());
-                ps.setString(3, cuenta.getCbu());
-                ps.setBigDecimal(4, cuenta.getSaldo());
-                ps.setInt(5, cuenta.getNroCuenta()); // WHERE clause
+                ps.setBigDecimal(3, cuenta.getSaldo());
+                ps.setInt(4, cuenta.getNroCuenta()); // WHERE clause
                 
             }
         } catch (Exception e) {

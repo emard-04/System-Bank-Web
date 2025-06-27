@@ -2,10 +2,13 @@ package Presentacion;
 
 import java.io.IOException;
 import Entidades.*;
+import negocio.ClientesNeg;
 import negocio.CuentasNeg;
 import negocio.TipoCuentaNeg;
+import negocio.UsuarioNeg;
 import negocioImpl.CuentasNegImpl;
 import negocioImpl.TipoCuentaNegImpl;
+import negocioImpl.UsuarioNegImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,6 +30,7 @@ import java.util.Formatter.BigDecimalLayoutForm;
 public class ServletModificarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private CuentasNeg cuentaNeg= new CuentasNegImpl();
+	private UsuarioNeg usuarioNeg= new UsuarioNegImpl();
 	private TipoCuentaNeg TipocuentaNeg= new TipoCuentaNegImpl();
    
     public ServletModificarCuentas() {
@@ -74,8 +78,8 @@ public class ServletModificarCuentas extends HttpServlet {
             // 2. Obtener idTipoCuenta según texto
 
             // 3. Buscar usuario por DNI (asumiendo que tienes daoUsuario y método BuscarDni)
-            daoUsuario daoU = new daoUsuario();
-            Usuario usuario = daoU.BuscarDni(dniCliente);
+
+            Usuario usuario = usuarioNeg.BuscarDni(dniCliente);
             if (usuario == null) {
                 // Si no existe el usuario, redirigir con error
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Usuario no encontrado");

@@ -161,8 +161,9 @@ function confirmarLogout(e) {
                                 id="cbu_mod"
                                 name="cbu_mod"
                                 placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                class="p-3 border border-gray-300 rounded-md w-full text-lg"
                                 required
+                                readonly
                             >
                         </div>
 
@@ -173,8 +174,10 @@ function confirmarLogout(e) {
                                 id="saldo_mod"
                                 name="saldo_mod"
                                 placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg"
+                                min=0
+                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                                 required
+                                
                             >
                         </div>
 

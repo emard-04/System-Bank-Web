@@ -30,7 +30,6 @@ public class ServletBorrarCliente extends HttpServlet{
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		String nroDniStr = request.getParameter("dni_eliminar");
 
 		if (nroDniStr == null || nroDniStr.isEmpty()) {

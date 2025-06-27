@@ -32,7 +32,7 @@ public class ServletModificarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static UsuarioNeg negUsuario= new UsuarioNegImpl();
 	private static ClientesNeg negCliente= new PersonaNegImpl();
-    private static TelefonoNeg dT=new TelefonoNegImpl();
+    private static TelefonoNeg negTelefono=new TelefonoNegImpl();
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -54,7 +54,7 @@ public class ServletModificarCliente extends HttpServlet {
 			Usuario us= new Usuario();
 			TelefonoxPersona  telefono=new TelefonoxPersona();
 			us=negUsuario.BuscarDni(dniCliente);
-			ArrayList<TelefonoxPersona>Lista=dT.listarTelefonos(dniCliente);
+			ArrayList<TelefonoxPersona>Lista=negTelefono.listarTelefonos(dniCliente);
 			 StringBuilder telefonosJson = new StringBuilder("[");
 			    for (int i = 0; i < Lista.size(); i++) {
 			        telefono = Lista.get(i);
@@ -106,46 +106,24 @@ public class ServletModificarCliente extends HttpServlet {
 		if(!negCliente.Modificar(persona)) {
 			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error persona";
 			windowdefault(request, response, ventana);
+			return;
 		}
-		System.out.println(request.getParameter("Accion"));
-		
-		if(request.getParameter("Accion")!=null) {
-			if(request.getParameter("Accion").equals("Editar")) {
-				TelefonoxPersona tf=new TelefonoxPersona();
-				tf.setDni(persona);
-				tf.setTelefono(request.getParameter("telefono_input"));
-				String oldTel=request.getParameter("oldTelefono");
-				if(dT.Modificar(oldTel, tf)) {
-					System.out.println("Edit tel");
-				}
-				else {System.out.println("No editTel");}
-			}
-			if(request.getParameter("Accion").equals("Agregar")) {
-				TelefonoxPersona tf=new TelefonoxPersona();
-				tf.setDni(persona);
-				tf.setTelefono(request.getParameter("telefono_input"));
-				if(dT.Agregar(tf)) {
-					System.out.println("add");
-				}
-				else {System.out.println("No add");}
-			}
-			if(request.getParameter("Accion").equals("Eliminar")) {
-				TelefonoxPersona tf=new TelefonoxPersona();
-				tf.setDni(persona);
-				tf.setTelefono(request.getParameter("telefono_input"));
-				if(dT.Eliminar(tf)) {
-					System.out.println("borrar");
-				}
-				else {System.out.println("No borro");}
-			}
-		}
+		String accion=request.getParameter("Accion");
+		if(!accion.trim().isEmpty()) {
+		if(!actualizarTelefonos(request, response, persona)) {
+			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error telefono";
+			windowdefault(request, response, ventana);
+			return;
+		}}
 		usuario.setPersona(persona);
 		usuario.setNombreUsuario(request.getParameter("usuario_mod"));
 		usuario.setContrasena(request.getParameter("contrasena_mod"));
 		if(!negUsuario.Modificar(usuario)) {
 		String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error usuario";
 		windowdefault(request, response, ventana);
+		return;
 		}
+		System.out.println("todo ok");
 		String ventana="AdminMode/clienteAdmin_modificar.jsp";
 		windowdefault(request,response, ventana);
 		doGet(request, response);
@@ -156,4 +134,40 @@ public class ServletModificarCliente extends HttpServlet {
 		rd.forward(request, response);
 	}
 
+	private boolean actualizarTelefonos(HttpServletRequest request, HttpServletResponse response, Persona persona)
+			throws ServletException, IOException {
+		if (request.getParameter("Accion").equals("Editar")) {
+			TelefonoxPersona tf = new TelefonoxPersona();
+			tf.setDni(persona);
+			tf.setTelefono(request.getParameter("telefono_input"));
+			String oldTel = request.getParameter("oldTelefono");
+			if (negTelefono.Modificar(oldTel, tf)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if (request.getParameter("Accion").equals("Agregar")) {
+			TelefonoxPersona tf = new TelefonoxPersona();
+			tf.setDni(persona);
+			tf.setTelefono(request.getParameter("telefono_input"));
+			if (negTelefono.Agregar(tf)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if (request.getParameter("Accion").equals("Eliminar")) {
+			TelefonoxPersona tf = new TelefonoxPersona();
+			tf.setDni(persona);
+			tf.setTelefono(request.getParameter("telefono_input"));
+			if (negTelefono.Eliminar(tf)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+
+	}
 }

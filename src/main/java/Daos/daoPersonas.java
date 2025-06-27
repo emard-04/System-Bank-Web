@@ -14,7 +14,7 @@ import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona {
     private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni) values(?,?,?,?,?,?,?,?,?,?,?);";
-    private final String Eliminar = "UPDATE Persona SET Estado = 'Inactiva' where Dni=?;";
+    private final String Eliminar = "Delete From Persona where Dni=?;";
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
     private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
             + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento, Direccion "
@@ -91,34 +91,25 @@ public class daoPersonas implements inPersona {
         return persona;
     }
 
-	public boolean Eliminar(String dni) {
-		Connection cn = null;
-		PreparedStatement ps = null;
-		try {
-			cn = Conexion.getConexion().getSQLConnection();
-			ps = cn.prepareStatement(Eliminar);
-			ps.setString(1, dni);
-			if (ps.executeUpdate() > 0) {
-				cn.commit();
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("No se pudo eliminar al cliente.");
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (cn != null)
-					cn.close();
-			} catch (Exception e) {
-			}
-		}
-		return false;
-	}
+    public boolean Eliminar(String dni) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(Eliminar);
+            ps.setString(1, dni);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
 
     public boolean Modificar(Persona persona) {
         Connection cn = null;
@@ -213,7 +204,9 @@ public class daoPersonas implements inPersona {
             ps = cn.prepareStatement(ExisteMail);
             ps.setString(1, mail);
             rs = ps.executeQuery();
-            return rs.next();
+            if(rs.next()) {
+            return true;}
+            else return false;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
