@@ -19,7 +19,7 @@ public class daoUsuario implements InUsuario {
     private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
     private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
     private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
-    private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
+    private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario, Estado FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
     private static daoPersonas dp;
     public boolean Agregar(Usuario usuario) {
         Connection cn = null;
@@ -71,11 +71,14 @@ public class daoUsuario implements InUsuario {
             dp=new daoPersonas();
             Persona persona =(dp.existeObj(rs.getString("dni")));
             usuario.setPersona(persona);
-            usuario.setEstado(rs.getBoolean("Estado")); 
-            usuario.setTipoUsuario(rs.getBoolean("TipoUsuario"));
+            String estado = rs.getString("Estado");
+            usuario.setEstado(estado != null && estado.equalsIgnoreCase("activo"));
+            usuario.setTipoUsuario(rs.getInt("TipoUsuario") == 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+
         return usuario;
     }
 
