@@ -30,6 +30,16 @@
             color: #4a5568; /* text-gray-700 */
         }
     </style>
+    <script>
+function confirmarLogout(e) {
+    e.preventDefault(); // Detiene la acción por defecto del enlace
+
+    if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        // Si el usuario confirma, redirige al servlet de logout
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
+</script>
 <body class="bg-gray-100 h-screen overflow-hidden">
     <div class="flex h-full">
 
@@ -53,9 +63,11 @@
                 </div>
             </div>
 
-            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-                Salir
-            </a>
+            <a href="#"
+   onclick="confirmarLogout(event)"
+   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   Salir
+</a>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto">
@@ -66,16 +78,45 @@
             </header>
             
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
-				<ul class="flex space-x-4 justify-center">
-					<li><a href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
-					<li><a href="/BancoParcial/ClientMode/movientosClient.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
-					<li><a href="/BancoParcial/ClientMode/PrestamosClient.jsp"
-						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
-					<li><a href="<%=request.getContextPath()%>/ServletPersonalCliente" 
-						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
-				</ul>
+				<%
+    String paginaActual = "personal"; // Ejemplo: "movimientos", "transferencia", "prestamos", "personal", "home"
+%>
+
+<ul class="flex items-center justify-between w-full px-4 py-2 bg-white shadow">
+
+    <!-- Home -->
+    <li>
+        <a href="<%=request.getContextPath()%>/ClientMode/homeClient.jsp"
+           class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+            Home
+        </a>
+    </li>
+
+    <!-- Opciones centradas -->
+    <li class="flex space-x-6 mx-auto">
+        <a href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
+           class="<%= paginaActual.equals("transferencia") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+            Transferencia
+        </a>
+
+        <a href="/BancoParcial/ClientMode/movientosClient.jsp"
+           class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+            Movimientos
+        </a>
+
+        <a href="/BancoParcial/ClientMode/PrestamosClient.jsp"
+           class="<%= paginaActual.equals("prestamos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+            Prestamos
+        </a>
+
+        <a href="<%=request.getContextPath()%>/ServletPersonalCliente"
+           class="<%= paginaActual.equals("personal") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+            Personal
+        </a>
+    </li>
+
+    <li></li>
+</ul>
 			</nav>
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
