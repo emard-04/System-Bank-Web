@@ -1,7 +1,6 @@
-<%@ page import="Daos.daoCuentas, Entidades.Cuenta, java.util.List" %>
+<%@ page import="Entidades.Cuenta, java.util.List" %>
 <%
-    daoCuentas dao = new daoCuentas();
-    List<Cuenta> cuentas = dao.ListarTodo(); // tu método que lista todas las cuentas
+    List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -68,7 +67,7 @@ function confirmarLogout(e) {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="/BancoParcial/AdminMode/cuentaAdmin_borrar.jsp"
+						<a href="<%=request.getContextPath()%>/ServletBorrarCuenta"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -90,11 +89,21 @@ function confirmarLogout(e) {
                                 required
                             >
                                 <option value="" required>Seleccione el numero de cuenta</option>
-    <% for (Cuenta c : cuentas) { %>
-        <option value="<%= c.getNroCuenta() %>">
-    <%= c.getNroCuenta() %> - Cliente DNI: <%= c.getUsuario().getPersona().getDni() %>
-</option>
-    <% } %>
+     <%
+        if (cuentas != null) {
+            for (Cuenta c : cuentas) {
+    %>
+                <option value="<%= c.getNroCuenta() %>">
+                    <%= c.getNroCuenta() %> - Cliente DNI: <%= c.getUsuario().getPersona().getDni() %>
+                </option>
+    <%
+            }
+        } else {
+    %>
+        <option disabled>No se pudo cargar la lista de cuentas.</option>
+    <%
+        }
+    %>
 </select>
                         </div>
 

@@ -1,9 +1,10 @@
 package Presentacion;
 
 import java.io.IOException;
+import Entidades.*;
 import Daos.*;
 import negocioImpl.CuentasNegImpl;
-
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +29,12 @@ public class ServletBorrarCuenta extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         // Opcional: redirigir o mostrar error si se accede con GET
-        response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp");
+        //response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp");
+    	List<Cuenta> cuentas = negCuenta.ListarTodo(); // usa tu capa de negocio
+
+        request.setAttribute("cuentas", cuentas);
+
+        request.getRequestDispatcher("/AdminMode/cuentaAdmin_borrar.jsp").forward(request, response);
     }
 
 	
@@ -48,14 +54,14 @@ public class ServletBorrarCuenta extends HttpServlet {
             boolean exito = negCuenta.Eliminar(nroCuenta);
 
             if (exito) {
-                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?msg=CuentaEliminada");
+                response.sendRedirect(request.getContextPath() +  "/ServletBorrarCuenta?msg=CuentaEliminada");
             } else {
-                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?error=Error al eliminar cuenta");
+                response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=Error al eliminar cuenta");
             }
 
         } catch (NumberFormatException e) {
             // nroCuenta no es válido
-            response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?error=NroCuenta inválido");
+            response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=NroCuenta inválido");
         }
     }
 
