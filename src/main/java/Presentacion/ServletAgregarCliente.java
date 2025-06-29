@@ -88,12 +88,13 @@ public class ServletAgregarCliente extends HttpServlet {
 	        // 5. Insertar teléfono
 	        for(String numero: telefonos) {
 	        TelefonoxPersona telPersona = new TelefonoxPersona();
+	        if(!numero.isEmpty()) {
 	        telPersona.setDni(persona);
 	        telPersona.setTelefono(numero.trim());
 	        telefonoGuardado = negTelefono.Agregar(telPersona);
 	        }
-	        // 6. Redirigir según resultado
-	        System.out.println(personaCreada+" "+usuarioCreado+ " "+telefonoGuardado);
+	        break;
+	        }
 	        if (personaCreada && usuarioCreado && telefonoGuardado) {
 	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");
 	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");

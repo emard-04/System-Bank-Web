@@ -12,7 +12,7 @@ import Interfaces.Conexion;
 import Interfaces.InUsuario;
 
 public class daoUsuario implements InUsuario {
-    private final String Agregar = "INSERT INTO Usuarios( Contraseña, dni, TipoUsuario, NombreUsuario) VALUES(?,?,?,?);";
+    private final String Agregar = "INSERT INTO Usuarios( Contraseña, dni, TipoUsuario, NombreUsuario, Estado) VALUES(?,?,?,?,?);";
     private final String Eliminar = "UPDATE Usuarios SET Estado = 'Inactivo' WHERE NombreUsuario = ?";
     private final String Modificar = "UPDATE Usuarios SET NombreUsuario=?,Contraseña=? WHERE Dni=?;";
     private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario FROM Usuarios where TipoUsuario=0 AND Estado = 'Activo';";
@@ -50,6 +50,7 @@ public class daoUsuario implements InUsuario {
                 ps.setString(2, usuario.getPersona().getDni());
                 ps.setBoolean(3, usuario.isTipoUsuario());
                 ps.setString(4, usuario.getNombreUsuario());
+                ps.setString(5, "Activo");
             }
             if (query.equals(Modificar)) {
             	ps.setString(1, usuario.getNombreUsuario());

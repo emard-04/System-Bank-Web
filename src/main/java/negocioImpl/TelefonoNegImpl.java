@@ -16,7 +16,6 @@ private daoTelefono dTelefono=new daoTelefono();
 
 	@Override
 	public boolean Agregar(TelefonoxPersona telefono) {
-		System.out.println(dTelefono.existe(telefono));
 		if(dTelefono.existe(telefono)) return false;
 		if(dTelefono.maximoTelefonos(telefono)>2)return false;
 		if(dTelefono.Agregar(telefono))return true;

@@ -38,8 +38,9 @@ public class ServletModificarCuentas extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		if(request.getParameter("openModificar")!=null) {
+			windowDefault(request, response);
+		}
 		if(request.getParameter("nroCuenta")!=null) {
 			Cuenta cuenta= new Cuenta();
 			int nroCuenta=Integer.parseInt(request.getParameter("nroCuenta"));
@@ -92,6 +93,12 @@ public class ServletModificarCuentas extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Error inesperado");
         }
     }
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("ListaCuenta", cuentaNeg.ListarTodo());
+		RequestDispatcher rd= request.getRequestDispatcher("/AdminMode/cuentaAdmin_modificar.jsp");
+		rd.forward(request, response);
+		
+	}
 
 }
 	/*private Cuenta setAtributosCuenta(HttpServletRequest request)throws ServletException, IOException { 

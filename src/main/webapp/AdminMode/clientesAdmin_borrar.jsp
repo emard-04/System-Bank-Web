@@ -1,8 +1,5 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.List,Daos.daoUsuario, Entidades.Usuario"%>
-<%
-daoUsuario dao = new daoUsuario();
-List<Usuario> usuarios = dao.ListarTodo(); //Se usa el metodo listar de usuario para que no aparezcan admins
-%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -66,12 +63,12 @@ function confirmarLogout(e) {
 					<li class="flex space-x-10 mx-auto"><a
 						href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="clientesAdmin_agregar.jsp"
+						<a href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregarUsu=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a
 						href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="clientesAdmin_borrar.jsp"
+						<a href="<%=request.getContextPath()%>/ServletBorrarCliente?openBorrar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -92,9 +89,9 @@ function confirmarLogout(e) {
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
 								<option value="" required>Seleccione DNI</option>
-								<%for (Usuario u : usuarios) {%>
-
-								<%if (true) {%>
+								<% if(request.getAttribute("ListarUsuario")!=null){
+									ArrayList<Usuario> usuarios=(ArrayList<Usuario>)request.getAttribute("ListarUsuario");
+								for (Usuario u : usuarios) {%>
 								<option value="<%=u.getPersona().getDni()%>">Dni =
 									<%=u.getPersona().getDni()%>
 								</option>

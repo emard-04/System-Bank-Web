@@ -1,11 +1,8 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.lang.reflect.Array"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Entidades.Cuenta" %>
-<%@ page import="Daos.daoCuentas" %>
 
-<%
-    daoCuentas dao = new daoCuentas();
-    List<Cuenta> cuentas = dao.ListarTodo(); // método que lista todas las cuentas
-%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 
     pageEncoding="UTF-8"%>
@@ -76,7 +73,7 @@ function confirmarLogout(e) {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp"
+						<a href="/BancoParcial/ServletModificarCuentas?openModificar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="<%=request.getContextPath()%>/ServletBorrarCuenta"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
@@ -90,17 +87,22 @@ function confirmarLogout(e) {
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
                     <div class="mb-8 pb-4 border-b border-gray-200 flex items-center justify-center">
                         <label for="seleccionar_cuenta_dni" class="block text-gray-700 text-lg font-semibold mr-4">Seleccionar Nº de Cuenta:</label>
+                      
                         <select
                             id="seleccionar_cuenta_dni"
                             name="seleccionar_cuenta_dni"
                             class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white w-64"
                             >
                              <option value="">-- Seleccione un Nº de Cuenta --</option>
-    <% for (Cuenta c : cuentas) { %>
+                               <% if(request.getAttribute("ListaCuenta")!=null){
+                        	ArrayList<Cuenta> cuentas=(ArrayList<Cuenta>)request.getAttribute("ListaCuenta");
+                        
+                        
+    for (Cuenta c : cuentas) { %>
         <option value="<%= c.getNroCuenta() %>">
             <%= c.getNroCuenta() %> (Cliente: <%= c.getUsuario().getPersona().getDni() %>)
         </option>
-    <% } %>
+    <% }}%>
                         </select>
                     </div>
 

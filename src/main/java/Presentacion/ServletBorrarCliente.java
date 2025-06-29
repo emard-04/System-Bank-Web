@@ -5,6 +5,7 @@ import negocioImpl.*;
 import Daos.*;
 import negocioImpl.PersonaNegImpl;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +25,8 @@ public class ServletBorrarCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.sendRedirect(request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp");
+		if(request.getParameter("openBorrar")!=null) {
+		windowDefault(request, response);}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,5 +68,11 @@ public class ServletBorrarCliente extends HttpServlet {
 			response.sendRedirect(
 					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
 		}
+	}
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setAttribute("ListarUsuario", negUsuario.listarTodo());
+		RequestDispatcher rd = request.getRequestDispatcher("/AdminMode/clientesAdmin_borrar.jsp");
+		rd.forward(request, response);
 	}
 }
