@@ -9,4 +9,5 @@ public interface TelefonoNeg {
 	public boolean Agregar(TelefonoxPersona telefono);
 	public boolean Eliminar(TelefonoxPersona telefono);
 	public ArrayList<TelefonoxPersona> listarTelefonos(String dni);
+	public TelefonoxPersona buscarPorDni(String dni);
 }

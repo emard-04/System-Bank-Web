@@ -1,5 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="Entidades.Usuario" %>
+<%
+    Usuario usuario = (Usuario) request.getAttribute("usuario");
+    String telefono = (String) request.getAttribute("telefonoUsuario");
+
+    if (usuario == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,13 +67,13 @@
             
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex space-x-4 justify-center">
-					<li><a href="TransferenciaClient.jsp"
+					<li><a href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
-					<li><a href="movientosClient.jsp"
+					<li><a href="/BancoParcial/ClientMode/movientosClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
-					<li><a href="PrestamosClient.jsp"
+					<li><a href="/BancoParcial/ClientMode/PrestamosClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
-					<li><a href="personalClient.jsp"
+					<li><a href="<%=request.getContextPath()%>/ServletPersonalCliente" 
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Personal</a></li>
 				</ul>
 			</nav>
@@ -73,153 +82,61 @@
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
                     <form class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
                         <div>
-                            <label for="nombre" class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
-                            <input
-                                type="text"
-                                id="nombre"
-                                name="nombre"
-                                value="Juan"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
+                            <input type="text" value="<%= usuario.getPersona().getNombre() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="apellido" class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
-                            <input
-                                type="text"
-                                id="apellido"
-                                name="apellido"
-                                value="Pérez"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
+                            <input type="text" value="<%= usuario.getPersona().getApellido() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="dni" class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
-                            <input
-                                type="text"
-                                id="dni"
-                                name="dni"
-                                value="12.345.678"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
+                            <input type="text" value="<%= usuario.getPersona().getDni() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
 
                         <div>
-                            <label for="provincia" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-                            <input
-                                type="text"
-                                id="provincia"
-                                name="provincia"
-                                value="Buenos Aires"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
+                            <input type="text" value="<%= usuario.getPersona().getProvincia() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="localidad" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-                            <input
-                                type="text"
-                                id="localidad"
-                                name="localidad"
-                                value="Pilar"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
+                            <input type="text" value="<%= usuario.getPersona().getLocalidad() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="direccion" class="block text-gray-700 text-lg font-semibold mb-2">Dirección</label>
-                            <input
-                                type="text"
-                                id="direccion"
-                                name="direccion"
-                                value="Calle Falsa 123"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Dirección</label>
+                            <input type="text" value="<%= usuario.getPersona().getDireccion() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
 
                         <div>
-                            <label for="sexo" class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
-                            <input
-                                type="text"
-                                id="sexo"
-                                name="sexo"
-                                value="Masculino"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
+                            <input type="text" value="<%= usuario.getPersona().getSexo() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="fecha_nacimiento" class="block text-gray-700 text-lg font-semibold mb-2">Fecha de Nacimiento</label>
-                            <input
-                                type="text"
-                                id="fecha_nacimiento"
-                                name="fecha_nacimiento"
-                                value="01/01/1990"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Fecha de Nacimiento</label>
+                            <input type="text" value="<%= usuario.getPersona().getFechaNacimiento() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
-                            <label for="nacionalidad" class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
-                            <input
-                                type="text"
-                                id="nacionalidad"
-                                name="nacionalidad"
-                                value="Argentina"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
+                            <input type="text" value="<%= usuario.getPersona().getNacionalidad() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
 
                         <div>
-                            <label for="telefono" class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
-                            <input
-                                type="text"
-                                id="telefono"
-                                name="telefono"
-                                value="+54 9 11 1234 5678" <%-- Valor de ejemplo --%>
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
-                        </div>
+    <label class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
+    <input type="text" value="<%= telefono != null ? telefono : "" %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly />
+</div>
                         <div>
-                            <label for="cuil" class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
-                            <input
-                                type="text"
-                                id="cuil"
-                                name="cuil"
-                                value="20-12345678-9" <%-- Valor de ejemplo --%>
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
+                            <input type="text" value="<%= usuario.getPersona().getCuil() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
-                        <div></div> 
-                        
-                        <%-- Campos existentes que ocupan 1 o 2 columnas --%>
-                        <div class="col-span-1 md:col-span-2"> 
-                            <label for="usuario" class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
-                            <input
-                                type="text"
-                                id="usuario"
-                                name="usuario"
-                                value="juan.perez"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                        <div></div>
+
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
+                            <input type="text" value="<%= usuario.getNombreUsuario() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
-                        <div class="col-span-1 md:col-span-1"> 
-                            <label for="correo" class="block text-gray-700 text-lg font-semibold mb-2">Correo</label>
-                            <input
-                                type="email"
-                                id="correo"
-                                name="correo"
-                                value="juan.perez@email.com"
-                                class="p-3 border border-gray-300 rounded-md w-full text-lg read-only-input focus:outline-none"
-                                readonly
-                            >
+                        <div class="col-span-1 md:col-span-1">
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Correo</label>
+                            <input type="email" value="<%= usuario.getPersona().getCorreoElectronico() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                     </form>
                 </div>

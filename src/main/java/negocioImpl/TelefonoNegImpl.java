@@ -30,4 +30,8 @@ private daoTelefono dTelefono=new daoTelefono();
 		return false;
 	}
 
+    public TelefonoxPersona buscarPorDni(String dni) {
+        return dTelefono.buscarPorDni(dni);
+    }
+
 }

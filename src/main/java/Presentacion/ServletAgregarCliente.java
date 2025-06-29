@@ -95,6 +95,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        }
 	        break;
 	        }
+	        System.out.println(personaCreada+" "+usuarioCreado+ " "+telefonoGuardado);
 	        if (personaCreada && usuarioCreado && telefonoGuardado) {
 	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");
 	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");

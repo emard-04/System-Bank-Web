@@ -179,4 +179,29 @@ public class daoTelefono implements inTelefono{
         }
         return false;
     }
+	public TelefonoxPersona buscarPorDni(String dni) {
+        TelefonoxPersona telefono = null;
+
+        try (Connection conn = Conexion.getConexion().getSQLConnection();
+             PreparedStatement ps = conn.prepareStatement(buscarxDni)) {
+
+            ps.setString(1, dni);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    telefono = new TelefonoxPersona();
+                    telefono.setTelefono(rs.getString("Telefono"));
+
+                    Persona persona = new Persona();
+                    persona.setDni(dni); // Asignás solo el dni, si es lo único que necesitás
+                    telefono.setDni(persona);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return telefono;
+    }
 }
+
