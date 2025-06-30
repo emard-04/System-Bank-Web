@@ -8,5 +8,6 @@ public interface InPrestamos {
     boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago);
     public Prestamos obtenerPendientePorUsuario(int idUsuario) ;
     boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstadoSoli);
+    List<Prestamos> obtenerPrestamosPendientes();
     
 }

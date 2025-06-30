@@ -41,4 +41,9 @@ public class PrestamosNegImpl implements PrestamosNeg{
 	    public Prestamos obtenerPrestamoPendientePorUsuario(int idUsuario) {
 	        return prestamoDao.obtenerPendientePorUsuario(idUsuario);
 	    }
+
+		@Override
+		public List<Prestamos> obtenerPrestamosPendientes() {
+			return  prestamoDao.obtenerPrestamosPendientes();
+		}
 }

@@ -9,4 +9,5 @@ public interface PrestamosNeg {
     boolean aprobarPrestamo(int idPrestamo);
     boolean rechazarPrestamo(int idPrestamo);
     public Prestamos obtenerPrestamoPendientePorUsuario(int idUsuario);
+    List<Prestamos> obtenerPrestamosPendientes();
 }

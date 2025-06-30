@@ -185,5 +185,46 @@ public class daoPrestamos implements InPrestamos{
 
 		        return false;
 			}
+			public List<Prestamos> obtenerPrestamosPendientes() {
+			    List<Prestamos> prestamos = new ArrayList<>();
+
+			    String query = """
+			        SELECT p.*, per.Dni
+			        FROM Prestamos p
+			        INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario
+			        INNER JOIN Persona per ON u.Dni = per.Dni
+			        WHERE p.EstadoSolicitud = 'Pendiente'
+			    """;
+
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(query);
+			         ResultSet rs = stmt.executeQuery()) {
+
+			        while (rs.next()) {
+			            Prestamos prestamo = new Prestamos();
+			            prestamo.setIdPrestamo(rs.getInt("IdPrestamo"));
+			            prestamo.setFecha(rs.getDate("Fecha").toLocalDate());
+			            prestamo.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+			            prestamo.setImportePedido(rs.getBigDecimal("ImportePedido"));
+			            prestamo.setPlazoDePago(rs.getString("PlazoDePago"));
+			            prestamo.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+			            prestamo.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
+			            prestamo.setEstadoPago(rs.getString("EstadoPago"));
+			            
+			            Usuario u = new Usuario();
+			            Persona per = new Persona();
+			            per.setDni(rs.getString("Dni"));
+			            u.setPersona(per);
+			            prestamo.setUsuario(u);
+
+			            prestamos.add(prestamo);
+			        }
+
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+
+			    return prestamos;
+			}
 		}
 

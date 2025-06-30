@@ -87,26 +87,32 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Cuotas</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Acciones</th> </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10020</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">123456789</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">04-11-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">100000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">100000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">3</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="icon-button bg-green-500 hover:bg-green-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                                            &#10003; </button>
-                                        <button class="icon-button bg-red-500 hover:bg-red-600 text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                                            &#10006; </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
+                       <tbody class="bg-white divide-y divide-gray-200">
+  <c:forEach var="prestamo" items="${prestamosPendientes}">
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${prestamo.idPrestamo}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.usuario.persona.dni}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.fecha}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.importeApagar}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.importePedido}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.plazoDePago}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.montoCuotasxMes}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.plazoDePago}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+        <form method="post" action="${pageContext.request.contextPath}/ServletAdminPrestamos" style="display:inline;">
+          <input type="hidden" name="idPrestamo" value="${prestamo.idPrestamo}" />
+          <input type="hidden" name="accion" value="aceptar" />
+          <button class="icon-button bg-green-500 hover:bg-green-600 text-white" type="submit">&#10003;</button>
+        </form>
+        <form method="post" action="${pageContext.request.contextPath}/ServletAdminPrestamos" style="display:inline;">
+          <input type="hidden" name="idPrestamo" value="${prestamo.idPrestamo}" />
+          <input type="hidden" name="accion" value="rechazar" />
+          <button class="icon-button bg-red-500 hover:bg-red-600 text-white" type="submit">&#10006;</button>
+        </form>
+      </td>
+    </tr>
+  </c:forEach>
+</tbody>
                     </table>
                 </div>
 

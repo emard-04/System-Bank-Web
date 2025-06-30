@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page import="Entidades.*"%>
 <!DOCTYPE html>
 <html>
@@ -52,17 +52,23 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                     class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
                     <option value="" disabled selected>Cuentas</option>
                     <%
-                        int contador = 0;
-                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
-                        for (Cuenta c : listaCuenta) {
-                            contador++;
-                    %>
-                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
-                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
-                        </option>
-                    <%
-                        }
-                    %>
+    int contador = 0;
+    ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+    if (listaCuenta != null) {
+        for (Cuenta c : listaCuenta) {
+            contador++;
+%>
+    <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
+        Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
+    </option>
+<%
+        }
+    } else {
+%>
+    <option disabled>No hay cuentas disponibles</option>
+<%
+    }
+%>
                 </select>
             </div>
 
@@ -137,13 +143,21 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                         
                         <div>
                             <label for="cuenta_a_debitar" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione una cuenta</label>
-                            <select id="cuenta_a_debitar" name="cuenta_a_debitar" class="...">
+                            <select id="cuenta_a_debitar" name="cuenta_a_debitar"
+    class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg bg-white" required>
     <option value="">-- Seleccione cuenta a debitar --</option>
-    <c:forEach var="cuenta" items="${cuentas}">
-        <option value="${cuenta.numeroCuenta}">
-            ${cuenta.tipo.descripcion} ${cuenta.numeroCuenta}
+    <%
+        ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+        if (cuentas != null) {
+            for (Cuenta cuenta : cuentas) {
+    %>
+        <option value="<%= cuenta.getNroCuenta() %>">
+            Cuenta <%= cuenta.getNroCuenta() %> - $<%= cuenta.getSaldo() %>
         </option>
-    </c:forEach>
+    <%
+            }
+        }
+    %>
 </select>
                         </div>
 
@@ -170,18 +184,14 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                             
 
                         <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
-                            <button
-                                type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-green focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
-                            >
-                                PAGAR
-                            </button>
-                            <button
-                                type="button"
-                                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
-                            >
-                                CANCELAR
-                            </button>
+                            <button type="submit"
+    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 text-base">
+    PAGAR
+</button>
+<button type="button"
+    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition duration-200 text-base">
+    CANCELAR
+</button>
                         </div>
                     </form>
                 </div>
