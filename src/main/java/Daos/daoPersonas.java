@@ -28,10 +28,12 @@ public class daoPersonas implements inPersona {
         try {
             cn = Conexion.getConexion().getSQLConnection();
             cs = valoresQuery(cn, Agregar, persona);
+            
             if (cs.executeUpdate() > 0) {
                 cn.commit();
                 return true;
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("No se pudo conectar");
@@ -57,7 +59,7 @@ public class daoPersonas implements inPersona {
             cs.setString(9, persona.getLocalidad());
             cs.setString(10, persona.getProvincia());
             cs.setString(11, persona.getDni());
-            cs.setString(12, "Acivo");
+            cs.setString(12, "Activo");
         } catch (Exception e) {
             e.printStackTrace();
         }
