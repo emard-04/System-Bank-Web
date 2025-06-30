@@ -49,7 +49,7 @@ function confirmarLogout(e) {
             </p>
 
             <div class="relative w-full mb-6">
-                <select name="cuentaSeleccionada" id="cuenta"
+                <select name="cuentaSeleccionada" id="cuenta" 
                     class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
                     <option value="" disabled selected>Cuentas</option>
                     <%
@@ -122,7 +122,7 @@ function confirmarLogout(e) {
 					<form action="/BancoParcial/ServletTransferencia" method="post"
 						class="space-y-6">
 						<div class="mb-4">
-						<input type="hidden" id="cuentaSeleccionadaHidden" name="cuentaSeleccionada">
+						<input type="hidden" id="cuentaSeleccionadaHidden" name="cuentaSeleccionada" >
 							<label for="monto"
 								class="block text-gray-700 text-lg font-semibold mb-2">Monto
 								a transferir</label> <input type="number" id="monto" name="monto"
