@@ -40,9 +40,9 @@
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
-                    <li><a href="clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
-                    <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
-                    <li><a href="prestamosAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ServletListarCuentas?openListar=1&pagina=1"class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
+                    <li><a href="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
                     <li><a href="reportesAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Reportes</a></li>
                 </ul>
             </nav>
