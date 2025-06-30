@@ -7,7 +7,10 @@ public class Movimiento {
     private int idMovimiento;
     private Usuario usuario;
     private TipoMovimiento tipoMovimiento;
-    private Cuenta cuenta;
+    private Cuenta CuentaEmisor;
+
+
+	private Cuenta CuentaReceptor;
     private String detalle;
     private BigDecimal importe;
     private LocalDate fecha;
@@ -15,11 +18,12 @@ public class Movimiento {
     public Movimiento() {}
 
     public Movimiento(int idMovimiento, Usuario usuario, TipoMovimiento tipoMovimiento, Cuenta cuenta,
-                      String detalle, BigDecimal importe, LocalDate fecha) {
+    		 Cuenta cuentaEmisor, Cuenta cuentaReceptor,String detalle, BigDecimal importe, LocalDate fecha) {
         this.idMovimiento = idMovimiento;
         this.usuario = usuario;
         this.tipoMovimiento = tipoMovimiento;
-        this.cuenta = cuenta;
+        this.CuentaEmisor = cuentaEmisor;
+        this.CuentaReceptor = cuentaReceptor;
         this.detalle = detalle;
         this.importe = importe;
         this.fecha = fecha;
@@ -43,12 +47,21 @@ public class Movimiento {
     public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
     }
-    public Cuenta getCuenta() {
-        return cuenta;
-    }
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
-    }
+    public Cuenta getCuentaEmisor() {
+		return CuentaEmisor;
+	}
+
+	public void setCuentaEmisor(Cuenta cuentaEmisor) {
+		CuentaEmisor = cuentaEmisor;
+	}
+
+	public Cuenta getCuentaReceptor() {
+		return CuentaReceptor;
+	}
+
+	public void setCuentaReceptor(Cuenta cuentaReceptor) {
+		CuentaReceptor = cuentaReceptor;
+	}
     public String getDetalle() {
         return detalle;
     }
@@ -74,7 +87,7 @@ public class Movimiento {
                 "ID=" + idMovimiento +
                 ", Usuario=" + usuario.getIdUsuario() +
                 ", TipoMovimiento=" +tipoMovimiento.getIdTipoMovimiento() +
-                ", Cuenta=" + cuenta.getNroCuenta() +
+                ", Cuenta=" + CuentaEmisor.getNroCuenta() +
                 ", Detalle='" + detalle + '\'' +
                 ", Importe=" + importe +
                 ", Fecha=" + fecha+""

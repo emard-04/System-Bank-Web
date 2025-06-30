@@ -17,7 +17,9 @@ public class CuentasNegImpl implements CuentasNeg{
         }
     	return false;
     }
-
+    public ArrayList<Cuenta> ListarxUsuario(int Id){
+    	return dao.ListarxUsuario(Id);
+    }
     @Override
     public boolean Modificar(Cuenta cuenta) {
         return dao.Modificar(cuenta);
@@ -47,6 +49,9 @@ public class CuentasNegImpl implements CuentasNeg{
     }
 	public String generarCBU() {
 		return dao.generarCBUAleatorio();
+	}
+	public Cuenta cuentaxCbu(String cbu) {
+		return dao.cuentaxCbu(cbu);
 	}
 }
 

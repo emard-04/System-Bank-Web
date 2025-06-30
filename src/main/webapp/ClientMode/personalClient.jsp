@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Entidades.Usuario" %>
+<%@page import="java.util.ArrayList"%>
+<%@ page import="Entidades.*"%>
 <%
     Usuario usuario = (Usuario) request.getAttribute("usuario");
     String telefono = (String) request.getAttribute("telefonoUsuario");
@@ -40,28 +41,43 @@ function confirmarLogout(e) {
     }
 }
 </script>
+<%Usuario us= (Usuario)session.getAttribute("usuarioLogueado"); %>
 <body class="bg-gray-100 h-screen overflow-hidden">
     <div class="flex h-full">
 
-        <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
-            
+        <aside 
+ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
+
             <div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-                </div>
-            
-            <h3 class="text-xl font-bold text-gray-800 text-center mb-1">Nombre Apellido</h3>
-            <p class="text-md text-gray-600 text-center mb-6">Saldo: $$$</p>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-800 text-center mb-1">
+                <%= us.getPersona().getNombre() %> <%= us.getPersona().getApellido() %>
+            </h3>
+
+            <p class="text-md text-gray-600 text-center mb-6">
+                Saldo: $<span id="saldoActual">---</span>
+            </p>
 
             <div class="relative w-full mb-6">
-                <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between" id="dropdown-button">
-                    Cuentas
-                    <svg class="w-4 h-4 fill-current ml-2" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                </button>
-                <div id="dropdown-list" class="absolute bg-white border border-gray-300 rounded-md shadow-lg mt-1 w-full z-10 hidden">
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Cuenta 1</a>
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Cuenta 2</a>
-                    <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Ver todas</a>
-                </div>
+                <select name="cuentaSeleccionada" id="cuenta"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
+                    <option value="" disabled selected>Cuentas</option>
+                    <%
+                        int contador = 0;
+                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+                        for (Cuenta c : listaCuenta) {
+                            contador++;
+                    %>
+                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
+                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
+                        </option>
+                    <%
+                        }
+                    %>
+                </select>
             </div>
+
 
             <a href="#"
    onclick="confirmarLogout(event)"

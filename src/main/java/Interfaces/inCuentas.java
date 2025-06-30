@@ -13,5 +13,7 @@ package Interfaces;
 	        boolean existe(int nroCuenta);
 	        String generarCBUAleatorio();
 	        int maximoCuentas(int Id);
+	        Cuenta cuentaxCbu(String cbu);
+	        ArrayList<Cuenta> ListarxUsuario(int Id);
 	}
 

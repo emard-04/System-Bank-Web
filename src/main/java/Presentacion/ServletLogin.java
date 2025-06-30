@@ -1,6 +1,8 @@
 package Presentacion;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpSession;
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UsuarioNeg usuarioNeg = new UsuarioNegImpl();
+	private CuentasNeg cuentaNeg= new CuentasNegImpl();
 
     public ServletLogin() {
         super();
@@ -36,12 +39,12 @@ public class ServletLogin extends HttpServlet {
 
         // Intentar login
         Usuario usuario = usuarioNeg.Login(username, password); // método que debería validar y devolver usuario o null
-
+        ArrayList<Cuenta> ListaCuentas= cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
         if (usuario != null && usuario.getIdUsuario() != 0) {
 			// LOGIN CORRECTO: guardamos en sesión
 			HttpSession session = request.getSession();
 			session.setAttribute("usuarioLogueado", usuario);
-
+			session.setAttribute("cuentasUsuario", ListaCuentas);
 			// Redireccionamos según tipo de usuario
 			if (usuario.isTipoUsuario()) {
 				// Admin

@@ -22,11 +22,11 @@ public class daoCuentas implements inCuentas{
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa';";
+    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa' and IdUsuario=?;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
     private final String maximoCuentas="Select sum(IdUsuario) as Cantidad from cuentas where idUsuario=? and estado=?";
-    private daoTipoCuenta dTipoCuenta;
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub
 	}
@@ -84,6 +84,28 @@ public class daoCuentas implements inCuentas{
             try { if (cn != null) cn.close(); } catch (Exception e) {}
         }
         return false;
+    }
+    public Cuenta cuentaxCbu(String cbu) {
+    	Connection cn = null;
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+    	Cuenta cuenta=null;
+    	try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(existeCBU);
+            ps.setString(1, cbu);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+            return valoresCuenta(rs);}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    	finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return cuenta;
     }
     
     public boolean Agregar(Cuenta cuenta) {
@@ -214,6 +236,30 @@ public class daoCuentas implements inCuentas{
             cn = Conexion.getConexion().getSQLConnection();
             st = cn.createStatement();
             rs = st.executeQuery(ListarTodo);
+            while (rs.next()) {
+                Cuenta cuenta = valoresCuenta(rs);
+                listaCuentas.add(cuenta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("No se pudieron listar las cuentas.");
+        }
+        finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return listaCuentas;
+    }
+    public ArrayList<Cuenta> ListarxUsuario(int Id) {
+        ArrayList<Cuenta> listaCuentas = new ArrayList<>();
+        Connection cn = null;
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(ListarxUsuario);
+            ps.setInt(1, Id);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Cuenta cuenta = valoresCuenta(rs);
                 listaCuentas.add(cuenta);

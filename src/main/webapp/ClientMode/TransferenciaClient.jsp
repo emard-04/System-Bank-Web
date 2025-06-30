@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@ page import="Entidades.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -28,45 +30,46 @@ function confirmarLogout(e) {
 }
 </script>
 </head>
+<%Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado"); %>
 <body class="bg-gray-100 h-screen overflow-hidden">
 	<div class="flex h-full">
 
 		<aside
-			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
+ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-			</div>
+            <div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
+            </div>
 
-			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">Nombre
-				Apellido</h3>
-			<p class="text-md text-gray-600 text-center mb-6">Saldo: $$$</p>
+            <h3 class="text-xl font-bold text-gray-800 text-center mb-1">
+                <%= usuario.getPersona().getNombre() %> <%= usuario.getPersona().getApellido() %>
+            </h3>
 
-			<div class="relative w-full mb-6">
-				<button
-					class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between"
-					id="dropdown-button">
-					Cuentas
-					<svg class="w-4 h-4 fill-current ml-2" viewBox="0 0 20 20">
-						<path
-							d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-				</button>
-				<div id="dropdown-list"
-					class="absolute bg-white border border-gray-300 rounded-md shadow-lg mt-1 w-full z-10 hidden ">
-					<a href="#"
-						class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Cuenta
-						1</a> <a href="#"
-						class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Cuenta
-						2</a> <a href="#"
-						class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Ver
-						todas</a>
-				</div>
-			</div>
+            <p class="text-md text-gray-600 text-center mb-6">
+                Saldo: $<span id="saldoActual">---</span>
+            </p>
 
-			<a href="#"
-   onclick="confirmarLogout(event)"
-   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-   Salir
-</a>
+            <div class="relative w-full mb-6">
+                <select name="cuentaSeleccionada" id="cuenta"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
+                    <option value="" disabled selected>Cuentas</option>
+                    <%
+                        int contador = 0;
+                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+                        for (Cuenta c : listaCuenta) {
+                            contador++;
+                    %>
+                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
+                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
+                        </option>
+                    <%
+                        }
+                    %>
+                </select>
+            </div>
+
+			<a href="#" onclick="confirmarLogout(event)"
+				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+				Salir </a>
 		</aside>
 
 		<main class="flex-1 flex flex-col overflow-y-auto">
@@ -78,51 +81,48 @@ function confirmarLogout(e) {
 			</header>
 
 			<nav class="bg-gray-50 border-b border-gray-200 p-4">
-			<%
+				<%
     String paginaActual = "transferencia"; // Ejemplo: "movimientos", "transferencia", "prestamos", "personal", "home"
 %>
 
-<ul class="flex items-center justify-between w-full px-4 py-2 bg-white shadow">
+				<ul
+					class="flex items-center justify-between w-full px-4 py-2 bg-white shadow">
 
-    <!-- Home -->
-    <li>
-        <a href="<%=request.getContextPath()%>/ClientMode/homeClient.jsp"
-            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-            Home
-        </a>
-    </li>
+					<!-- Home -->
+					<li><a
+						href="<%=request.getContextPath()%>/ClientMode/homeClient.jsp"
+						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Home </a></li>
 
-    <!-- Opciones centradas -->
-    <li class="flex space-x-6 mx-auto">
-        <a href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
-           class="<%= paginaActual.equals("transferencia") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-            Transferencia
-        </a>
+					<!-- Opciones centradas -->
+					<li class="flex space-x-6 mx-auto"><a
+						href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
+						class="<%= paginaActual.equals("transferencia") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Transferencia </a> <a
+						href="/BancoParcial/ClientMode/movientosClient.jsp"
+						class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Movimientos </a> <a
+						href="/BancoParcial/ClientMode/PrestamosClient.jsp"
+						class="<%= paginaActual.equals("prestamos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Prestamos </a> <a
+						href="<%=request.getContextPath()%>/ServletPersonalCliente"
+						class="<%= paginaActual.equals("personal") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Personal </a></li>
 
-        <a href="/BancoParcial/ClientMode/movientosClient.jsp"
-           class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-            Movimientos
-        </a>
-
-        <a href="/BancoParcial/ClientMode/PrestamosClient.jsp"
-           class="<%= paginaActual.equals("prestamos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-            Prestamos
-        </a>
-
-        <a href="<%=request.getContextPath()%>/ServletPersonalCliente"
-           class="<%= paginaActual.equals("personal") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-            Personal
-        </a>
-    </li>
-
-    <li></li>
-</ul>
+					<li></li>
+				</ul>
 			</nav>
-
 			<div class="p-6 flex-1 flex flex-col items-center justify-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-					<form action="TransferirServlet" method="post" class="space-y-6">
+				                <% if (request.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+        <%= request.getAttribute("mensaje") %>
+    </div>
+<% } %>
+					<form action="/BancoParcial/ServletTransferencia" method="post"
+						class="space-y-6">
 						<div class="mb-4">
+						<input type="hidden" id="cuentaSeleccionadaHidden" name="cuentaSeleccionada">
 							<label for="monto"
 								class="block text-gray-700 text-lg font-semibold mb-2">Monto
 								a transferir</label> <input type="number" id="monto" name="monto"
@@ -148,7 +148,7 @@ function confirmarLogout(e) {
 
 						<button type="submit"
 							class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-							Transferir!</button>
+							Transferir</button>
 					</form>
 				</div>
 			</div>
@@ -161,14 +161,33 @@ function confirmarLogout(e) {
 	</div>
 
 	<script>
-        const dropdownButton = document.getElementById('dropdown-button');
-        const dropdownList = document.getElementById('dropdown-list');
+	document.getElementById("cuenta").addEventListener("change", function () {
+		const selectedOption = this.options[this.selectedIndex];
+		const saldo = selectedOption.getAttribute("data-saldo");
+		document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
+	});
 
-        if (dropdownButton && dropdownList) {
-            dropdownButton.addEventListener('click', () => {
-                dropdownList.classList.toggle('hidden');
-            });
-        }
-    </script>
+	window.addEventListener("DOMContentLoaded", function () {
+		const select = document.getElementById("cuenta");
+		if (select && select.options.length > 0) {
+			const selectedOption = select.options[select.selectedIndex];
+			const saldo = selectedOption.getAttribute("data-saldo");
+			document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
+		}
+	});
+	   const selectCuenta = document.getElementById("cuenta");
+	    const hiddenInput = document.getElementById("cuentaSeleccionadaHidden");
+
+	    selectCuenta.addEventListener("change", function () {
+	        hiddenInput.value = this.value;
+	    });
+
+	    // Por si ya viene preseleccionado:
+	    window.addEventListener("DOMContentLoaded", function () {
+	        if (selectCuenta.value) {
+	            hiddenInput.value = selectCuenta.value;
+	        }
+	    });
+</script>
 </body>
 </html>
