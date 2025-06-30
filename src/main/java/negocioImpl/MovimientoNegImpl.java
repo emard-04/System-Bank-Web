@@ -1,5 +1,6 @@
 package negocioImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import Daos.daoMovimiento;
@@ -12,10 +13,24 @@ import negocio.MovimientoNeg;
 
 public class MovimientoNegImpl implements MovimientoNeg {
 	private final CuentasNegImpl nCuenta= new CuentasNegImpl();
-	private final UsuarioNeg nUsuario= new UsuarioNegImpl();
 	private final daoMovimiento dMov= new daoMovimiento();
-public boolean Agregar(Movimiento mov) {
-
-	return dMov.Agregar(mov);
+public boolean Agregar(Movimiento movReceptor, Movimiento movEmisor) {
+if(!(movEmisor.getCuentaEmisor().getSaldo().compareTo(movReceptor.getImporte()) > 0))return false;
+BigDecimal saldoEmisor=movEmisor.getCuentaEmisor().getSaldo().subtract(movEmisor.getImporte());
+BigDecimal saldoReceptor=movReceptor.getCuentaReceptor().getSaldo().add(movReceptor.getImporte());
+Cuenta Emisor= new Cuenta();
+Cuenta receptor = new Cuenta();
+Emisor=movEmisor.getCuentaEmisor();
+Emisor.setSaldo(saldoEmisor);
+receptor=movEmisor.getCuentaReceptor();
+receptor.setSaldo(saldoReceptor);
+boolean exitoEmisor=nCuenta.Modificar(Emisor);
+boolean exitoReceptor = nCuenta.Modificar(receptor);
+if(!exitoEmisor)return false;
+if(!exitoReceptor)return false;
+if(dMov.Agregar(movEmisor)&&dMov.Agregar(movReceptor)) {
+	return true;
+}
+return false;
 }
 }

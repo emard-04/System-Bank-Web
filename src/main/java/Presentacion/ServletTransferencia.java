@@ -58,8 +58,8 @@ public class ServletTransferencia extends HttpServlet {
 		BigDecimal monto = new BigDecimal(request.getParameter("monto"));
 		movEmisor.setImporte(monto);
 		movEmisor.setUsuario((Usuario)request.getSession().getAttribute("usuarioLogueado"));
-		System.out.println(movEmisor.getUsuario());
-		boolean exitoEmisor=nMovimiento.Agregar(movEmisor);
+		System.out.println(movEmisor.getCuentaEmisor().getFechaCreacion());
+		System.out.println(movEmisor.getCuentaReceptor().getFechaCreacion());
 		Movimiento movReceptor= new Movimiento();
 		movReceptor.setImporte(monto);
 		movReceptor.setDetalle(request.getParameter("referencia"));
@@ -68,8 +68,8 @@ public class ServletTransferencia extends HttpServlet {
 		movReceptor.setUsuario(c.getUsuario());
 		movReceptor.setTipoMovimiento(tm);
 		movReceptor.setFecha(LocalDate.now());
-		boolean exitoReceptor=nMovimiento.Agregar(movReceptor);
-		if(exitoEmisor&&exitoReceptor) {
+		boolean exitoReceptor=nMovimiento.Agregar(movReceptor, movEmisor);
+		if(exitoReceptor) {
 			request.setAttribute("mensaje", "✅ Transferencia realizada");
 			RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
 			rd.forward(request, response);
