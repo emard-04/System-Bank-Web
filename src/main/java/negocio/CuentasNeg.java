@@ -13,12 +13,10 @@ public interface CuentasNeg {
         Cuenta BuscarPorNro(int nroCuenta);
         boolean existe(int nroCuenta);
         String generarCBU();
-<<<<<<< Updated upstream
         Cuenta cuentaxCbu(String cbu);
         ArrayList<Cuenta> ListarxUsuario(int Id);
-=======
        List<Cuenta> obtenerCuentasPorUsuario(int idUsuario);
         
->>>>>>> Stashed changes
+
 }
 

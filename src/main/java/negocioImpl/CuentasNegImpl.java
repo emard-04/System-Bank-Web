@@ -52,13 +52,13 @@ public class CuentasNegImpl implements CuentasNeg{
 	public String generarCBU() {
 		return dao.generarCBUAleatorio();
 	}
-<<<<<<< Updated upstream
 	public Cuenta cuentaxCbu(String cbu) {
 		return dao.cuentaxCbu(cbu);
-=======
+	}
+		
 	public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario){
 		return dao.obtenerCuentasPorUsuario(idUsuario);
->>>>>>> Stashed changes
+
 	}
 }
 
