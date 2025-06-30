@@ -44,6 +44,7 @@ public class PrestamosNegImpl implements PrestamosNeg{
 
 		@Override
 		public List<Prestamos> obtenerPrestamosPendientes() {
+			System.out.println("Llamando a obtenerPrestamosPendientes en PrestamosNegImpl");
 			return  prestamoDao.obtenerPrestamosPendientes();
 		}
 }

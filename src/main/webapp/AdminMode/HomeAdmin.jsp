@@ -45,7 +45,7 @@
                 <ul class="flex space-x-10 justify-center">
                     <li><a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
                     <li><a href="<%=request.getContextPath()%>/ServletListarCuentas?openListar=1&pagina=1"class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
-                    <li><a href="prestamosAdmin.jsp" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
+                    <li><a href="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
                     <li><a href="reportesAdmin.jsp" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Reportes</a></li>
                 </ul>
             </nav>

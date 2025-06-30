@@ -1,3 +1,6 @@
+<%@ page import="Entidades.Prestamos"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -51,9 +54,9 @@
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
-                    <li><a href="clientesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
-                    <li><a href="cuentasAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
-                    <li><a href="prestamosAdmin.jsp" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ServletListarCuentas?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
+                    <li><a href="${pageContext.request.contextPath}/ServletPrestamosAdmi"class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
                     <li><a href="reportesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Reportes</a></li>
                 </ul>
             </nav>
@@ -61,16 +64,22 @@
             <div class="p-6 flex-1 overflow-y-auto">
                 <div class="mb-6 flex items-center">
                     <label for="prestamos_autorizar" class="block text-gray-700 text-lg font-semibold mr-4 whitespace-nowrap">Préstamos a Autorizar:</label>
-                    <select
-                        id="prestamos_autorizar"
-                        name="prestamos_autorizar"
-                        class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white"
-                    >
-                        <option value="">Seleccione</option>
-                        <option value="10020">10020</option>
-                        <option value="10021">10021</option>
-                        <option value="10022">10022</option>
-                    </select>
+                    <%
+    List<Prestamos> listaPrestamos = (List<Prestamos>) request.getAttribute("prestamosPendientes");
+%>
+                   <select id="prestamos_autorizar" name="prestamos_autorizar" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white">
+    <option value="">Seleccione</option>
+    <%
+        if (listaPrestamos != null) {
+            for (Prestamos p : listaPrestamos) {
+                String dni = p.getUsuario().getPersona().getDni();
+    %>
+    <option value="<%= dni %>"><%= dni %></option>
+    <%
+            }
+        }
+    %>
+</select>
                 </div>
 
                 <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -84,34 +93,39 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Importe Pedido</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Plazo de Pago</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Monto por Mes</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Cuotas</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Acciones</th> </tr>
                         </thead>
                        <tbody class="bg-white divide-y divide-gray-200">
-  <c:forEach var="prestamo" items="${prestamosPendientes}">
-    <tr>
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${prestamo.idPrestamo}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.usuario.persona.dni}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.fecha}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.importeApagar}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.importePedido}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.plazoDePago}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.montoCuotasxMes}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${prestamo.plazoDePago}</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <form method="post" action="${pageContext.request.contextPath}/ServletAdminPrestamos" style="display:inline;">
-          <input type="hidden" name="idPrestamo" value="${prestamo.idPrestamo}" />
-          <input type="hidden" name="accion" value="aceptar" />
-          <button class="icon-button bg-green-500 hover:bg-green-600 text-white" type="submit">&#10003;</button>
-        </form>
-        <form method="post" action="${pageContext.request.contextPath}/ServletAdminPrestamos" style="display:inline;">
-          <input type="hidden" name="idPrestamo" value="${prestamo.idPrestamo}" />
-          <input type="hidden" name="accion" value="rechazar" />
-          <button class="icon-button bg-red-500 hover:bg-red-600 text-white" type="submit">&#10006;</button>
-        </form>
-      </td>
-    </tr>
-  </c:forEach>
+  <%
+    
+    if (listaPrestamos != null) {
+        for (Prestamos p : listaPrestamos) {
+%>
+<tr>
+    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= p.getIdPrestamo() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getUsuario().getPersona().getDni() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getFecha() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getImporteApagar() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getImportePedido() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getPlazoDePago() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getMontoCuotasxMes() %></td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+       <form method="post" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" style="display:inline;">
+        <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
+        <input type="hidden" name="accion" value="aceptar" />
+        <button class="icon-button bg-green-500 hover:bg-green-600 text-white" type="submit">&#10003;</button>
+    </form>
+    <form method="post" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" style="display:inline;">
+        <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
+        <input type="hidden" name="accion" value="rechazar" />
+        <button class="icon-button bg-red-500 hover:bg-red-600 text-white" type="submit">&#10006;</button>
+    </form>
+    </td>
+</tr>
+<%
+        }
+    }
+%>
 </tbody>
                     </table>
                 </div>

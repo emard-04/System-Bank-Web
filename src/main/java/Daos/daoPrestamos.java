@@ -158,7 +158,11 @@ public class daoPrestamos implements InPrestamos{
 		            stmt.setString(1, nuevoEstadoPago);
 		            stmt.setInt(2, idPrestamo);
 
-		            return stmt.executeUpdate() > 0;
+		            if(stmt.executeUpdate() > 0) {
+		            	conn.commit();
+		            	return true;
+		            }
+		            	
 
 		        } catch (Exception e) {
 		            e.printStackTrace();
@@ -169,7 +173,7 @@ public class daoPrestamos implements InPrestamos{
 
 			@Override
 			public boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstadoSoli) {
-				String query = "UPDATE Prestamos SET EstadoSolicitado = ? WHERE IdPrestamo = ?";
+				String query = "UPDATE Prestamos SET EstadoSolicitud = ? WHERE IdPrestamo = ?";
 
 		        try (Connection conn = Conexion.getConexion().getSQLConnection();
 		             PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -177,7 +181,10 @@ public class daoPrestamos implements InPrestamos{
 		            stmt.setString(1, nuevoEstadoSoli);
 		            stmt.setInt(2, idPrestamo);
 
-		            return stmt.executeUpdate() > 0;
+		            if(stmt.executeUpdate() > 0) {
+		            	conn.commit();
+		            	return true;
+		            }
 
 		        } catch (Exception e) {
 		            e.printStackTrace();
@@ -219,6 +226,7 @@ public class daoPrestamos implements InPrestamos{
 
 			            prestamos.add(prestamo);
 			        }
+			        System.out.println("Total préstamos encontrados en DAO: ");
 
 			    } catch (Exception e) {
 			        e.printStackTrace();
