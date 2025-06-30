@@ -133,20 +133,18 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl text-center">
-                    <form action="PagarCuotaPrestamoServlet" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-end">
+                    <form action="<%=request.getContextPath()%>/ServletPagarPrestamoCliente" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-end">
                         
                         <div>
                             <label for="cuenta_a_debitar" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione una cuenta</label>
-                            <select
-                                id="cuenta_a_debitar"
-                                name="cuenta_a_debitar"
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-                                required
-                            >
-                                <option value="">-- Seleccione cuenta a debitar --</option>
-                                <option value="202156">Cuenta Corriente 202156</option>
-                                <option value="202157">Caja de Ahorro 202157</option>
-                            </select>
+                            <select id="cuenta_a_debitar" name="cuenta_a_debitar" class="...">
+    <option value="">-- Seleccione cuenta a debitar --</option>
+    <c:forEach var="cuenta" items="${cuentas}">
+        <option value="${cuenta.numeroCuenta}">
+            ${cuenta.tipo.descripcion} ${cuenta.numeroCuenta}
+        </option>
+    </c:forEach>
+</select>
                         </div>
 
                         <div>
@@ -165,8 +163,11 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                         
                         <div>
                             <label for="importe_cuota" class="block text-gray-700 text-lg font-semibold mb-2">Importe</label>
-                            <p id="importe_cuota" class="text-gray-900 text-2xl font-bold"> $5000.00 </p>
-                            <input type="hidden" name="importe_hardcodeado" value="5000.00"> </div>
+                            <p id="importe_cuota" class="text-gray-900 text-2xl font-bold">
+    $<%= request.getAttribute("cuota") != null ? request.getAttribute("cuota") : "0.00" %>
+</p>
+<input type="hidden" name="importe_hardcodeado" value="<%= request.getAttribute("cuota") != null ? request.getAttribute("cuota") : "0.00" %>">
+                            
 
                         <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
                             <button

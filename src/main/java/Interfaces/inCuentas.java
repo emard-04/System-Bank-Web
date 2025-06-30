@@ -1,6 +1,7 @@
 package Interfaces;
 
 	import Entidades.*;
+	import java.util.List; 
 	import java.util.ArrayList;
 	public interface inCuentas {
 	    
@@ -13,7 +14,11 @@ package Interfaces;
 	        boolean existe(int nroCuenta);
 	        String generarCBUAleatorio();
 	        int maximoCuentas(int Id);
+<<<<<<< Updated upstream
 	        Cuenta cuentaxCbu(String cbu);
 	        ArrayList<Cuenta> ListarxUsuario(int Id);
+=======
+	        public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario);
+>>>>>>> Stashed changes
 	}
 

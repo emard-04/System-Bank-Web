@@ -10,7 +10,8 @@ public class Prestamos {
     private BigDecimal importePedido;
     private String plazoDePago;
     private BigDecimal montoCuotasxMes;
-    private boolean estado;
+    private String estadoSolicitud;
+    private String estadoPago;
 
     public Prestamos() {}
 
@@ -67,14 +68,21 @@ public class Prestamos {
     public void setMontoCuotasxMes(BigDecimal montoCuotasxMes) {
         this.montoCuotasxMes = montoCuotasxMes;
     }
-    
 
-    public boolean isEstado() {
-		return estado;
+	public String getEstadoSolicitud() {
+		return estadoSolicitud;
 	}
 
-	public void setEstado(boolean estado) {
-		this.estado = estado;
+	public void setEstadoSolicitud(String estadoSolicitud) {
+		this.estadoSolicitud = estadoSolicitud;
+	}
+
+	public String getEstadoPago() {
+		return estadoPago;
+	}
+
+	public void setEstadoPago(String estadoPago) {
+		this.estadoPago = estadoPago;
 	}
 
 	@Override

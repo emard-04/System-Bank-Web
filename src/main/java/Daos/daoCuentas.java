@@ -14,6 +14,7 @@ import Entidades.Cuenta;
 import Entidades.TipoCuenta; // Necesario para el objeto TipoCuenta dentro de Cuenta
 import Interfaces.Conexion;
 import Interfaces.inCuentas;
+import java.util.List;
 
 public class daoCuentas implements inCuentas{
     // SQL Queries adaptadas para la tabla Cuentas
@@ -347,5 +348,50 @@ public class daoCuentas implements inCuentas{
 	            try { if (cn != null) cn.close(); } catch (Exception e) {}
 	        }
 		    return cue;
+	}
+	@Override
+	public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario) {
+	    List<Cuenta> cuentas = new ArrayList<>();
+	    Connection conn = null;
+	    PreparedStatement stmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conn = Conexion.getConexion().getSQLConnection();
+	        String query = """
+	            SELECT c.NroCuenta, c.CBU, c.Saldo, c.Estado, c.FechaCreacion, 
+	                   tc.IdTipoCuenta, tc.Descripcion 
+	            FROM cuentas c
+	            INNER JOIN tipocuenta tc ON c.TipoCuenta = tc.IdTipoCuenta
+	            WHERE c.IdUsuario = ? AND c.Estado = 1
+	        """;
+
+	        stmt = conn.prepareStatement(query);
+	        stmt.setInt(1, idUsuario);
+	        rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            Cuenta cuenta = new Cuenta();
+	            cuenta.setNroCuenta(rs.getInt("NroCuenta"));
+	            cuenta.setCbu(rs.getString("CBU"));
+	            cuenta.setSaldo(rs.getBigDecimal("Saldo"));
+	            cuenta.setEstado(rs.getBoolean("Estado"));
+	            cuenta.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate());
+
+	            TipoCuenta tipoCuenta = new TipoCuenta();
+	            tipoCuenta.setIdTipoCuenta(rs.getInt("IdTipoCuenta"));
+	            tipoCuenta.setDescripcion(rs.getString("Descripcion"));
+	            cuenta.setTipoCuenta(tipoCuenta);
+
+	            cuentas.add(cuenta);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Si no querés cerrar la conexión, dejás vacío este bloque
+	    }
+
+	    return cuentas;
 	}
 }

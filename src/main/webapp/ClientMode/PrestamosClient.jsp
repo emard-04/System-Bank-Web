@@ -137,7 +137,12 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
 
 			<div class="p-6 flex-1 flex flex-col items-center justify-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-					<form action="SolicitarPrestamoServlet" method="post"
+				<% if (request.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+        <%= request.getAttribute("mensaje") %>
+    </div>
+<% } %>
+					<form action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente" method="post"
 						class="space-y-6">
 						<div
 							class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
