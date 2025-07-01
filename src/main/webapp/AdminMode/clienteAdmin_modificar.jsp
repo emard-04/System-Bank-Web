@@ -1,10 +1,14 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="Entidades.Usuario"%>
+<%@ page import="Entidades.Persona" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
+<%
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -47,7 +51,9 @@ function confirmarLogout(e) {
 			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
 
-			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
+			    <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
+    <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
+</h3>
 
 			<a href="#"
    onclick="confirmarLogout(event)"

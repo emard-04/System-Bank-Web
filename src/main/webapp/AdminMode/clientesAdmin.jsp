@@ -1,12 +1,15 @@
-<%@page import="Entidades.Usuario"%>
+<%@ page import="Entidades.Usuario" %>
+<%@ page import="Entidades.Persona" %>
 <%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
-<%@ page import="Entidades.Persona"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
+<%
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clientes Admin - Tu Banco</title>
@@ -41,7 +44,9 @@ function confirmarLogout(e) {
 			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
 			</div>
 
-			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">ADMIN</h3>
+			    <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
+    <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
+</h3>
 
 			<a href="#"
    onclick="confirmarLogout(event)"
