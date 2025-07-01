@@ -1,8 +1,10 @@
 package negocio;
 
+import java.util.ArrayList;
+
 import Entidades.Movimiento;
 
 public interface MovimientoNeg {
-public boolean Agregar(Movimiento movReceptor, Movimiento movEmisor);
-
+boolean Agregar(Movimiento movReceptor, Movimiento movEmisor);
+ArrayList<Movimiento> Listarxcuentas(Movimiento mov);
 }

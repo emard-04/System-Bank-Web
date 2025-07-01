@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import Entidades.Cuenta;
 import Entidades.Movimiento;
@@ -39,6 +41,21 @@ public class ServletTransferencia extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 HttpSession sesion = request.getSession();
+
+		    // Leer número de cuenta desde sesión
+		    Integer cuentaSeleccionada = (Integer) sesion.getAttribute("cuentaSeleccionada");
+
+		    if (cuentaSeleccionada != null) {
+			request.setAttribute("nroCuenta", cuentaSeleccionada);
+			System.out.println(cuentaSeleccionada);
+			RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+			rd.forward(request, response);
+			return;
+		}
+		System.out.println(cuentaSeleccionada);
+		RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+		rd.forward(request, response);
 	}
 
 	/**

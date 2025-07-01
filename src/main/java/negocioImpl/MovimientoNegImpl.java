@@ -2,6 +2,7 @@ package negocioImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import Daos.daoMovimiento;
 import Daos.daoUsuario;
@@ -17,11 +18,12 @@ public class MovimientoNegImpl implements MovimientoNeg {
 public boolean Agregar(Movimiento movReceptor, Movimiento movEmisor) {
 if(!(movEmisor.getCuentaEmisor().getSaldo().compareTo(movReceptor.getImporte()) > 0))return false;
 BigDecimal saldoEmisor=movEmisor.getCuentaEmisor().getSaldo().subtract(movEmisor.getImporte());
-BigDecimal saldoReceptor=movReceptor.getCuentaReceptor().getSaldo().add(movReceptor.getImporte());
+BigDecimal saldoReceptor=movReceptor.getCuentaEmisor().getSaldo().add(movReceptor.getImporte());
 Cuenta Emisor= new Cuenta();
 Cuenta receptor = new Cuenta();
 Emisor=movEmisor.getCuentaEmisor();
 Emisor.setSaldo(saldoEmisor);
+movEmisor.setImporte(movEmisor.getImporte().negate());
 receptor=movEmisor.getCuentaReceptor();
 receptor.setSaldo(saldoReceptor);
 boolean exitoEmisor=nCuenta.Modificar(Emisor);
@@ -32,5 +34,8 @@ if(dMov.Agregar(movEmisor)&&dMov.Agregar(movReceptor)) {
 	return true;
 }
 return false;
+}
+public ArrayList<Movimiento> Listarxcuentas(Movimiento mov){
+	return dMov.Listarxcuentas(mov);
 }
 }

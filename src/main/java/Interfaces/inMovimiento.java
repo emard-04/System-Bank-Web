@@ -1,7 +1,10 @@
 package Interfaces;
 
+import java.util.ArrayList;
+
 import Entidades.Movimiento;
 
 public interface inMovimiento {
-public boolean Agregar(Movimiento mov);
+boolean Agregar(Movimiento mov);
+ ArrayList<Movimiento> Listarxcuentas(Movimiento mov);
 }

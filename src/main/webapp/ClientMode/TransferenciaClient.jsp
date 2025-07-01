@@ -35,37 +35,38 @@ function confirmarLogout(e) {
 	<div class="flex h-full">
 
 		<aside
- class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
+			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-            <div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-            </div>
+			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
+			</div>
 
-            <h3 class="text-xl font-bold text-gray-800 text-center mb-1">
-                <%= usuario.getPersona().getNombre() %> <%= usuario.getPersona().getApellido() %>
-            </h3>
+			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">
+				<%= usuario.getPersona().getNombre() %>
+				<%= usuario.getPersona().getApellido() %>
+			</h3>
 
-            <p class="text-md text-gray-600 text-center mb-6">
-                Saldo: $<span id="saldoActual">---</span>
-            </p>
+			<p class="text-md text-gray-600 text-center mb-6">
+				Saldo: $<span id="saldoActual">---</span>
+			</p>
 
-            <div class="relative w-full mb-6">
-                <select name="cuentaSeleccionada" id="cuenta" 
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
-                    <option value="" disabled selected>Cuentas</option>
-                    <%
+			<div class="relative w-full mb-6">
+				<select name="cuentaSeleccionada" id="cuenta"
+					class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
+					<option value="">Cuentas</option>
+					<%
                         int contador = 0;
                         ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
                         for (Cuenta c : listaCuenta) {
                             contador++;
                     %>
-                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
-                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
-                        </option>
-                    <%
-                        }
-                    %>
-                </select>
-            </div>
+					<option value="<%= c.getNroCuenta() %>"
+						data-saldo="<%= c.getSaldo() %>">Cuenta
+						<%= contador %> - CBU:
+						<%= c.getCbu() %>
+					</option>
+					<%} %>
+				</select>
+			</div>
 
 			<a href="#" onclick="confirmarLogout(event)"
 				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
@@ -114,16 +115,18 @@ function confirmarLogout(e) {
 			</nav>
 			<div class="p-6 flex-1 flex flex-col items-center justify-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-				                <% if (request.getAttribute("mensaje") != null) { %>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
-        <%= request.getAttribute("mensaje") %>
-    </div>
-<% } %>
+					<% if (request.getAttribute("mensaje") != null) { %>
+					<div
+						class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+						<%= request.getAttribute("mensaje") %>
+					</div>
+					<% } %>
 					<form action="/BancoParcial/ServletTransferencia" method="post"
 						class="space-y-6">
 						<div class="mb-4">
-						<input type="hidden" id="cuentaSeleccionadaHidden" name="cuentaSeleccionada" >
-							<label for="monto"
+							<input type="hidden" id="cuentaSeleccionadaHidden"
+								name="cuentaSeleccionada"> 
+								<label for="monto"
 								class="block text-gray-700 text-lg font-semibold mb-2">Monto
 								a transferir</label> <input type="number" id="monto" name="monto"
 								placeholder=""
@@ -161,33 +164,34 @@ function confirmarLogout(e) {
 	</div>
 
 	<script>
-	document.getElementById("cuenta").addEventListener("change", function () {
-		const selectedOption = this.options[this.selectedIndex];
+
+document.getElementById("cuenta").addEventListener("change", function () {
+	const selectedOption = this.options[this.selectedIndex];
+	const saldo = selectedOption.getAttribute("data-saldo");
+	document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
+});
+
+window.addEventListener("DOMContentLoaded", function () {
+	const select = document.getElementById("cuenta");
+	if (select && select.options.length > 0) {
+		const selectedOption = select.options[select.selectedIndex];
 		const saldo = selectedOption.getAttribute("data-saldo");
 		document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
-	});
+	}
+});
+   const selectCuenta = document.getElementById("cuenta");
+    const hiddenInput = document.getElementById("cuentaSeleccionadaHidden");
 
-	window.addEventListener("DOMContentLoaded", function () {
-		const select = document.getElementById("cuenta");
-		if (select && select.options.length > 0) {
-			const selectedOption = select.options[select.selectedIndex];
-			const saldo = selectedOption.getAttribute("data-saldo");
-			document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
-		}
-	});
-	   const selectCuenta = document.getElementById("cuenta");
-	    const hiddenInput = document.getElementById("cuentaSeleccionadaHidden");
+    selectCuenta.addEventListener("change", function () {
+        hiddenInput.value = this.value;
+    });
 
-	    selectCuenta.addEventListener("change", function () {
-	        hiddenInput.value = this.value;
-	    });
-
-	    // Por si ya viene preseleccionado:
-	    window.addEventListener("DOMContentLoaded", function () {
-	        if (selectCuenta.value) {
-	            hiddenInput.value = selectCuenta.value;
-	        }
-	    });
+    // Por si ya viene preseleccionado:
+    window.addEventListener("DOMContentLoaded", function () {
+        if (selectCuenta.value) {
+            hiddenInput.value = selectCuenta.value;
+        }
+    });
 </script>
 </body>
 </html>
