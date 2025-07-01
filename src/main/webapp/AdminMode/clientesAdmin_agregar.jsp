@@ -56,7 +56,10 @@ function confirmarLogout(e) {
             
             <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
                 <h1 class="text-xl font-semibold text-gray-800">CLIENTES</h1>
-                <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
+                 <div class="flex items-center">
+				<img src="<%=request.getContextPath()%>/img/FotoLogo.webp" alt="Logo del banco" class="h-12 object-contain">
+				<span class="text-gray-700 font-bold text-lg">Universidad Tecnológica Nacional</span>
+				</div>
             </header>
 
            <nav class="bg-gray-50 border-b border-gray-200 p-4">

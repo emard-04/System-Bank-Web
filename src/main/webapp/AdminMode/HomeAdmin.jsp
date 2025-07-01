@@ -22,6 +22,16 @@
         }
     </style>
 </head>
+<script>
+function confirmarLogout(e) {
+    e.preventDefault(); // Detiene la acción por defecto del enlace
+
+    if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        // Si el usuario confirma, redirige al servlet de logout
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
+</script>
 <body class="bg-gray-100 h-screen overflow-hidden">
     <div class="flex h-full">
 
@@ -43,10 +53,12 @@
 
         <main class="flex-1 flex flex-col overflow-y-auto">
             
-            <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
-                <h1 class="text-xl font-semibold text-gray-800">HEADER</h1>
-                <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
-            </header>
+            <header class="bg-white p-4 border-b border-gray-200 flex justify-end items-center">
+    <div class="flex items-center">
+        <img src="<%=request.getContextPath()%>/img/FotoLogo.webp" alt="Logo del banco" class="h-12 object-contain">
+        <span class="text-gray-700 font-bold text-lg ml-2">Universidad Tecnológica Nacional</span>
+    </div>
+</header>
 
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
