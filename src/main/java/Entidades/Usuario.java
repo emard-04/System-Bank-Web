@@ -6,7 +6,7 @@ public class Usuario {
 	    private String contrasena;
 	    private Persona persona;  // referencia a Persona
 	    private boolean tipoUsuario;
-	    private boolean estado;
+	    private String estado;
 
 	    public Usuario() {}
 
@@ -51,11 +51,13 @@ public class Usuario {
 	        this.tipoUsuario = tipoUsuario;
 	    }
 
-	    public boolean isEstado() {
+	    
+
+		public String getEstado() {
 			return estado;
 		}
 
-		public void setEstado(boolean estado) {
+		public void setEstado(String estado) {
 			this.estado = estado;
 		}
 

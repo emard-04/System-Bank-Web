@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 public class daoPrestamos implements InPrestamos{
 	 private static final String INSERT = 
-		        "INSERT INTO Prestamos (IdUsuario, Fecha, ImporteAPagar, ImportePedido, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+		        "INSERT INTO Prestamos (IdUsuario, Fecha, ImporteAPagar, ImportePedido, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago, IdCuenta) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 
 		    @Override
 		    public boolean agregar(Prestamos p) {
@@ -26,6 +26,7 @@ public class daoPrestamos implements InPrestamos{
 		            stmt.setBigDecimal(6, p.getMontoCuotasxMes());
 		            stmt.setString(7, p.getEstadoSolicitud());
 		            stmt.setString(8, p.getEstadoPago());
+		            stmt.setInt(9, p.getIdCuenta());
 		           
 		            
 
@@ -233,6 +234,75 @@ public class daoPrestamos implements InPrestamos{
 			    }
 
 			    return prestamos;
+			}
+			private Prestamos mapearPrestamo(ResultSet rs) throws SQLException {
+			    Prestamos p = new Prestamos();
+
+			    p.setIdPrestamo(rs.getInt("IdPrestamo"));
+			    p.setFecha(rs.getDate("Fecha").toLocalDate());
+			    p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+			    p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+			    p.setPlazoDePago(rs.getString("PlazoDePago"));
+			    p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+			    p.setEstadoSolicitud(rs.getString("EstadoSolicitud")); 
+			    p.setEstadoPago(rs.getString("EstadoPago"));
+
+			    // Mapear Usuario
+			    Usuario u = new Usuario();
+			    u.setIdUsuario(rs.getInt("IdUsuario"));
+			    u.setNombreUsuario(rs.getString("NombreUsuario"));
+
+			    // Mapear Persona
+			    Persona per = new Persona();
+			    per.setDni(rs.getString("Dni"));
+			    per.setNombre(rs.getString("Nombre"));
+			    per.setApellido(rs.getString("Apellido"));
+			    // Si tu clase Persona tiene más campos, completalos aquí.
+
+			    u.setPersona(per);
+			    p.setUsuario(u);
+
+			    return p;
+			}
+			@Override
+			public List<Prestamos> obtenerPrestamosPendientesPorDni(String dni) {
+			    List<Prestamos> lista = new ArrayList<>();
+			    String query = "SELECT * FROM Prestamos p INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario " +
+			                   "INNER JOIN Persona per ON u.dni = per.dni " +
+			                   "WHERE p.EstadoSolicitud = 'pendiente' AND per.dni = ?";
+
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+			        stmt.setString(1, dni);
+			        ResultSet rs = stmt.executeQuery();
+
+			        while (rs.next()) {
+			            Prestamos p = mapearPrestamo(rs);
+			            lista.add(p);
+			        }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+
+			    return lista;
+			}
+			@Override
+			public int cantidadPrestamosActivosPorCuenta(int idCuenta) {
+			    String query = "SELECT COUNT(*) FROM Prestamos WHERE IdCuenta = ? AND EstadoPago = 'En curso'";
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(query)) {
+			         
+			        stmt.setInt(1, idCuenta);
+			        ResultSet rs = stmt.executeQuery();
+			        
+			        if (rs.next()) {
+			            return rs.getInt(1);
+			        }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+			    return 0;
 			}
 		}
 

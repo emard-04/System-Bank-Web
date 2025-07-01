@@ -9,5 +9,7 @@ public interface InPrestamos {
     public Prestamos obtenerPendientePorUsuario(int idUsuario) ;
     boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstadoSoli);
     List<Prestamos> obtenerPrestamosPendientes();
+    List<Prestamos> obtenerPrestamosPendientesPorDni(String dni);
+     int cantidadPrestamosActivosPorCuenta(int idCuenta);
     
 }

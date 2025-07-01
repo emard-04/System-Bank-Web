@@ -62,25 +62,26 @@
             </nav>
 
             <div class="p-6 flex-1 overflow-y-auto">
-                <div class="mb-6 flex items-center">
-                    <label for="prestamos_autorizar" class="block text-gray-700 text-lg font-semibold mr-4 whitespace-nowrap">Préstamos a Autorizar:</label>
-                    <%
-    List<Prestamos> listaPrestamos = (List<Prestamos>) request.getAttribute("prestamosPendientes");
-%>
-                   <select id="prestamos_autorizar" name="prestamos_autorizar" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white">
-    <option value="">Seleccione</option>
-    <%
+             
+                <form method="get" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="flex items-center space-x-4">
+    <label for="prestamos_autorizar" class="block text-gray-700 text-lg font-semibold whitespace-nowrap">Préstamos a Autorizar:</label>
+    <select id="prestamos_autorizar" name="dni" class="p-2 border border-gray-300 rounded-md bg-white">
+        <option value="">Todos</option>
+        <% 
+        List<Prestamos> listaPrestamos = (List<Prestamos>) request.getAttribute("prestamosPendientes");
         if (listaPrestamos != null) {
             for (Prestamos p : listaPrestamos) {
                 String dni = p.getUsuario().getPersona().getDni();
-    %>
-    <option value="<%= dni %>"><%= dni %></option>
-    <%
-            }
-        }
-    %>
-</select>
-                </div>
+        %>
+        <option value="<%= dni %>" <%= dni.equals(request.getParameter("dni")) ? "selected" : "" %>><%= dni %></option>
+        <% } } %>
+    </select>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Filtrar</button>
+</form>
+<% String filtroDni = (String) request.getAttribute("filtroDni"); %>
+<% if (filtroDni != null && !filtroDni.isEmpty()) { %>
+    <a href="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="ml-4 text-red-600 font-semibold hover:underline">Quitar filtro</a>
+<% } %>
 
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <table class="min-w-full divide-y divide-gray-200">

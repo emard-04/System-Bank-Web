@@ -50,6 +50,20 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	            return;
 	        }
 	        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+	        String nroCuentaStr = request.getParameter("cuenta");
+	        if (nroCuentaStr == null || nroCuentaStr.isEmpty()) {
+	            request.setAttribute("mensaje", "❌ Debe seleccionar una cuenta.");
+	            windowDefault(request, response, "/ClientMode/PrestamosClient.jsp");
+	            return;
+	        }
+	        int nroCuenta = Integer.parseInt(nroCuentaStr);
+	        boolean tienePrestamoActivo = prestamoNeg.puedePedirPrestamo(nroCuenta);
+
+	        if (!tienePrestamoActivo) {
+	            request.setAttribute("mensaje", "❌ Esta cuenta ya tiene un préstamo activo. No puede solicitar otro.");
+	            windowDefault(request, response, "/ClientMode/PrestamosClient.jsp");
+	            return; // Salir para evitar seguir con la creación del préstamo
+	        }
 
 			// Calcular los datos del préstamo
 			BigDecimal interes = new BigDecimal("0.20");
@@ -70,6 +84,7 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 			prestamo.setMontoCuotasxMes(montoCuota);
 			prestamo.setEstadoSolicitud("Pendiente");
 			prestamo.setEstadoPago("En curso");// pendiente
+	        prestamo.setIdCuenta(nroCuenta);
 
 			//  Se guarda en la base de datos
 			boolean guardado = prestamoNeg.agregarPrestamo(prestamo);

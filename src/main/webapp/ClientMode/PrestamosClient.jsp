@@ -47,25 +47,7 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                 Saldo: $<span id="saldoActual">---</span>
             </p>
 
-            <div class="relative w-full mb-6">
-                <select name="cuentaSeleccionada" id="cuenta"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
-                    <option value="" disabled selected>Cuentas</option>
-                    <%
-                        int contador = 0;
-                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
-                        for (Cuenta c : listaCuenta) {
-                            contador++;
-                    %>
-                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
-                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
-                        </option>
-                    <%
-                        }
-                    %>
-                </select>
-            </div>
-
+           
 
 			<a href="#"
    onclick="confirmarLogout(event)"
@@ -142,44 +124,59 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
         <%= request.getAttribute("mensaje") %>
     </div>
 <% } %>
-					<form action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente" method="post"
-						class="space-y-6">
-						<div
-							class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
-							<div class="flex-1">
-								<label for="monto_solicitar"
-									class="block text-gray-700 text-lg font-semibold mb-2">Monto
-									a solicitar</label> <input type="number" id="monto_solicitar"
-									name="monto_solicitar" placeholder=""
-									class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-									required>
-							</div>
+					<form action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente" method="post" class="space-y-6">
 
-							<div class="flex-1">
-								<label for="cantidad_cuotas"
-									class="block text-gray-700 text-lg font-semibold mb-2">Cantidad
-									de cuotas</label> <select id="cantidad_cuotas" name="cantidad_cuotas"
-									class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-									required>
-									<option value="">Seleccione cuotas</option>
-									<option value="6">6 cuotas</option>
-									<option value="12">12 cuotas</option>
-									<option value="18">18 cuotas</option>
-									<option value="24">24 cuotas</option>
-									<option value="36">36 cuotas</option>
-								</select>
-							</div>
-						</div>
+    <div class="flex-1 mb-4">
+        <label for="cuenta" class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar Cuenta</label>
+        <select id="cuenta" name="cuenta" required
+    class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
+    <option value="" disabled selected>Seleccione una cuenta</option>
+    <% 
+        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario"); 
+        for (Cuenta c : listaCuenta) {
+    %>
+        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
+            Cuenta CBU: <%= c.getCbu() %>
+        </option>
+    <% } %>
+</select>
+    </div>
 
-						<div class="flex justify-center space-x-6 pt-4">
-							<button type="submit"
-								class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-								Solicitar</button>
-							<button type="button"
-								class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-								Cancelar</button>
-						</div>
-					</form>
+    <div class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
+        <div class="flex-1">
+            <label for="monto_solicitar" class="block text-gray-700 text-lg font-semibold mb-2">Monto a solicitar</label>
+            <input type="number" id="monto_solicitar" name="monto_solicitar" placeholder=""
+                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                required>
+        </div>
+
+        <div class="flex-1">
+            <label for="cantidad_cuotas" class="block text-gray-700 text-lg font-semibold mb-2">Cantidad de cuotas</label>
+            <select id="cantidad_cuotas" name="cantidad_cuotas"
+                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+                required>
+                <option value="">Seleccione cuotas</option>
+                <option value="6">6 cuotas</option>
+                <option value="12">12 cuotas</option>
+                <option value="18">18 cuotas</option>
+                <option value="24">24 cuotas</option>
+                <option value="36">36 cuotas</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="flex justify-center space-x-6 pt-4">
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
+            Solicitar
+        </button>
+        <button type="button"
+            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
+            Cancelar
+        </button>
+    </div>
+
+</form>
 				</div>
 			</div>
 
@@ -200,4 +197,18 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
             });
         }
     </script>
+    <script>
+    const selectCuenta = document.getElementById('cuenta');
+    const saldoSpan = document.getElementById('saldoActual');
+
+    function actualizarSaldo() {
+        const selectedOption = selectCuenta.options[selectCuenta.selectedIndex];
+        const saldo = selectedOption.getAttribute('data-saldo');
+        saldoSpan.textContent = saldo ? parseFloat(saldo).toFixed(2) : '---';
+    }
+
+    // Inicializar al cargar
+    selectCuenta.addEventListener('change', actualizarSaldo);
+    window.addEventListener('DOMContentLoaded', actualizarSaldo); // por si ya hay opción preseleccionada
+</script>
 </html>

@@ -18,16 +18,16 @@ import java.util.List;
 
 public class daoCuentas implements inCuentas{
     // SQL Queries adaptadas para la tabla Cuentas
-    private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo) VALUES(?,?,?,?,?);";
+    private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado) VALUES(?,?,?,?,?,?);";
     private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa';";
-    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa' and IdUsuario=?;";
+    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and IdUsuario=?;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
-    private final String maximoCuentas="Select sum(IdUsuario) as Cantidad from cuentas where idUsuario=? and estado=?";
+    private final String maximoCuentas="Select sum(IdUsuario) as Cantidad from cuentas where idUsuario=? and Estado=?";
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub
 	}
@@ -140,6 +140,7 @@ public class daoCuentas implements inCuentas{
                 ps.setInt(3, cuenta.getTipoCuenta().getIdTipoCuenta());
                 ps.setString(4, cuenta.getCbu());
                 ps.setBigDecimal(5, cuenta.getSaldo());
+                ps.setString(6, "Activo");
                 
             } else if (query.equals(Modificar)) {
                 ps.setDate(1, java.sql.Date.valueOf(cuenta.getFechaCreacion()));
@@ -161,16 +162,12 @@ public class daoCuentas implements inCuentas{
             daoUsuario du=new daoUsuario();
             cuenta.setUsuario(du.BuscarIdusuario(rs.getInt("IdUsuario")));
             cuenta.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate());
-            // Para el objeto TipoCuenta dentro de Cuenta:
-            // Similar al Usuario, solo seteamos el IdTipoCuenta por ahora.
-            // Si necesitas la descripción del tipo de cuenta, necesitarías un daoTipoCuenta
-            // o un JOIN en la consulta SQL.
-          //  TipoCuenta tipoCuenta = dTipoCuenta.buscarXID(rs.getInt("idTipoCuenta"));
             TipoCuenta tipoCuenta = new TipoCuenta();
             tipoCuenta.setIdTipoCuenta(rs.getInt("IdtipoCuenta"));
             cuenta.setTipoCuenta(tipoCuenta);
             cuenta.setCbu(rs.getString("Cbu"));
             cuenta.setSaldo(rs.getBigDecimal("Saldo"));
+            cuenta.setEstado(rs.getString("Estado"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -363,7 +360,7 @@ public class daoCuentas implements inCuentas{
 	                   tc.IdTipoCuenta, tc.Descripcion 
 	            FROM cuentas c
 	            INNER JOIN tipocuenta tc ON c.TipoCuenta = tc.IdTipoCuenta
-	            WHERE c.IdUsuario = ? AND c.Estado = 1
+	            WHERE c.IdUsuario = ? AND c.Estado = 'Activo'
 	        """;
 
 	        stmt = conn.prepareStatement(query);
@@ -375,7 +372,7 @@ public class daoCuentas implements inCuentas{
 	            cuenta.setNroCuenta(rs.getInt("NroCuenta"));
 	            cuenta.setCbu(rs.getString("CBU"));
 	            cuenta.setSaldo(rs.getBigDecimal("Saldo"));
-	            cuenta.setEstado(rs.getBoolean("Estado"));
+	            cuenta.setEstado(rs.getString("Estado"));
 	            cuenta.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate());
 
 	            TipoCuenta tipoCuenta = new TipoCuenta();
@@ -389,7 +386,7 @@ public class daoCuentas implements inCuentas{
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } finally {
-	        // Si no querés cerrar la conexión, dejás vacío este bloque
+	        
 	    }
 
 	    return cuentas;

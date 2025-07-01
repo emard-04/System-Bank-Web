@@ -47,4 +47,12 @@ public class PrestamosNegImpl implements PrestamosNeg{
 			System.out.println("Llamando a obtenerPrestamosPendientes en PrestamosNegImpl");
 			return  prestamoDao.obtenerPrestamosPendientes();
 		}
+		@Override
+		public List<Prestamos> obtenerPrestamosPendientesPorDni(String dni) {
+		    return prestamoDao.obtenerPrestamosPendientesPorDni(dni);
+		}
+		@Override
+		public boolean puedePedirPrestamo(int idCuenta) {
+		    return prestamoDao.cantidadPrestamosActivosPorCuenta(idCuenta) == 0;
+		}
 }

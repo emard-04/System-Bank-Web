@@ -12,6 +12,7 @@ public class Prestamos {
     private BigDecimal montoCuotasxMes;
     private String estadoSolicitud;
     private String estadoPago;
+    private int idCuenta;
 
     public Prestamos() {}
 
@@ -25,7 +26,14 @@ public class Prestamos {
         this.plazoDePago = plazoDePago;
         this.montoCuotasxMes = montoCuotasxMes;
     }
+    
+    public int getIdCuenta() {
+        return idCuenta;
+    }
 
+    public void setIdCuenta(int idCuenta) {
+        this.idCuenta = idCuenta;
+    }
     public int getIdPrestamo() {
         return idPrestamo;
     }

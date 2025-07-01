@@ -72,8 +72,7 @@ public class daoUsuario implements InUsuario {
             dp=new daoPersonas();
             Persona persona =(dp.existeObj(rs.getString("dni")));
             usuario.setPersona(persona);
-            String estado = rs.getString("Estado");
-            usuario.setEstado(estado != null && estado.equalsIgnoreCase("activo"));
+            usuario.setEstado(rs.getString("Estado"));
             usuario.setTipoUsuario(rs.getInt("TipoUsuario") == 1);
         } catch (Exception e) {
             e.printStackTrace();

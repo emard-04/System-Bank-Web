@@ -24,17 +24,25 @@ public class ServletPrestamosAdmi extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-    	System.out.println("Entrando a doGet de ServletPrestamosAdmi");
-		List<Prestamos> prestamosPendientes = prestamoNeg.obtenerPrestamosPendientes();
-		System.out.println("Cantidad de préstamos pendientes: " + prestamosPendientes.size());
-		request.setAttribute("prestamosPendientes", prestamosPendientes);
-		//RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/prestamosAdmi.jsp");
-		//dispatcher.forward(request, response);
-		request.getRequestDispatcher("/AdminMode/prestamosAdmin.jsp").forward(request, response);
-	}
+    		throws ServletException, IOException {
+    	
+
+    	String dniFiltro = request.getParameter("dni");
+    	List<Prestamos> prestamosPendientes;
+
+    	if (dniFiltro != null && !dniFiltro.isEmpty()) {
+    		prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPorDni(dniFiltro);
+    		request.setAttribute("filtroDni", dniFiltro);
+    	} else {
+    		prestamosPendientes = prestamoNeg.obtenerPrestamosPendientes();
+    	}
+
+    	
+    	request.setAttribute("prestamosPendientes", prestamosPendientes);
+    	request.getRequestDispatcher("/AdminMode/prestamosAdmin.jsp").forward(request, response);
+    }
+   
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

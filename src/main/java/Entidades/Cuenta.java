@@ -9,7 +9,7 @@ public class Cuenta {
     private TipoCuenta tipoCuenta;
     private String cbu;
     private BigDecimal saldo;
-    private boolean estado;
+    private String estado;
 
     public Cuenta() {}
 
@@ -58,13 +58,14 @@ public class Cuenta {
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-    
 
-    public boolean isEstado() {
+	
+
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(boolean estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
