@@ -1,7 +1,9 @@
-<%@page import="java.util.ArrayList"%>
-<%@ page import="Entidades.*"%>
+<%@page import="negocioImpl.CuentasNegImpl"%>
+<%@page import="negocio.CuentasNeg"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page import="Entidades.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,30 +46,54 @@ function confirmarLogout(e) {
 				<%= usuario.getPersona().getNombre() %>
 				<%= usuario.getPersona().getApellido() %>
 			</h3>
-
-			<p class="text-md text-gray-600 text-center mb-6">
-				Saldo: $<span id="saldoActual">---</span>
-			</p>
+			<% Cuenta cuenta = null;
+			if(request.getSession().getAttribute("cuenta")!=null){
+				CuentasNeg cn = new CuentasNegImpl();
+			    cuenta = cn.BuscarPorNro((Integer) session.getAttribute("cuenta"));
+			}
+			%>
+			<% if (cuenta != null) { %>
+    <p class="text-md text-gray-600 text-center mb-6">
+        <% if(cuenta.getSaldo() != null) { %>
+            Saldo: $<span id="saldoActual"><%=cuenta.getSaldo()%></span>
+        <% } else { %>
+            Saldo: $<span id="saldoActual">---</span>
+        <% } %>
+    </p>
+<% } %>
 
 			<div class="relative w-full mb-6">
-				<select name="cuentaSeleccionada" id="cuenta"
-					class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
-					<option value="">Cuentas</option>
-					<%
-                        int contador = 0;
-                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
-                        for (Cuenta c : listaCuenta) {
-                            contador++;
-                    %>
-					<option value="<%= c.getNroCuenta() %>"
-						data-saldo="<%= c.getSaldo() %>">Cuenta
-						<%= contador %> - CBU:
-						<%= c.getCbu() %>
-					</option>
-					<%} %>
-				</select>
-			</div>
+			<form id="formCuenta"
+    action="<%=request.getContextPath()%>/ServletTransferencia"
+    method="get">
+    
+    <select name="cuentaSeleccionada" id="cuenta"
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between"
+        onchange="document.getElementById('formCuenta').submit();">
+        
+        <% if (cuenta != null) { %>
+            <option value="<%=cuenta.getNroCuenta()%>" selected>CBU: <%=cuenta.getCbu()%></option>
+        <% } else { %>
+            <option value="" disabled selected>Cuentas</option>
+        <% } %>
 
+        <%
+        int contador = 0;
+        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+        for (Cuenta c : listaCuenta) {
+            contador++;
+            if (cuenta == null || cuenta.getNroCuenta() != c.getNroCuenta()) {
+        %>
+            <option value="<%=c.getNroCuenta()%>" data-saldo="<%=c.getSaldo()%>">
+                Cuenta <%=contador%> - CBU: <%=c.getCbu()%>
+            </option>
+        <% 
+            }
+        }
+        %>
+    </select>
+</form>
+			</div>
 			<a href="#" onclick="confirmarLogout(event)"
 				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
 				Salir </a>
@@ -103,7 +129,7 @@ function confirmarLogout(e) {
 						href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
 						class="<%= paginaActual.equals("transferencia") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Transferencia </a> <a
-						href="/BancoParcial/ClientMode/movientosClient.jsp"
+						href="/BancoParcial/ServletListarMovimientos?Actualizar=1"
 						class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Movimientos </a> <a
 						href="/BancoParcial/ClientMode/PrestamosClient.jsp"
@@ -167,34 +193,46 @@ function confirmarLogout(e) {
 	</div>
 
 	<script>
+		document
+				.getElementById("cuenta")
+				.addEventListener(
+						"change",
+						function() {
+							const selectedOption = this.options[this.selectedIndex];
+							const saldo = selectedOption
+									.getAttribute("data-saldo");
+							document.getElementById("saldoActual").textContent = saldo !== null ? saldo
+									: "---";
+						});
 
-document.getElementById("cuenta").addEventListener("change", function () {
-	const selectedOption = this.options[this.selectedIndex];
-	const saldo = selectedOption.getAttribute("data-saldo");
-	document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
-});
+		window
+				.addEventListener(
+						"DOMContentLoaded",
+						function() {
+							const select = document.getElementById("cuenta");
+							if (select && select.options.length > 0) {
+								const selectedOption = select.options[select.selectedIndex];
+								const saldo = selectedOption
+										.getAttribute("data-saldo");
+								document.getElementById("saldoActual").textContent = saldo !== null ? saldo
+										: "---";
+							}
+						});
+		const selectCuenta = document.getElementById("cuenta");
+		const hiddenInput = document.getElementById("cuentaSeleccionadaHidden");
 
-window.addEventListener("DOMContentLoaded", function () {
-	const select = document.getElementById("cuenta");
-	if (select && select.options.length > 0) {
-		const selectedOption = select.options[select.selectedIndex];
-		const saldo = selectedOption.getAttribute("data-saldo");
-		document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
-	}
-});
-   const selectCuenta = document.getElementById("cuenta");
-    const hiddenInput = document.getElementById("cuentaSeleccionadaHidden");
+		selectCuenta.addEventListener("change", function() {
+			if(this.value!=null){
+			hiddenInput.value = this.value;
 
-    selectCuenta.addEventListener("change", function () {
-        hiddenInput.value = this.value;
-    });
+		});
 
-    // Por si ya viene preseleccionado:
-    window.addEventListener("DOMContentLoaded", function () {
-        if (selectCuenta.value) {
-            hiddenInput.value = selectCuenta.value;
-        }
-    });
-</script>
+		// Por si ya viene preseleccionado:
+		window.addEventListener("DOMContentLoaded", function() {
+			if (selectCuenta.value) {
+				hiddenInput.value = selectCuenta.value;
+			}
+		});
+	</script>
 </body>
 </html>

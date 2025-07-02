@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Entidades.Movimiento;
 import Entidades.Persona;
@@ -17,21 +18,71 @@ import Interfaces.inPersona;
 	public class daoMovimiento implements inMovimiento {
 	    private final String Agregar = "insert into Movimientos(IdUsuario, IdTipoMovimiento, CuentaEmisor,CuentaReceptor, Detalle, Importe, Fecha) values(?,?,?,?,?,?,?);";
 	    private final String ListarxCuenta="select * from movimientos where idUsuario=? and cuentaEmisor=?;";
-	    //rivate final String listaxParametro="select * from movimientos ";
-	    /*public void filtrar() {
-	    	String nombre="ju";
-	    	LocalDate local=LocalDate.now();
-	    	String operacion=">";
-	    	if(!nombre.isEmpty()) {
-	    	listaxParametro += "inner join Usuarios on Usuarios.idUsuario=movimientos.idUsuario where Usuarios.nombreusuario like ? and idUsuario=? and cuentaEmisor=?";}
-	    	if( local!=null&&!nombre.isEmpty()) {
-	    		listaxParametro += "and  fecha between  ? and ? ";
-	    	}
-	    	if(!operacion.isEmpty()) {
-	    		listaxParametro+="and importe > 0";
-	    	}
-	    	
-	    }*/
+	    public ArrayList<Movimiento> filtrar(Movimiento mov, String nombre, String operador, LocalDate desde, LocalDate hasta) {
+	        Connection cn = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+
+	        try {
+	            cn = Conexion.getConexion().getSQLConnection();
+	            StringBuilder query = new StringBuilder();
+	            query.append("SELECT IdMovimiento, movimientos.IdUsuario, IdTipoMovimiento, CuentaEmisor, CuentaReceptor, Detalle, Importe, Fecha ");
+	            query.append("FROM movimientos ");
+	            query.append("INNER JOIN\r\n"
+	            		+ "    cuentas ON movimientos.CuentaReceptor = cuentas.NroCuenta\r\n"
+	            		+ "    inner join Usuarios on usuarios.IdUsuario=cuentas.IdUsuario ");
+	            query.append("WHERE 1=1 ");
+	            query.append("AND movimientos.idUsuario = ? ");
+	            query.append("AND movimientos.CuentaEmisor = ? ");
+	            query.append("AND Usuarios.nombreusuario LIKE ? ");
+
+	            if (desde != null && hasta != null) {
+	                query.append("AND fecha BETWEEN ? AND ? ");
+	            }
+
+	            if (!operador.isEmpty()) {
+	                if (operador.equals(">")) {
+	                    query.append("AND importe > 0 ");
+	                } else {
+	                    query.append("AND importe < 0 ");
+	                }
+	            }
+
+	            ps = cn.prepareStatement(query.toString());
+
+	            // Parámetros en el orden correcto
+	            int paramIndex = 1;
+	            ps.setInt(paramIndex++, mov.getUsuario().getIdUsuario());
+	            ps.setInt(paramIndex++, mov.getCuentaEmisor().getNroCuenta());
+	            ps.setString(paramIndex++, "%" + nombre + "%");
+
+	            if (desde != null && hasta != null) {
+	                ps.setDate(paramIndex++, java.sql.Date.valueOf(desde));
+	                ps.setDate(paramIndex++, java.sql.Date.valueOf(hasta));
+	            }
+
+	            rs = ps.executeQuery();
+	            ArrayList<Movimiento> listaFiltro = new ArrayList<Movimiento>();
+	            while (rs.next()) {
+	                listaFiltro.add(valoresMovimiento(rs));
+	            }
+
+	            return listaFiltro;
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (rs != null) rs.close();
+	                if (ps != null) ps.close();
+	                if (cn != null) cn.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        return null;
+	    }
 	    public boolean Agregar(Movimiento mov) {
 	        Connection cn = null;
 	        PreparedStatement cs = null;
@@ -79,6 +130,7 @@ import Interfaces.inPersona;
 	            cs.setInt(2, mov.getCuentaEmisor().getNroCuenta());
 	            rs=cs.executeQuery();
 	            while (rs.next()) {
+	            	
 	            	listaMovimiento.add(valoresMovimiento(rs));
 	            }
 	            return listaMovimiento;

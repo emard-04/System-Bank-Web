@@ -22,11 +22,11 @@ public class daoCuentas implements inCuentas{
     private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
-    private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE Estado = 'Activa';";
-    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and IdUsuario=?;";
+    private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE Estado = 'Activa';";
+    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and IdUsuario=?;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
-    private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo FROM Cuentas WHERE NroCuenta=?;";
+    private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE NroCuenta=?;";
     private final String maximoCuentas="Select sum(IdUsuario) as Cantidad from cuentas where idUsuario=? and Estado=?";
     public  daoCuentas() {
 		// TODO Auto-generated constructor stub

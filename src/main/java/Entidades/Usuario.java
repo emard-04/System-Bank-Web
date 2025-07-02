@@ -1,6 +1,7 @@
 package Entidades;
 
 public class Usuario {
+	private static final long serialVersionUID = 1L;
 	    private int idUsuario;
 	    private String nombreUsuario;
 	    private String contrasena;

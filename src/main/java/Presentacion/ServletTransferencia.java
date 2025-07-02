@@ -41,21 +41,17 @@ public class ServletTransferencia extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 HttpSession sesion = request.getSession();
-
-		    // Leer número de cuenta desde sesión
-		    Integer cuentaSeleccionada = (Integer) sesion.getAttribute("cuentaSeleccionada");
-
-		    if (cuentaSeleccionada != null) {
-			request.setAttribute("nroCuenta", cuentaSeleccionada);
-			System.out.println(cuentaSeleccionada);
-			RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
-			rd.forward(request, response);
-			return;
-		}
-		System.out.println(cuentaSeleccionada);
-		RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
-		rd.forward(request, response);
+				 HttpSession sesion = request.getSession();
+				    // Leer número de cuenta desde sesión
+				    int cuentaSeleccionada = Integer.parseInt(request.getParameter("cuentaSeleccionada"));
+				    if (cuentaSeleccionada > 0) {
+				    	Cuenta cuenta=new Cuenta();
+						cuenta.setNroCuenta(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
+					request.setAttribute("nroCuenta", cuentaSeleccionada);
+						request.getSession().setAttribute("cuenta", cuenta.getNroCuenta());
+				}
+				RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+				rd.forward(request, response);
 	}
 
 	/**
@@ -68,20 +64,19 @@ public class ServletTransferencia extends HttpServlet {
 		tm.setIdTipoMovimiento(3);
 		movEmisor.setTipoMovimiento(tm);
 		movEmisor.setFecha(LocalDate.now());
-		movEmisor.setCuentaEmisor(nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada"))));
+		movEmisor.setCuentaEmisor(nCuenta.BuscarPorNro((Integer)request.getSession().getAttribute("cuenta")));
 		Cuenta c=nCuenta.cuentaxCbu(request.getParameter("alias_cbu"));
 		if(c==null)return;
 		movEmisor.setCuentaReceptor(c);
 		BigDecimal monto = new BigDecimal(request.getParameter("monto"));
 		movEmisor.setImporte(monto);
 		movEmisor.setUsuario((Usuario)request.getSession().getAttribute("usuarioLogueado"));
-		System.out.println(movEmisor.getCuentaEmisor().getFechaCreacion());
-		System.out.println(movEmisor.getCuentaReceptor().getFechaCreacion());
+
 		Movimiento movReceptor= new Movimiento();
 		movReceptor.setImporte(monto);
 		movReceptor.setDetalle(request.getParameter("referencia"));
 		movReceptor.setCuentaEmisor(c);
-		movReceptor.setCuentaReceptor(nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada"))));
+		movReceptor.setCuentaReceptor(nCuenta.BuscarPorNro((Integer)request.getSession().getAttribute("cuenta")));
 		movReceptor.setUsuario(c.getUsuario());
 		movReceptor.setTipoMovimiento(tm);
 		movReceptor.setFecha(LocalDate.now());

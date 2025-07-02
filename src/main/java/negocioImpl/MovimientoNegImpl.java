@@ -38,4 +38,7 @@ return false;
 public ArrayList<Movimiento> Listarxcuentas(Movimiento mov){
 	return dMov.Listarxcuentas(mov);
 }
+public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operador, LocalDate desde, LocalDate hasta){
+	return dMov.filtrar(mov, nombre, operador, desde, hasta);
+}
 }

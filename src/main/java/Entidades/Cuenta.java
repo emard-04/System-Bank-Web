@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Cuenta {
+	private static final long serialVersionUID = 1L;
 	private int nroCuenta;
     private Usuario usuario;
     private LocalDate fechaCreacion;
