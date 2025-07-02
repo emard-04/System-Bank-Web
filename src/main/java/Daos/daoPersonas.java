@@ -1,6 +1,7 @@
 package Daos;
 
 import java.sql.Connection;
+import Entidades.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -9,16 +10,20 @@ import java.util.ArrayList;
 import Interfaces.inPersona;
 import Entidades.Persona;
 import Entidades.TelefonoxPersona;
-import Entidades.TipoCuenta;
 import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona {
-    private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, Localidad, Provincia, Dni, Estado) values(?,?,?,?,?,?,?,?,?,?,?,?);";
+    private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, IdLocalidad, IdProvincia, Dni, Estado) values(?,?,?,?,?,?,?,?,?,?,?,?);";
     private final String Eliminar = "UPDATE Persona SET Estado = 'Inactiva' where Dni=?;";
-    private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, Localidad=?, Provincia=? where Dni=?;";
-    private final String ListarTodo = "SELECT Dni, Cuil, Nombre, Apellido, CorreoElectronico, "
-            + "Localidad, Provincia, Nacionalidad, Sexo, FechaNacimiento, Direccion "
-            + "FROM Persona WHERE Estado = 'Activo';";
+    private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, IdLocalidad=?, IdProvincia=? where Dni=?;";
+    private final String ListarTodo = "SELECT p.Dni, p.Cuil, p.Nombre, p.Apellido, p.CorreoElectronico,\r\n"
+    		+ "       loc.IdLocalidad, loc.Nombre AS NombreLocalidad,\r\n"
+    		+ "       prov.IdProvincia, prov.Nombre AS NombreProvincia,\r\n"
+    		+ "       p.Nacionalidad, p.Sexo, p.fechaNacimiento, p.Direccion\r\n"
+    		+ "FROM Persona p\r\n"
+    		+ "JOIN Localidad loc ON p.IdLocalidad = loc.IdLocalidad\r\n"
+    		+ "JOIN Provincia prov ON p.IdProvincia = prov.IdProvincia\r\n"
+    		+ "WHERE p.Estado = 'Activo';";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
 
@@ -56,8 +61,8 @@ public class daoPersonas implements inPersona {
             cs.setString(6, persona.getNacionalidad());
             cs.setDate(7, java.sql.Date.valueOf(persona.getFechaNacimiento()));
             cs.setString(8, persona.getDireccion());
-            cs.setString(9, persona.getLocalidad());
-            cs.setString(10, persona.getProvincia());
+            cs.setInt(9, persona.getLocalidad().getIdLocalidad());
+            cs.setInt(10, persona.getProvincia().getIdProvincia());
             cs.setString(11, persona.getDni());
             cs.setString(12, "Activo");
         } catch (Exception e) {
@@ -78,8 +83,13 @@ public class daoPersonas implements inPersona {
             persona.setNacionalidad(rs.getString("Nacionalidad"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
-            persona.setLocalidad(rs.getString("Localidad"));
-            persona.setProvincia(rs.getString("Provincia"));
+            Localidad loc = new Localidad();
+            loc.setIdLocalidad(rs.getInt("IdLocalidad")); 
+            persona.setLocalidad(loc);
+
+            Provincia prov = new Provincia();
+            prov.setIdProvincia(rs.getInt("IdProvincia")); 
+            persona.setProvincia(prov);
             persona.setDni(rs.getString("Dni"));
             ArrayList<TelefonoxPersona>Lista=dTel.listarTelefonos(persona.getDni());
             ArrayList<String> telefonos = new ArrayList<>();

@@ -1,6 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="Entidades.Usuario"%>
 <%@ page import="Entidades.Persona" %>
+<%@ page import="Entidades.Provincia" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -117,7 +118,7 @@ function confirmarLogout(e) {
 						</select>
 					</div>
 
-					<form action="/BancoParcial/ServletModificarCliente" method="post"
+					<form action="<%=request.getContextPath()%>/ServletModificarCliente" method="post"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 
 						<!-- Fila 1 -->
@@ -152,20 +153,32 @@ function confirmarLogout(e) {
 								required>
 						</div>
 						<div>
-							<label for="localidad_mod"
-								class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-							<input type="text" id="localidad_mod" name="localidad_mod"
-								class="p-3 border border-gray-300 rounded-md w-full text-lg"
-								required>
-						</div>
-						<div>
-							<label for="provincia_mod"
-								class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-							<input type="text" id="provincia_mod" name="provincia_mod"
-								class="p-3 border border-gray-300 rounded-md w-full text-lg"
-								required>
-						</div>
+    <label for="provincia_mod" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
+    <select id="provincia_mod" name="provincia_mod" 
+            class="p-3 border border-gray-300 rounded-md w-full text-lg" required>
+        <option value="">Seleccione una provincia</option>
+        <%-- Aquí llenás las opciones dinámicamente --%>
+        <% 
+            // Supongamos que pasaste la lista de provincias en el request como "listaProvincias"
+            ArrayList<Provincia> listaProvincias = (ArrayList<Provincia>) request.getAttribute("listaProvincias");
+            if (listaProvincias != null) {
+                for (Provincia p : listaProvincias) {
+        %>
+                    <option value="<%= p.getIdProvincia() %>"><%= p.getNombre() %></option>
+        <%      }
+            }
+        %>
+    </select>
+</div>
 
+<div>
+    <label for="localidad_mod" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
+    <select id="localidad_mod" name="localidad_mod" 
+            class="p-3 border border-gray-300 rounded-md w-full text-lg" required>
+        <option value="">Seleccione una localidad</option>
+        <%-- Inicialmente puede estar vacío o cargar todas --%>
+    </select>
+</div>
 						<!-- Fila 3 -->
 						<div>
 							<label for="direccion_mod"
@@ -387,6 +400,29 @@ $('#seleccionar_cliente_dni').on('change', function ()  {
     document.getElementById('telefono_input').value = '';
     document.getElementById('telefono_select').value = '';
     }
+    document.getElementById('provincia_mod').addEventListener('change', function() {
+        var provinciaId = this.value;
+        var localidadSelect = document.getElementById('localidad_mod');
+        localidadSelect.innerHTML = '<option value="">Cargando...</option>';
+        if (!provinciaId) {
+            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+            return;
+        }
 
+        fetch('/BancoParcial/ServletLocalidades?provinciaId=' + provinciaId)
+            .then(response => response.json())
+            .then(data => {
+                localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+                data.forEach(localidad => {
+                    var option = document.createElement('option');
+                    option.value = localidad.id;
+                    option.textContent = localidad.nombre;
+                    localidadSelect.appendChild(option);
+                });
+            })
+            .catch(() => {
+                localidadSelect.innerHTML = '<option value="">Error cargando localidades</option>';
+            });
+    });
 </script>
 </html>

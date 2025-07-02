@@ -156,11 +156,11 @@ function confirmarLogout(e) {
 
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-                            <input type="text" value="<%= usuario.getPersona().getProvincia() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
+                            <input type="text" value="<%= request.getAttribute("nombreProvincia") %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-                            <input type="text" value="<%= usuario.getPersona().getLocalidad() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
+                            <input type="text" value="<%= request.getAttribute("nombreLocalidad") %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">Dirección</label>

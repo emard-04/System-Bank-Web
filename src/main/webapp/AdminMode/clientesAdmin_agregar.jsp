@@ -138,28 +138,32 @@ function confirmarLogout(e) {
     >
 </div>
 
-                        <div>
-                            <label for="localidad" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-                            <input
-                                type="text"
-                                id="localidad"
-                                name="localidad"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        <div>
-                            <label for="provincia" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-                            <input
-                                type="text"
-                                id="provincia"
-                                name="provincia"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
+                        <div id="grupoProvincia" class="hidden">
+  <label for="provincia" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
+  <select id="provincia" name="provincia"
+          class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
+    <option value="">Seleccione provincia</option>
+  </select>
+</div>
+<div id="grupoProvinciaManual" class="hidden">
+  <label for="provincia_manual" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
+  <input type="text" id="provincia_manual" name="provincia"
+         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg" />
+</div>
+
+<!-- LOCALIDAD -->
+<div id="grupoLocalidad" class="hidden">
+  <label for="localidad" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
+  <select id="localidad" name="localidad"
+          class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
+    <option value="">Seleccione localidad</option>
+  </select>
+</div>
+<div id="grupoLocalidadManual" class="hidden">
+  <label for="localidad_manual" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
+  <input type="text" id="localidad_manual" name="localidad"
+         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg" />
+</div>
                         <div>
                             <label for="direccion" class="block text-gray-700 text-lg font-semibold mb-2">Direccion</label>
                             <input
@@ -339,6 +343,61 @@ function confirmarLogout(e) {
     		    contenedor.appendChild(div);
     		  }
     		}
+    document.addEventListener("DOMContentLoaded", function () {
+        const nacionalidad = document.getElementById("nacionalidad");
+        const grupoProvincia = document.getElementById("grupoProvincia");
+        const grupoProvinciaManual = document.getElementById("grupoProvinciaManual");
+        const grupoLocalidad = document.getElementById("grupoLocalidad");
+        const grupoLocalidadManual = document.getElementById("grupoLocalidadManual");
+
+        const provinciaSelect = document.getElementById("provincia");
+        const localidadSelect = document.getElementById("localidad");
+
+        nacionalidad.addEventListener("input", function () {
+            if (nacionalidad.value.toLowerCase() === "argentina") {
+                grupoProvincia.classList.remove("hidden");
+                grupoLocalidad.classList.remove("hidden");
+                grupoProvinciaManual.classList.add("hidden");
+                grupoLocalidadManual.classList.add("hidden");
+                cargarProvincias();
+            } else {
+                grupoProvincia.classList.add("hidden");
+                grupoLocalidad.classList.add("hidden");
+                grupoProvinciaManual.classList.remove("hidden");
+                grupoLocalidadManual.classList.remove("hidden");
+            }
+        });
+
+        provinciaSelect.addEventListener("change", function () {
+            const idProvincia = provinciaSelect.value;
+            cargarLocalidades(idProvincia);
+        });
+
+        function cargarProvincias() {
+            fetch("<%=request.getContextPath()%>/ServletAgregarCliente?listarProvincias=1")
+                .then(response => response.json())
+                .then(data => {
+                    provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+                    data.forEach(p => {
+                        provinciaSelect.innerHTML += `<option value="${p.idProvincia}">${p.nombre}</option>`;
+                    });
+                })
+                .catch(err => console.error("Error cargando provincias:", err));
+        }
+
+        function cargarLocalidades(idProvincia) {
+            if (!idProvincia) return;
+            fetch(`<%=request.getContextPath()%>/ServletAgregarCliente?listarLocalidades=1&idProvincia=${idProvincia}`)
+                .then(response => response.json())
+                .then(data => {
+                    localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+                    data.forEach(l => {
+                        localidadSelect.innerHTML += `<option value="${l.idLocalidad}">${l.nombre}</option>`;
+                    });
+                })
+                .catch(err => console.error("Error cargando localidades:", err));
+        }
+    });
 </script>
 </body>
 </html>

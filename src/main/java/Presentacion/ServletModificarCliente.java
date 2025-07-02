@@ -1,6 +1,7 @@
 package Presentacion;
 
 import java.io.IOException;
+import Entidades.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -20,9 +21,12 @@ import Interfaces.inTelefono;
 import negocio.ClientesNeg;
 import negocio.TelefonoNeg;
 import negocio.UsuarioNeg;
+import negocioImpl.LocalidadNegImpl;
 import negocioImpl.PersonaNegImpl;
+import negocioImpl.ProvinciaNegImpl;
 import negocioImpl.TelefonoNegImpl;
 import negocioImpl.UsuarioNegImpl;
+import java.util.List;
 
 /**
  * Servlet implementation class ServletModificarCliente
@@ -33,13 +37,21 @@ public class ServletModificarCliente extends HttpServlet {
 	private static UsuarioNeg negUsuario= new UsuarioNegImpl();
 	private static ClientesNeg negCliente= new PersonaNegImpl();
     private static TelefonoNeg negTelefono=new TelefonoNegImpl();
+    private static final ProvinciaNegImpl ProvinciaNeg = new ProvinciaNegImpl();
+	private static final LocalidadNegImpl localidadNeg = new LocalidadNegImpl();
     public ServletModificarCliente() {
         super();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("openModificar")!=null) {
-			String ventana="AdminMode/clienteAdmin_modificar.jsp";
-			windowdefault(request,response, ventana);
+		if(request.getParameter("openModificar") != null) {
+	        // Obtener lista de provincias
+	        List<Provincia> listaProvincias = ProvinciaNeg.listarProvincias();
+	        request.setAttribute("listaProvincias", listaProvincias);
+
+	        String ventana = "AdminMode/clienteAdmin_modificar.jsp";
+	        windowdefault(request, response, ventana);
+	        return; // para que no siga ejecutando más código si hubiera
+	    
 		}
 		if(request.getParameter("dniCliente")!=null) {
 			String dniCliente=request.getParameter("dniCliente");
@@ -61,8 +73,10 @@ public class ServletModificarCliente extends HttpServlet {
 					    + "\"cuil\": \"" + us.getPersona().getCuil() + "\","
 					    + "\"nombre\": \"" + us.getPersona().getNombre() + "\","
 					    + "\"apellido\": \"" + us.getPersona().getApellido() + "\","
-					    + "\"localidad\": \"" + us.getPersona().getLocalidad() + "\","
-					    + "\"provincia\": \"" + us.getPersona().getProvincia() + "\","
+					    + "\"localidad_id\": " + us.getPersona().getLocalidad().getIdLocalidad() + ","
+					    + "\"localidad_nombre\": \"" + us.getPersona().getLocalidad().getNombre() + "\","
+					    + "\"provincia_id\": " + us.getPersona().getProvincia().getIdProvincia() + ","
+					    + "\"provincia_nombre\": \"" + us.getPersona().getProvincia().getNombre() + "\","
 					    + "\"direccion\": \"" + us.getPersona().getDireccion() + "\","
 					    + "\"nacionalidad\": \"" + us.getPersona().getNacionalidad() + "\","
 					    + "\"fechaNacimiento\": \"" + us.getPersona().getFechaNacimiento() + "\","
@@ -82,14 +96,23 @@ public class ServletModificarCliente extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idProvincia = request.getParameter("provincia_mod");
+		String idLocalidad = request.getParameter("localidad_mod");
 		Usuario usuario=new Usuario();
 		Persona persona= new Persona();
 		persona.setDni(request.getParameter("dni_mod"));
 		persona.setCuil(request.getParameter("cuil_mod"));
 		persona.setNombre(request.getParameter("nombre_mod"));
 		persona.setApellido(request.getParameter("apellido_mod"));
-		persona.setLocalidad(request.getParameter("localidad_mod"));
-		persona.setProvincia(request.getParameter("provincia_mod"));
+		Provincia provincia = new Provincia();
+		provincia.setIdProvincia(Integer.parseInt(idProvincia));
+
+		Localidad localidad = new Localidad();
+		localidad.setIdLocalidad(Integer.parseInt(idLocalidad));
+
+		// Asignar a persona
+		persona.setProvincia(provincia);
+		persona.setLocalidad(localidad);
 		persona.setDireccion(request.getParameter("direccion_mod"));
 		persona.setNacionalidad(request.getParameter("nacionalidad_mod"));
 		persona.setCorreoElectronico(request.getParameter("correo_electronico_mod"));

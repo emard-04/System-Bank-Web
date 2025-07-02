@@ -135,8 +135,8 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
 
             <nav class="bg-gray-100 border-b border-gray-200 p-3">
                 <ul class="flex space-x-4 justify-center">
-                    <li><a href="PrestamosClient.jsp" class="hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pedir Préstamos</a></li>
-                    <li><a href="pagarPrestamosClient.jsp" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pagar Préstamos</a></li>
+                    <li><a href="/BancoParcial/ClientMode/PrestamosClient.jsp" class="hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pedir Préstamos</a></li>
+                    <li><a href="/BancoParcial/ClientMode/pagarPrestamoClient.jsp" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Pagar Préstamos</a></li>
                 </ul>
             </nav>
 

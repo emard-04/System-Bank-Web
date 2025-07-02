@@ -13,15 +13,15 @@ public class Persona {
 	    private List<String> telefonos;
 	    private LocalDate fechaNacimiento;
 	    private String direccion;
-	    private String localidad;
-	    private String provincia;
+	    private Localidad localidad;  
+	    private Provincia provincia;
 	    private String correoElectronico;
 	    private boolean estado;
 
 	    public Persona() {}
 
 	    public Persona(String dni, String cuil, String nombre, String apellido, String sexo, String nacionalidad,
-	                   LocalDate fechaNacimiento, String direccion, String localidad, String provincia, String correoElectronico) {
+	                   LocalDate fechaNacimiento, String direccion, Localidad localidad,Provincia provincia, String correoElectronico) {
 	        this.dni = dni;
 	        this.cuil = cuil;
 	        this.nombre = nombre;
@@ -84,19 +84,24 @@ public class Persona {
 	    public void setDireccion(String direccion) {
 	        this.direccion = direccion;
 	    }
-	    public String getLocalidad() {
-	        return localidad;
-	    }
-	    public void setLocalidad(String localidad) {
-	        this.localidad = localidad;
-	    }
-	    public String getProvincia() {
-	        return provincia;
-	    }
-	    public void setProvincia(String provincia) {
-	        this.provincia = provincia;
-	    }
-	    public String getCorreoElectronico() {
+	    
+	    public Localidad getLocalidad() {
+			return localidad;
+		}
+
+		public void setLocalidad(Localidad localidad) {
+			this.localidad = localidad;
+		}
+
+		public Provincia getProvincia() {
+			return provincia;
+		}
+
+		public void setProvincia(Provincia provincia) {
+			this.provincia = provincia;
+		}
+
+		public String getCorreoElectronico() {
 	        return correoElectronico;
 	    }
 	    public void setCorreoElectronico(String correoElectronico) {

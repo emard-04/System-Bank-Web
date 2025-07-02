@@ -18,6 +18,8 @@ import Entidades.*;
 public class ServletPersonalCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TelefonoNeg telefonoNeg = new TelefonoNegImpl();
+	private ProvinciaNeg proNeg = new ProvinciaNegImpl();
+	private LocalidadNeg LocNeg = new LocalidadNegImpl();
        
   
     public ServletPersonalCliente() {
@@ -39,10 +41,22 @@ public class ServletPersonalCliente extends HttpServlet {
         // Obtener teléfono
         TelefonoxPersona telefono = telefonoNeg.buscarPorDni(usuario.getPersona().getDni());
         String telefonoUsuario = telefono != null ? telefono.getTelefono() : "";
+     // Obtener Provincia
+        Provincia pro = proNeg.buscarPorId(usuario.getPersona().getProvincia().getIdProvincia());
+        String proUsu = pro != null ? pro.getNombre() : "";
+     // Obtener Localidad
+        Localidad loc = LocNeg.buscarPorId(usuario.getPersona().getLocalidad().getIdLocalidad());
+        String locUsu = loc != null ? loc.getNombre() : "";
 
         // Pasar datos al JSP
         request.setAttribute("usuario", usuario);
         request.setAttribute("telefonoUsuario", telefonoUsuario);
+        
+        String nombreProvincia = pro != null ? pro.getNombre() : "";
+        String nombreLocalidad = loc != null ? loc.getNombre() : "";
+
+        request.setAttribute("nombreProvincia", nombreProvincia);
+        request.setAttribute("nombreLocalidad", nombreLocalidad);
 
         // Forward al JSP que muestra la info personal
         request.getRequestDispatcher("/ClientMode/personalClient.jsp").forward(request, response);
