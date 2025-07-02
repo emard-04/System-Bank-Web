@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page import="Entidades.*"%>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +30,12 @@ function confirmarLogout(e) {
     }
 }
 </script>
+<%
+if (request.getAttribute("cuentas") == null || request.getAttribute("cuotasPendientes") == null) {
+    response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente");
+    return;
+}
+%>
 </head>
 <%Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado"); %>
 <body class="bg-gray-100 h-screen overflow-hidden">
@@ -47,30 +55,7 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                 Saldo: $<span id="saldoActual">---</span>
             </p>
 
-            <div class="relative w-full mb-6">
-                <select name="cuentaSeleccionada" id="cuenta"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
-                    <option value="" disabled selected>Cuentas</option>
-                    <%
-    int contador = 0;
-    ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-    if (listaCuenta != null) {
-        for (Cuenta c : listaCuenta) {
-            contador++;
-%>
-    <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
-        Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
-    </option>
-<%
-        }
-    } else {
-%>
-    <option disabled>No hay cuentas disponibles</option>
-<%
-    }
-%>
-                </select>
-            </div>
+            
 
 
 			<a href="#"
@@ -142,56 +127,65 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl text-center">
+                		<% if (request.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+        <%= request.getAttribute("mensaje") %>
+    </div>
+<% } %>
                     <form action="<%=request.getContextPath()%>/ServletPagarPrestamoCliente" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-end">
                         
                         <div>
                             <label for="cuenta_a_debitar" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione una cuenta</label>
-                            <select id="cuenta_a_debitar" name="cuenta_a_debitar"
-    class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg bg-white" required>
-    <option value="">-- Seleccione cuenta a debitar --</option>
+
+                            <select name="cuenta_a_debitar" id="cuenta"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between">
+                   <option value="" disabled selected>Cuentas</option>
+                    <%
+                        int contador = 0;
+                        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+                        for (Cuenta c : listaCuenta) {
+                            contador++;
+                    %>
+                        <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>">
+                            Cuenta <%= contador %> - CBU: <%= c.getCbu() %>
+                        </option>
+                    <%
+                        }
+                    %>
+                </select>
+                        </div>
+
+                        <div>
+                          <label for="cuotaSeleccionada" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione Cuota</label>
+<select id="cuotaSeleccionada" name="cuotaSeleccionada"
+    class="p-3 border border-gray-300 rounded-md w-full bg-white text-lg" onchange="actualizarImporte()">
+    <option value="">-- Seleccione una cuota --</option>
     <%
-        ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-        if (cuentas != null) {
-            for (Cuenta cuenta : cuentas) {
+        List<Cuota> cuotasPendientes = (List<Cuota>) request.getAttribute("cuotasPendientes");
+        if (cuotasPendientes != null) {
+            for (Cuota cuota : cuotasPendientes) {
     %>
-        <option value="<%= cuenta.getNroCuenta() %>">
-            Cuenta <%= cuenta.getNroCuenta() %> - $<%= cuenta.getSaldo() %>
+        <option value="<%= cuota.getIdCuota() %>" data-importe="<%= cuota.getImporte() %>">
+            Cuota #<%= cuota.getNroCuota() %> - $<%= cuota.getImporte() %>
         </option>
     <%
             }
         }
     %>
 </select>
-                        </div>
 
-                        <div>
-                            <label for="nro_cuota_a_pagar" class="block text-gray-700 text-lg font-semibold mb-2">Cuota a pagar</label>
-                            <input
-                                type="number"
-                                id="nro_cuota_a_pagar"
-                                name="nro_cuota_a_pagar"
-                                placeholder="Ej: 1, 2, 3..."
-                                min="1"
-                                max="36"
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        
-                        <div>
-                            <label for="importe_cuota" class="block text-gray-700 text-lg font-semibold mb-2">Importe</label>
-                            <p id="importe_cuota" class="text-gray-900 text-2xl font-bold">
-    $<%= request.getAttribute("cuota") != null ? request.getAttribute("cuota") : "0.00" %>
-</p>
-<input type="hidden" name="importe_hardcodeado" value="<%= request.getAttribute("cuota") != null ? request.getAttribute("cuota") : "0.00" %>">
-                            
+<!-- Mostrar el importe -->
+<label for="importe_cuota" class="block text-gray-700 text-lg font-semibold mt-4 mb-2">Importe</label>
+<p id="importe_cuota" class="text-gray-900 text-2xl font-bold">$0.00</p>
 
+<!-- Campo oculto para enviar al servlet -->
+<input type="hidden" name="importe_hardcodeado" id="importe_hidden" value="0.00">
                         <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
                             <button type="submit"
     class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 text-base">
     PAGAR
 </button>
-<button type="button"
+<button type="button" onclick="this.form.reset(); actualizarImporte();"
     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition duration-200 text-base">
     CANCELAR
 </button>
@@ -206,5 +200,23 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
         </main>
 
     </div>
+    <script>
+    function actualizarImporte() {
+        const select = document.getElementById('cuotaSeleccionada');
+        const selectedOption = select.options[select.selectedIndex];
+        console.log("Cambió selección:", selectedOption);
+
+        if (!selectedOption || !selectedOption.getAttribute('data-importe')) {
+            document.getElementById('importe_cuota').innerText = '$0.00';
+            document.getElementById('importe_hidden').value = '0.00';
+            return;
+        }
+
+        const importe = selectedOption.getAttribute('data-importe');
+        console.log("Importe seleccionado:", importe);
+        document.getElementById('importe_cuota').innerText = `$${importe}`;
+        document.getElementById('importe_hidden').value = importe;
+    }
+</script>
 </body>
 </html>
