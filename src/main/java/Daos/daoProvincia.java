@@ -43,7 +43,7 @@ public class daoProvincia implements inProvincia{
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 provincia = new Provincia();
-                provincia.setIdProvincia(rs.getInt(idProvincia));
+                provincia.setIdProvincia(idProvincia);
                 provincia.setNombre(rs.getString("Nombre"));
             }
 

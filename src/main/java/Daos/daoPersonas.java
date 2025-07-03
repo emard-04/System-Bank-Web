@@ -86,11 +86,17 @@ public class daoPersonas implements inPersona {
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
             Localidad loc = dLoc.buscarPorId(rs.getInt("IdLocalidad"),rs.getInt("IdProvincia"));
-            System.out.println( " nombre Loc "+loc.getNombre());
-            persona.setLocalidad(loc);
+            if (loc != null) {
+                persona.setLocalidad(loc);
+            } else {
+                persona.setLocalidad(null); // o lanzar excepción si es obligatorio
+            }
             Provincia prov = dProv.buscarPorId(rs.getInt("IdProvincia"));
-            System.out.println(prov.getNombre()+ " nombre prov");
-            persona.setProvincia(prov);
+            if (loc != null) {
+                persona.setProvincia(prov);
+            } else {
+                persona.setProvincia(null); // o lanzar excepción si es obligatorio
+            }
             persona.setDni(rs.getString("Dni"));
             ArrayList<TelefonoxPersona>Lista=dTel.listarTelefonos(persona.getDni());
             ArrayList<String> telefonos = new ArrayList<>();
@@ -154,6 +160,7 @@ public class daoPersonas implements inPersona {
             st = cn.createStatement();
             rs = st.executeQuery(ListarTodo);
             while (rs.next()) {
+            	System.out.println("crack");
                 Persona persona = valoresPersona(rs);
                 ListaPersona.add(persona);
             }
