@@ -11,5 +11,9 @@ public interface InPrestamos {
     List<Prestamos> obtenerPrestamosPendientes();
     List<Prestamos> obtenerPrestamosPendientesPorDni(String dni);
      int cantidadPrestamosActivosPorCuenta(int idCuenta);
-    
+     int insertarYObtenerId(Prestamos p);
+     int contarPrestamosPendientes();
+     int contarPrestamosPendientesPorDni(String dni);
+     List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
+     List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
 }

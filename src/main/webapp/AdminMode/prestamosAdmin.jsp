@@ -151,22 +151,35 @@ function confirmarLogout(e) {
                     </table>
                 </div>
 
-                <div class="bg-red-700 p-3 rounded-b-lg shadow-lg flex justify-end items-center mt-0">
-                    <button class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-                        &larr; </button>
-                    <button class="bg-red-500 text-white font-bold p-2 mx-1 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-                        1
-                    </button>
-                    <button class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-                        2
-                    </button>
-                    <button class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-                        3
-                    </button>
-                    <button class="p-2 mx-1 text-white opacity-75 hover:opacity-100 rounded-md focus:outline-none focus:ring-2 focus:ring-white">
-                        &rarr; </button>
-                </div>
-            </div>
+                <%
+    Integer paginaActual = (Integer) request.getAttribute("paginaActual");
+    Integer totalPaginas = (Integer) request.getAttribute("totalPaginas");
+    if (paginaActual == null) paginaActual = 1;
+    if (totalPaginas == null) totalPaginas = 1;
+    String baseUrl = "ServletPrestamosAdmi";
+    String queryParams = (filtroDni != null && !filtroDni.isEmpty()) ? "&dni=" + filtroDni : "";
+%>
+
+<div class="bg-red-700 p-3 rounded-b-lg shadow-lg flex justify-center items-center mt-0">
+    
+    <% if (paginaActual > 1) { %>
+        <a href="<%= baseUrl %>?pagina=<%= paginaActual - 1 %><%= queryParams %>" 
+           class="p-2 mx-1 text-white rounded-md hover:bg-red-600 transition">&larr;</a>
+    <% } %>
+
+    <% for (int i = 1; i <= totalPaginas; i++) { %>
+        <a href="<%= baseUrl %>?pagina=<%= i %><%= queryParams %>" 
+           class="p-2 mx-1 rounded-md transition 
+                  <%= (i == paginaActual) ? "bg-red-500 text-white font-bold" : "text-white hover:bg-red-600" %>">
+            <%= i %>
+        </a>
+    <% } %>
+
+    <% if (paginaActual < totalPaginas) { %>
+        <a href="<%= baseUrl %>?pagina=<%= paginaActual + 1 %><%= queryParams %>" 
+           class="p-2 mx-1 text-white rounded-md hover:bg-red-600 transition">&rarr;</a>
+    <% } %>
+</div>
 
             <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
                 GRUPO_N7

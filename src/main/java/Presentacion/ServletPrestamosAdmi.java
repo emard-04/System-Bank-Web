@@ -25,22 +25,54 @@ public class ServletPrestamosAdmi extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    		throws ServletException, IOException {
-    	
+            throws ServletException, IOException {
 
-    	String dniFiltro = request.getParameter("dni");
-    	List<Prestamos> prestamosPendientes;
+        String dniFiltro = request.getParameter("dni");
 
-    	if (dniFiltro != null && !dniFiltro.isEmpty()) {
-    		prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPorDni(dniFiltro);
-    		request.setAttribute("filtroDni", dniFiltro);
-    	} else {
-    		prestamosPendientes = prestamoNeg.obtenerPrestamosPendientes();
-    	}
+        // Página actual, por defecto 1 si no se pasa o es inválida
+        int paginaActual = 1;
+        String paginaParam = request.getParameter("pagina");
+        if (paginaParam != null) {
+            try {
+                paginaActual = Integer.parseInt(paginaParam);
+                if (paginaActual < 1) paginaActual = 1;
+            } catch (NumberFormatException e) {
+                paginaActual = 1;
+            }
+        }
 
-    	
-    	request.setAttribute("prestamosPendientes", prestamosPendientes);
-    	request.getRequestDispatcher("/AdminMode/prestamosAdmin.jsp").forward(request, response);
+        final int prestamosPorPagina = 10; // 10 préstamos por página
+
+        // Obtén el total de préstamos para el filtro dado (método que debes implementar)
+        int totalPrestamos;
+        if (dniFiltro != null && !dniFiltro.isEmpty()) {
+            totalPrestamos = prestamoNeg.contarPrestamosPendientesPorDni(dniFiltro);
+        } else {
+            totalPrestamos = prestamoNeg.contarPrestamosPendientes();
+        }
+
+        // Calcula el total de páginas
+        int totalPaginas = (int) Math.ceil((double) totalPrestamos / prestamosPorPagina);
+
+        // Ajustar la página actual para que no supere el total de páginas
+        if (paginaActual > totalPaginas && totalPaginas > 0) {
+            paginaActual = totalPaginas;
+        }
+
+        List<Prestamos> prestamosPendientes;
+        if (dniFiltro != null && !dniFiltro.isEmpty()) {
+            // Obtiene la página de préstamos filtrados por DNI
+            prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPorDniPaginado(dniFiltro, paginaActual, prestamosPorPagina);
+            request.setAttribute("filtroDni", dniFiltro);
+        } else {
+            // Obtiene la página de préstamos sin filtro
+            prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPaginado(paginaActual, prestamosPorPagina);
+        }
+
+        request.setAttribute("prestamosPendientes", prestamosPendientes);
+        request.setAttribute("paginaActual", paginaActual);
+        request.setAttribute("totalPaginas", totalPaginas);
+        request.getRequestDispatcher("/AdminMode/prestamosAdmin.jsp").forward(request, response);
     }
    
 

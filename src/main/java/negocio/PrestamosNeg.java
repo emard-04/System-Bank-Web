@@ -3,7 +3,7 @@ import Entidades.*;
 import java.util.List; 
 
 public interface PrestamosNeg {
-	boolean agregarPrestamo(Prestamos p);
+	//
     List<Prestamos> listarPrestamosCliente(int idUsuario);
     List<Prestamos> listarTodos();
     boolean aprobarPrestamo(int idPrestamo);
@@ -12,4 +12,11 @@ public interface PrestamosNeg {
     List<Prestamos> obtenerPrestamosPendientes();
      List<Prestamos> obtenerPrestamosPendientesPorDni(String dni);
      boolean puedePedirPrestamo(int idCuenta);
+    int agregarPrestamo(Prestamos prestamo);
+    int insertarYObtenerId(Prestamos p);
+    int contarPrestamosPendientes();
+    int contarPrestamosPendientesPorDni(String dni);
+    List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
+    List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
+      
 }

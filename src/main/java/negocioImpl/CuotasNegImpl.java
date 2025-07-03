@@ -1,5 +1,6 @@
 package negocioImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import Entidades.Cuota;
@@ -17,6 +18,18 @@ public class CuotasNegImpl implements CuotasNeg{
 	@Override
 	public boolean pagarCuota(int idCuota, int nroCuenta) throws SQLException {
 		return dao.pagarCuota(idCuota, nroCuenta);
+	}
+
+	@Override
+	public boolean generarCuotasParaPrestamo(int idPrestamo, BigDecimal importeCuota, int cantidadCuotas) {
+		
+		return dao.generarCuotasParaPrestamo(idPrestamo, importeCuota, cantidadCuotas);
+	}
+
+	@Override
+	public List<Cuota> obtenerCuotasPendientesPorCuenta(int nroCuenta) throws SQLException {
+		
+		return dao.obtenerCuotasPendientesPorCuenta(nroCuenta);
 	}
 
 }

@@ -13,7 +13,7 @@ import negocio.*;
 import negocioImpl.*;
 import javax.servlet.RequestDispatcher;
 import java.util.List; 
-
+import java.util.ArrayList;
 /**
  * Servlet implementation class ServletPagarPrestamoCliente
  */
@@ -36,7 +36,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 	 */
    
 
-     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (usuario == null) {
             response.sendRedirect("login.jsp");
@@ -44,24 +44,30 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
         }
 
         try {
-            // Guardar cuenta seleccionada si viene por parámetro
-            String paramCuenta = request.getParameter("cuentaSeleccionada");
+            String paramCuenta = request.getParameter("cuenta");
+            int cuentaSeleccionada = -1;
             if (paramCuenta != null && !paramCuenta.isEmpty()) {
-                int cuentaSeleccionada = Integer.parseInt(paramCuenta);
+                cuentaSeleccionada = Integer.parseInt(paramCuenta);
                 request.getSession().setAttribute("cuenta", cuentaSeleccionada);
-               // request.setAttribute("nroCuenta", cuentaSeleccionada);
             }
+            
 
-            List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
-          //  System.out.println("Cuentas cargadas:");
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
-           // System.out.println("Cuentas encontradas: " + cuentas.size());
-	     //   System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
+            List<Cuota> cuotasPendientes;
+
+            if (cuentaSeleccionada > 0) {
+                // Filtrar cuotas solo para la cuenta seleccionada
+                cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(cuentaSeleccionada);
+            } else {
+                // Si no hay cuenta seleccionada, podés mostrar todas o ninguna
+                cuotasPendientes = new ArrayList<>();
+            }
 
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);
 
             request.getRequestDispatcher("/ClientMode/pagarPrestamoClient.jsp").forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/ClientMode/pagarPrestamoClient.jsp?error=excepcion");
@@ -91,8 +97,10 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
                 request.setAttribute("mensaje", "❌ Error al pagar cuota.");
             }
 
-            List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
+            List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(nroCuenta);
+            System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
+            request.getSession().setAttribute("cuentasUsuario", cuentas); 
 
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);

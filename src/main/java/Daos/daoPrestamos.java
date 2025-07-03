@@ -304,5 +304,212 @@ public class daoPrestamos implements InPrestamos{
 			    }
 			    return 0;
 			}
+			public int insertarYObtenerId(Prestamos p) {
+			    String sql = "INSERT INTO Prestamos (IdUsuario, IdCuenta, Fecha, ImportePedido, ImporteApagar, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+			        // Si usás transacciones, desactivá autocommit para controlar commit y rollback
+			        conn.setAutoCommit(false);
+
+			        stmt.setInt(1, p.getUsuario().getIdUsuario());
+			        stmt.setInt(2, p.getIdCuenta());
+			        stmt.setDate(3, Date.valueOf(p.getFecha()));
+			        stmt.setBigDecimal(4, p.getImportePedido());
+			        stmt.setBigDecimal(5, p.getImporteApagar());
+			        stmt.setString(6, p.getPlazoDePago());
+			        stmt.setBigDecimal(7, p.getMontoCuotasxMes());
+			        stmt.setString(8, p.getEstadoSolicitud());
+			        stmt.setString(9, p.getEstadoPago());
+
+			        int rowsAffected = stmt.executeUpdate();
+			        if (rowsAffected == 0) {
+			            throw new SQLException("Fallo al insertar el préstamo, no se afectó ninguna fila.");
+			        }
+
+			        try (ResultSet rs = stmt.getGeneratedKeys()) {
+			            if (rs.next()) {
+			                int idGenerado = rs.getInt(1);
+			                conn.commit();  // Confirmar cambios
+			                return idGenerado;
+			            } else {
+			                throw new SQLException("No se pudo obtener el ID generado.");
+			            }
+			        }
+
+			    } catch (SQLException e) {
+			        e.printStackTrace();
+			        // Si querés rollback en caso de error
+			        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+			    }
+			    return -1;
+			}
+
+			@Override
+			public int contarPrestamosPendientes() {
+				String sql = "SELECT COUNT(*) FROM Prestamos WHERE EstadoSolicitud = 'Pendiente'";
+			    int total = 0;
+
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement ps = conn.prepareStatement(sql);
+			         ResultSet rs = ps.executeQuery()) {
+			        if (rs.next()) {
+			            total = rs.getInt(1);
+			        }
+			    }
+			    catch (SQLException e) {
+			        e.printStackTrace();
+			        // Si querés rollback en caso de error
+			        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+			    }
+
+			    return total;
+			}
+
+			@Override
+			public int contarPrestamosPendientesPorDni(String dni) {
+				 String sql = "SELECT COUNT(*) FROM Prestamos p INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario"
+				 		+ "		                 INNER JOIN Persona pe ON u.dni = pe.Dni"
+				 		+ "		                 WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni =?";
+		    int total = 0;
+
+		    try (Connection conn = Conexion.getConexion().getSQLConnection();
+		         PreparedStatement ps = conn.prepareStatement(sql)) {
+		        ps.setString(1, dni);
+
+		        try (ResultSet rs = ps.executeQuery()) {
+		            if (rs.next()) {
+		                total = rs.getInt(1);
+		            }
+		        }
+		        catch (SQLException e) {
+			        e.printStackTrace();
+			        // Si querés rollback en caso de error
+			        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+			    }
+		    }
+		    catch (SQLException e) {
+		        e.printStackTrace();
+		        // Si querés rollback en caso de error
+		        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+		    }
+
+		    return total;
+			}
+
+			@Override
+			public List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina) {
+				int offset = (pagina - 1) * prestamosPorPagina;
+			    String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni"
+			    		+ "			                 FROM Prestamos p \r\n"
+			    		+ "			                 INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario"
+			    		+ "			                 INNER JOIN Persona pe ON u.dni = pe.Dni "
+			    		+ "			                 WHERE p.EstadoSolicitud = 'Pendiente' "
+			    		+ "			                 ORDER BY p.Fecha DESC"
+			    		+ "			                 LIMIT ? OFFSET ?";
+
+			    List<Prestamos> lista = new ArrayList<>();
+
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			        ps.setInt(1, prestamosPorPagina);
+			        ps.setInt(2, offset);
+
+			        try (ResultSet rs = ps.executeQuery()) {
+			            while (rs.next()) {
+			                Prestamos p = new Prestamos();
+			                p.setIdPrestamo(rs.getInt("IdPrestamo"));
+
+			                Usuario usuario = new Usuario();
+			                usuario.setIdUsuario(rs.getInt("IdUsuario"));
+
+			                Persona persona = new Persona();
+			                persona.setNombre(rs.getString("Nombre"));
+			                persona.setApellido(rs.getString("Apellido"));
+			                persona.setDni(rs.getString("Dni"));
+
+			                usuario.setPersona(persona);
+			                p.setUsuario(usuario);
+
+			                p.setFecha(rs.getDate("Fecha").toLocalDate());
+			                p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+			                p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+			                p.setPlazoDePago(String.valueOf(rs.getInt("PlazoDePago")));
+			                p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+			                p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
+
+			                lista.add(p);
+			            }
+			        }
+			    } catch (SQLException e) {
+			        e.printStackTrace();
+			    }
+
+			    return lista;
+			}
+
+			@Override
+			public List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina,
+					int prestamosPorPagina) {
+				 int offset = (pagina - 1) * prestamosPorPagina;
+				    String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni " +
+				                 "FROM Prestamos p " + 
+				                 "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario " +
+				                 "INNER JOIN Personas pe ON u.dni = pe.Dni " +
+				                 "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? " +
+				                 "ORDER BY p.Fecha DESC " +
+				                 "LIMIT ? OFFSET ?";
+
+				    List<Prestamos> lista = new ArrayList<>();
+
+				    try (Connection conn = Conexion.getConexion().getSQLConnection();
+				         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+				        ps.setString(1, dni);
+				        ps.setInt(2, prestamosPorPagina);
+				        ps.setInt(3, offset);
+
+				        try (ResultSet rs = ps.executeQuery()) {
+				        	
+				            while (rs.next()) {
+				                Prestamos p = new Prestamos();
+				                p.setIdPrestamo(rs.getInt("IdPrestamo"));
+
+				                Usuario usuario = new Usuario();
+				                usuario.setIdUsuario(rs.getInt("IdUsuario"));
+
+				                Persona persona = new Persona();
+				                persona.setNombre(rs.getString("Nombre"));
+				                persona.setApellido(rs.getString("Apellido"));
+				                persona.setDni(rs.getString("Dni"));
+
+				                usuario.setPersona(persona);
+				                p.setUsuario(usuario);
+
+				                p.setFecha(rs.getDate("Fecha").toLocalDate());
+				                p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+				                p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+				                p.setPlazoDePago(String.valueOf(rs.getInt("PlazoDePago")));
+				                p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+				                p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
+				                lista.add(p);
+				            }
+				        }
+				        catch (SQLException e) {
+					        e.printStackTrace();
+					        // Si querés rollback en caso de error
+					        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+					    }
+				    }
+				    catch (SQLException e) {
+				        e.printStackTrace();
+				        // Si querés rollback en caso de error
+				        // Tenés que manejar la conexión fuera o usar try-with-resources con conexión abierta antes.
+				    }
+
+				    return lista;
+			}
 		}
 

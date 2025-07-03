@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.math.BigDecimal;
-
+import java.time.LocalDate;
 
 
 public class daoCuotas implements inCuotas{
@@ -124,5 +124,89 @@ public class daoCuotas implements inCuotas{
 
         return exito;
     }
+	public boolean generarCuotasParaPrestamo(int idPrestamo, BigDecimal importeCuota, int cantidadCuotas) {
+		
+		Connection conn = null;
+	    PreparedStatement ps = null;
+
+	    String sql = "INSERT INTO Cuotas (NroCuota, Importe, FechaVencimiento, FechaPago, IdPrestamo) VALUES (?, ?, ?, ?, ?)";
+
+	    try {
+	        conn = Conexion.getConexion().getSQLConnection();
+	        conn.setAutoCommit(false);
+	        ps = conn.prepareStatement(sql);
+
+	        LocalDate vencimiento = LocalDate.now().plusMonths(1);
+
+	        for (int i = 1; i <= cantidadCuotas; i++) {
+	            ps.setInt(1, i);  // NroCuota
+	            ps.setBigDecimal(2, importeCuota);  // Importe
+	            ps.setDate(3, java.sql.Date.valueOf(vencimiento));  // FechaVencimiento
+	            ps.setNull(4, java.sql.Types.DATE);  // FechaPago (null)
+	            ps.setInt(5, idPrestamo);  // IdPrestamo
+
+	            ps.addBatch();
+	            vencimiento = vencimiento.plusMonths(1);
+	        }
+
+	        int[] resultados = ps.executeBatch();
+	        for (int r : resultados) {
+	            if (r <= 0) return false;  // Si alguna cuota no se insertó
+	        }
+	        System.out.println("✅ Cuotas listas para guardar en DB");
+	        conn.commit();  // Muy importante si estás trabajando con transacciones
+	        return true;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        try {
+	            if (conn != null) conn.rollback();
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	        }
+	        return false;
+
+	    } finally {
+	        try {
+	            if (ps != null) ps.close();
+	            if (conn != null) conn.close();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+		
+	}
+	public List<Cuota> obtenerCuotasPendientesPorCuenta(int nroCuenta) throws SQLException {
+	    String sql = "SELECT c.* FROM Cuotas c INNER JOIN Prestamos p ON c.IdPrestamo = p.IdPrestamo WHERE p.IdCuenta = ? AND c.FechaPago IS NULL";
+	    List<Cuota> lista = new ArrayList<>();
+	    
+	    try (Connection conn = Conexion.getConexion().getSQLConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, nroCuenta);
+	        System.out.println("Ejecutando SQL con nroCuenta: " + nroCuenta);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	            	Cuota cuota = new Cuota();
+	            	System.out.println("Cuota encontrada - ID: " + rs.getInt("IdCuota"));
+	                cuota.setIdCuota(rs.getInt("IdCuota"));
+	                cuota.setNroCuota(rs.getInt("NroCuota"));
+	                cuota.setImporte(rs.getBigDecimal("Importe"));
+	                cuota.setFechaVencimiento(rs.getDate("FechaVencimiento").toLocalDate());
+
+	                // FechaPago puede ser null, así que la controlamos
+	                Date fechaPago = rs.getDate("FechaPago");
+	                if (fechaPago != null) {
+	                    cuota.setFechaPago(fechaPago.toLocalDate());
+	                } else {
+	                    cuota.setFechaPago(null);
+	                }
+	                lista.add(cuota);
+	            }
+	        }
+	        System.out.println("No se encontraron cuotas pendientes para la cuenta: " + nroCuenta);
+	    }
+	    return lista;
+	}
 
 }

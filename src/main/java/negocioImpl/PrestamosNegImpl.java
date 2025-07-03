@@ -7,10 +7,7 @@ import java.util.List;
 public class PrestamosNegImpl implements PrestamosNeg{
 	 private final InPrestamos prestamoDao = new daoPrestamos();
 
-	    @Override
-	    public boolean agregarPrestamo(Prestamos p) {
-	        return prestamoDao.agregar(p);
-	    }
+	    
 
 	    @Override
 	    public List<Prestamos> listarPrestamosCliente(int idUsuario) {
@@ -54,5 +51,39 @@ public class PrestamosNegImpl implements PrestamosNeg{
 		@Override
 		public boolean puedePedirPrestamo(int idCuenta) {
 		    return prestamoDao.cantidadPrestamosActivosPorCuenta(idCuenta) == 0;
+		}
+		@Override
+		public int agregarPrestamo(Prestamos prestamo) {
+		    return prestamoDao.insertarYObtenerId(prestamo); 
+		}
+
+		@Override
+		public int insertarYObtenerId(Prestamos p) {
+			return prestamoDao.insertarYObtenerId(p);
+		}
+
+		@Override
+		public int contarPrestamosPendientes() {
+			
+			return prestamoDao.contarPrestamosPendientes();
+		}
+
+		@Override
+		public int contarPrestamosPendientesPorDni(String dni) {
+			// TODO Auto-generated method stub
+			return prestamoDao.contarPrestamosPendientesPorDni(dni);
+		}
+
+		@Override
+		public List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina) {
+			// TODO Auto-generated method stub
+			return prestamoDao.obtenerPrestamosPendientesPaginado(pagina, prestamosPorPagina);
+		}
+
+		@Override
+		public List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina,
+				int prestamosPorPagina) {
+			// TODO Auto-generated method stub
+			return prestamoDao.obtenerPrestamosPendientesPorDniPaginado(dni, pagina, prestamosPorPagina);
 		}
 }
