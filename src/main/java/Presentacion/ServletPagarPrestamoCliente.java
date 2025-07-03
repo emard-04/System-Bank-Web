@@ -35,31 +35,39 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	 Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-    	    if (usuario == null) {
-    	        response.sendRedirect("login.jsp");
-    	        return;
-    	    }
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
 
-    	    try {
-    	        List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
-    	        System.out.println("Cuentas cargadas:");
-    	        List<Cuenta> cuentas = cuentaNeg.obtenerCuentasPorUsuario(usuario.getIdUsuario());
-    	        System.out.println("Cuentas encontradas: " + cuentas.size());
-    	        System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
+        try {
+            // Guardar cuenta seleccionada si viene por parámetro
+            String paramCuenta = request.getParameter("cuentaSeleccionada");
+            if (paramCuenta != null && !paramCuenta.isEmpty()) {
+                int cuentaSeleccionada = Integer.parseInt(paramCuenta);
+                request.getSession().setAttribute("cuenta", cuentaSeleccionada);
+               // request.setAttribute("nroCuenta", cuentaSeleccionada);
+            }
 
-    	        request.setAttribute("cuotasPendientes", cuotasPendientes);
-    	        request.setAttribute("cuentas", cuentas);
+            List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
+            System.out.println("Cuentas cargadas:");
+            List<Cuenta> cuentas = cuentaNeg.obtenerCuentasPorUsuario(usuario.getIdUsuario());
+            System.out.println("Cuentas encontradas: " + cuentas.size());
+	        System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
 
-    	        request.getRequestDispatcher("/ClientMode/pagarPrestamoClient.jsp").forward(request, response);
-    	    } catch (Exception e) {
-    	        e.printStackTrace();
-    	        response.sendRedirect(request.getContextPath() + "/ClientMode/pagarPrestamoClient.jsp?error=excepcion");
-    	    }
+            request.setAttribute("cuotasPendientes", cuotasPendientes);
+            request.setAttribute("cuentasUsuario", cuentas);
+
+            request.getRequestDispatcher("/ClientMode/pagarPrestamoClient.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/ClientMode/pagarPrestamoClient.jsp?error=excepcion");
+        }
     }
-
-    
+   
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (usuario == null) {
@@ -68,28 +76,36 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
         }
 
         int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
-        int nroCuenta = Integer.parseInt(request.getParameter("cuenta_a_debitar"));
+        Integer nroCuenta = (Integer) request.getSession().getAttribute("cuenta");
+        if (nroCuenta == null) {
+            request.setAttribute("mensaje", "❌ Seleccione una cuenta válida.");
+            doGet(request, response);
+            return;
+        }
 
         try {
-            boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
+        	System.out.println("ID cuota seleccionada: " + idCuota);
+        	System.out.println("Nro cuenta seleccionada: " + nroCuenta);
+
+        	boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
+        	System.out.println("Resultado del pago de cuota: " + exito);
             if (exito) {
-            	request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
-                //response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?mensaje=exito");
-                windowDefault(request, response, "/ServletPagarPrestamoCliente?mensaje=exito");
+                request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
             } else {
-            	request.setAttribute("mensaje", "❌ Error al pagar cuota.");
-                //response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=fallo");
-               windowDefault(request, response, "/ServletPagarPrestamoCliente?error=fallo");
+                request.setAttribute("mensaje", "❌ Error al pagar cuota.");
             }
+            List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
+            List<Cuenta> cuentas = cuentaNeg.obtenerCuentasPorUsuario(usuario.getIdUsuario());
+
+            request.setAttribute("cuotasPendientes", cuotasPendientes);
+            request.setAttribute("cuentasUsuario", cuentas);
+
+            request.getRequestDispatcher("/ClientMode/pagarPrestamoClient.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=excepcion");
         }
     }
-    private void windowDefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException{
-		 
-		 RequestDispatcher rd= request.getRequestDispatcher(jsp);
-		 rd.forward(request, response);
-	}
+   
 
 }

@@ -75,7 +75,7 @@ public class daoCuotas implements inCuotas{
             }
 
             // 2. Verificar saldo de la cuenta
-            String sqlSaldo = "SELECT Saldo FROM Cuentas WHERE NroCuenta = ?";
+            String sqlSaldo = "SELECT Saldo FROM cuentas WHERE NroCuenta = ?";
             BigDecimal saldo = null;
             try (PreparedStatement ps = conn.prepareStatement(sqlSaldo)) {
                 ps.setInt(1, nroCuenta);
