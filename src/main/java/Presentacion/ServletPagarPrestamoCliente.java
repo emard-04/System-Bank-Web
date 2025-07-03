@@ -103,6 +103,4 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=excepcion");
         }
     }
-   
-
 }
