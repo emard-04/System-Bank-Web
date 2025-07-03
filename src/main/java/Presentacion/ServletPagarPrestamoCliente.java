@@ -36,7 +36,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 	 */
    
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (usuario == null) {
             response.sendRedirect("login.jsp");
@@ -53,10 +53,10 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             }
 
             List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
-            System.out.println("Cuentas cargadas:");
+          //  System.out.println("Cuentas cargadas:");
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
-            System.out.println("Cuentas encontradas: " + cuentas.size());
-	        System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
+           // System.out.println("Cuentas encontradas: " + cuentas.size());
+	     //   System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
 
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);
@@ -75,25 +75,22 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             return;
         }
 
-        int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
-        Integer nroCuenta = (Integer) request.getSession().getAttribute("cuenta");
-        if (nroCuenta == null) {
-            request.setAttribute("mensaje", "❌ Seleccione una cuenta válida.");
-            doGet(request, response);
-            return;
-        }
-
         try {
-        	System.out.println("ID cuota seleccionada: " + idCuota);
-        	System.out.println("Nro cuenta seleccionada: " + nroCuenta);
+            int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
+            int nroCuenta = Integer.parseInt(request.getParameter("cuenta")); // ✅ CAMBIO
 
-        	boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
-        	System.out.println("Resultado del pago de cuota: " + exito);
+           // System.out.println("ID cuota seleccionada: " + idCuota);
+            //System.out.println("Nro cuenta seleccionada: " + nroCuenta);
+
+            boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
+            //System.out.println("Resultado del pago de cuota: " + exito);
+
             if (exito) {
                 request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
             } else {
                 request.setAttribute("mensaje", "❌ Error al pagar cuota.");
             }
+
             List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
 

@@ -45,8 +45,25 @@ else{
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-			</div>
+			<%
+    String sexo = usuario.getPersona().getSexo();
+    String rutaFoto = "";
+
+    if (sexo != null) {
+        if (sexo.equalsIgnoreCase("F") || sexo.equalsIgnoreCase("Femenino")) {
+            rutaFoto = request.getContextPath() + "/img/perfilMujer.avif";
+        } else if (sexo.equalsIgnoreCase("M") || sexo.equalsIgnoreCase("Masculino")) {
+            rutaFoto = request.getContextPath() + "/img/perfilHombre.avif";
+        }else {
+            rutaFoto = request.getContextPath() + "/img/perfilAdmi.webp";
+        }
+    }
+%>
+
+<img src="<%= rutaFoto %>"
+     alt="Foto de perfil"
+     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
+			
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">
 				<%= usuario.getPersona().getNombre() %>

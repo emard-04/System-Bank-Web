@@ -35,21 +35,34 @@
         }
     </style>
 </head>
+<script>
+function confirmarLogout(e) {
+    e.preventDefault(); // Detiene la acción por defecto del enlace
+
+    if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+        // Si el usuario confirma, redirige al servlet de logout
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
+</script>
 <body class="bg-gray-100 h-screen overflow-hidden">
     <div class="flex h-full">
 
         <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
             
-            <div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-                </div>
+           <img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
+     alt="Foto de perfil"
+     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
             
             <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
     <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
 </h3>
             
-            <a href="logout.jsp" class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-                Salir
-            </a>
+            	<a href="#"
+   onclick="confirmarLogout(event)"
+   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+   Salir
+</a>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto">

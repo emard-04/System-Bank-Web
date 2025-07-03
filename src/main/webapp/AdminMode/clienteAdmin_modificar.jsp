@@ -49,8 +49,9 @@ function confirmarLogout(e) {
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			<div class="w-full h-48 bg-gray-300 mb-4 profile-photo-placeholder">
-			</div>
+			 <img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
+     alt="Foto de perfil"
+     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
 
 			    <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
     <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
