@@ -25,8 +25,9 @@ public class ServletBorrarCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(request.getParameter("openBorrar")!=null) {
-		windowDefault(request, response);}
+		if (request.getParameter("openBorrar") != null) {
+			windowDefault(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -56,6 +57,7 @@ public class ServletBorrarCliente extends HttpServlet {
 			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
 
 			if (exitoPersona && exitoUsuario) {
+				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(
 						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
 			} else {
@@ -69,6 +71,7 @@ public class ServletBorrarCliente extends HttpServlet {
 					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
 		}
 	}
+
 	private void windowDefault(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setAttribute("ListarUsuario", negUsuario.listarTodo());

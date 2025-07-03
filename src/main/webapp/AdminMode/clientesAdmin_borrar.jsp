@@ -1,7 +1,7 @@
-<%@ page import="Entidades.Usuario" %>
-<%@ page import="Entidades.Persona" %>
+<%@ page import="Entidades.Usuario"%>
+<%@ page import="Entidades.Persona"%>
 <%@page import="java.util.ArrayList"%>
-<%@ page import="java.util.List, Entidades.Usuario" %>
+<%@ page import="java.util.List, Entidades.Usuario"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -9,7 +9,7 @@
 <html>
 <head>
 <%
-    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,23 +31,33 @@ function confirmarLogout(e) {
 
     if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
         // Si el usuario confirma, redirige al servlet de logout
-        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
-    }
-}
+        window.location.href = "<%=request.getContextPath()%>
+	/ServletLogout";
+		}
+	}
 </script>
 <body class="bg-gray-100 h-screen overflow-hidden">
+
+	<% String mensaje = (String) session.getAttribute("mensaje"); 
+	if (mensaje !=null){
+	%>
+	<script>alert("<%=mensaje%>")</script>
+
+	<% session.removeAttribute("mensaje");} %>
+
 	<div class="flex h-full">
 
 		<aside
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-			 <img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
-     alt="Foto de perfil"
-     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
+			<img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
+				alt="Foto de perfil"
+				class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
 
-			    <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
-    <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
-</h3>
+			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">
+				<%=usuarioLogueado.getPersona().getNombre()%>
+				<%=usuarioLogueado.getPersona().getApellido()%>
+			</h3>
 
 			<a href="#" onclick="confirmarLogout(event)"
 				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
@@ -59,9 +69,11 @@ function confirmarLogout(e) {
 			<header
 				class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
 				<h1 class="text-xl font-semibold text-gray-800">CLIENTES</h1>
-				 <div class="flex items-center">
-				<img src="<%=request.getContextPath()%>/img/FotoLogo.webp" alt="Logo del banco" class="h-12 object-contain">
-				<span class="text-gray-700 font-bold text-lg">Universidad Tecnológica Nacional</span>
+				<div class="flex items-center">
+					<img src="<%=request.getContextPath()%>/img/FotoLogo.webp"
+						alt="Logo del banco" class="h-12 object-contain"> <span
+						class="text-gray-700 font-bold text-lg">Universidad
+						Tecnológica Nacional</span>
 				</div>
 			</header>
 
@@ -75,12 +87,14 @@ function confirmarLogout(e) {
 					<li class="flex space-x-10 mx-auto"><a
 						href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregarUsu=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregarUsu=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
 						<a
 						href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="<%=request.getContextPath()%>/ServletBorrarCliente?openBorrar=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletBorrarCliente?openBorrar=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -91,7 +105,8 @@ function confirmarLogout(e) {
 			<div class="p-6 flex-1 flex flex-col justify-center items-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
 					<form action="/BancoParcial/ServletBorrarCliente" method="post"
-						 class="space-y-6 text-center">
+						onsubmit="return confirmarEliminar();"
+						class="space-y-6 text-center">
 						<p class="text-gray-700 text-lg font-semibold mb-4">Seleccione
 							el DNI del usuario que quieras eliminar:</p>
 
@@ -101,14 +116,21 @@ function confirmarLogout(e) {
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
 								<option value="" required>Seleccione DNI</option>
-								<% if(request.getAttribute("ListarUsuario")!=null){
-									ArrayList<Usuario> usuarios=(ArrayList<Usuario>)request.getAttribute("ListarUsuario");
-								for (Usuario u : usuarios) {%>
-								<option value="<%=u.getPersona().getDni()%>">Dni =
+								<%
+								if (request.getAttribute("ListarUsuario") != null) {
+									ArrayList<Usuario> usuarios = (ArrayList<Usuario>) request.getAttribute("ListarUsuario");
+									for (Usuario u : usuarios) {
+								%>
+								<option value="<%=u.getPersona().getDni()%>">Usuario:
+									<%=u.getIdUsuario()%> - Dni =
 									<%=u.getPersona().getDni()%>
 								</option>
-								<%}%>
-								<%}%>
+								<%
+								}
+								%>
+								<%
+								}
+								%>
 
 							</select>
 						</div>
@@ -117,6 +139,16 @@ function confirmarLogout(e) {
 							class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline-red focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
 							Eliminar</button>
 					</form>
+					<script>
+						function confirmarEliminar() {
+							if (confirm("¿Estás segura de que querés eliminar esta cuenta?")) {
+
+								return true;
+							} else {
+								return false;
+							}
+						}
+					</script>
 				</div>
 			</div>
 
