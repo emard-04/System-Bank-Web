@@ -18,7 +18,7 @@ import Interfaces.inPersona;
 	public class daoMovimiento implements inMovimiento {
 	    private final String Agregar = "insert into Movimientos(IdUsuario, IdTipoMovimiento, CuentaEmisor,CuentaReceptor, Detalle, Importe, Fecha) values(?,?,?,?,?,?,?);";
 	    private final String ListarxCuenta="select * from movimientos where idUsuario=? and cuentaEmisor=?;";
-	    public ArrayList<Movimiento> filtrar(Movimiento mov, String nombre, String operador, LocalDate desde, LocalDate hasta) {
+	    public ArrayList<Movimiento> Filtrar(int idUsuario, int cuentaEmisor, String nombreUsuario, String condicionesExtras, ArrayList<Object> parametrosExtras) {
 	        Connection cn = null;
 	        PreparedStatement ps = null;
 	        ResultSet rs = null;
@@ -28,46 +28,37 @@ import Interfaces.inPersona;
 	            StringBuilder query = new StringBuilder();
 	            query.append("SELECT IdMovimiento, movimientos.IdUsuario, IdTipoMovimiento, CuentaEmisor, CuentaReceptor, Detalle, Importe, Fecha ");
 	            query.append("FROM movimientos ");
-	            query.append("INNER JOIN\r\n"
-	            		+ "    cuentas ON movimientos.CuentaReceptor = cuentas.NroCuenta\r\n"
-	            		+ "    inner join Usuarios on usuarios.IdUsuario=cuentas.IdUsuario ");
-	            query.append("WHERE 1=1 ");
-	            query.append("AND movimientos.idUsuario = ? ");
+	            query.append("INNER JOIN cuentas ON movimientos.CuentaReceptor = cuentas.NroCuenta ");
+	            query.append("INNER JOIN Usuarios ON usuarios.IdUsuario = cuentas.IdUsuario ");
+	            query.append("WHERE movimientos.idUsuario = ? ");
 	            query.append("AND movimientos.CuentaEmisor = ? ");
 	            query.append("AND Usuarios.nombreusuario LIKE ? ");
-
-	            if (desde != null && hasta != null) {
-	                query.append("AND fecha BETWEEN ? AND ? ");
-	            }
-
-	            if (!operador.isEmpty()) {
-	                if (operador.equals(">")) {
-	                    query.append("AND importe > 0 ");
-	                } else {
-	                    query.append("AND importe < 0 ");
-	                }
-	            }
+	            query.append(condicionesExtras);  // Aquí se agregan condiciones dinámicas
 
 	            ps = cn.prepareStatement(query.toString());
 
-	            // Parámetros en el orden correcto
 	            int paramIndex = 1;
-	            ps.setInt(paramIndex++, mov.getUsuario().getIdUsuario());
-	            ps.setInt(paramIndex++, mov.getCuentaEmisor().getNroCuenta());
-	            ps.setString(paramIndex++, "%" + nombre + "%");
+	            ps.setInt(paramIndex++, idUsuario);
+	            ps.setInt(paramIndex++, cuentaEmisor);
+	            ps.setString(paramIndex++, "%" + nombreUsuario + "%");
 
-	            if (desde != null && hasta != null) {
-	                ps.setDate(paramIndex++, java.sql.Date.valueOf(desde));
-	                ps.setDate(paramIndex++, java.sql.Date.valueOf(hasta));
+	            for (Object param : parametrosExtras) {
+	                if (param instanceof LocalDate) {
+	                    ps.setDate(paramIndex++, java.sql.Date.valueOf((LocalDate) param));
+	                } else if (param instanceof Integer) {
+	                    ps.setInt(paramIndex++, (Integer) param);
+	                } else if (param instanceof String) {
+	                    ps.setString(paramIndex++, (String) param);
+	                }
 	            }
 
+	            ArrayList<Movimiento> lista = new ArrayList<>();
 	            rs = ps.executeQuery();
-	            ArrayList<Movimiento> listaFiltro = new ArrayList<Movimiento>();
 	            while (rs.next()) {
-	                listaFiltro.add(valoresMovimiento(rs));
+	                lista.add(valoresMovimiento(rs));
 	            }
 
-	            return listaFiltro;
+	            return lista;
 
 	        } catch (Exception e) {
 	            e.printStackTrace();

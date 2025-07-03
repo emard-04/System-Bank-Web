@@ -17,7 +17,9 @@ import Entidades.Cuenta;
 import Entidades.Movimiento;
 import Entidades.TelefonoxPersona;
 import Entidades.Usuario;
+import negocio.CuentasNeg;
 import negocio.MovimientoNeg;
+import negocioImpl.CuentasNegImpl;
 import negocioImpl.MovimientoNegImpl;
 
 /**
@@ -27,6 +29,7 @@ import negocioImpl.MovimientoNegImpl;
 public class ServletListarMovimientos extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        private final MovimientoNeg nMov=new MovimientoNegImpl();
+       private final CuentasNeg nCue= new CuentasNegImpl();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,9 +50,7 @@ public class ServletListarMovimientos extends HttpServlet {
 		String operador = request.getParameter("tipoOperacion");
 		String desdeStr = request.getParameter("fechaDesde");
 		String hastaStr = request.getParameter("fechaHasta");
-		Cuenta cuenta=new Cuenta();
-		System.out.println("Cuenta numero"+ request.getSession().getAttribute("cuenta")+"xd");
-		cuenta.setNroCuenta((Integer)request.getSession().getAttribute("cuenta"));
+		Cuenta cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
 		Usuario usuario=(Usuario)(request.getSession().getAttribute("usuarioLogueado"));
 		Movimiento mov = new Movimiento();
 		mov.setCuentaEmisor(cuenta);
@@ -76,16 +77,20 @@ private void windowDefault(HttpServletRequest request, HttpServletResponse respo
 	if(request.getParameter("cuentaSeleccionada")!=null) {
 	cuenta.setNroCuenta((Integer.parseInt(request.getParameter("cuentaSeleccionada"))));}
 	else{
-		cuenta.setNroCuenta((Integer)request.getSession().getAttribute("cuenta"));
+		System.out.println("else");
+		cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
 	}
 	Usuario usuario=(Usuario)(request.getSession().getAttribute("usuarioLogueado"));
+if(cuenta!=null) {
 	if(cuenta.getNroCuenta()!=0) {
-		request.getSession().setAttribute("cuenta", cuenta.getNroCuenta());
+		cuenta=nCue.BuscarPorNro(cuenta.getNroCuenta());
+		request.getSession().setAttribute("cuenta", cuenta);
 	}
 	Movimiento mov = new Movimiento();
 	mov.setCuentaEmisor(cuenta);
 	mov.setUsuario(usuario);
 	request.setAttribute("Lista",nMov.Listarxcuentas(mov));
+}
 	RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movientosClient.jsp");
 	rd.forward(request, response);
 }

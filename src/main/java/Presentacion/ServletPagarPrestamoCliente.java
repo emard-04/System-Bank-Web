@@ -54,7 +54,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 
             List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
             System.out.println("Cuentas cargadas:");
-            List<Cuenta> cuentas = cuentaNeg.obtenerCuentasPorUsuario(usuario.getIdUsuario());
+            List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
             System.out.println("Cuentas encontradas: " + cuentas.size());
 	        System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
 
@@ -95,7 +95,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
                 request.setAttribute("mensaje", "❌ Error al pagar cuota.");
             }
             List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorUsuario(usuario.getIdUsuario());
-            List<Cuenta> cuentas = cuentaNeg.obtenerCuentasPorUsuario(usuario.getIdUsuario());
+            List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
 
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);

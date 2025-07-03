@@ -15,7 +15,6 @@ public interface CuentasNeg {
         String generarCBU();
         Cuenta cuentaxCbu(String cbu);
         ArrayList<Cuenta> ListarxUsuario(int Id);
-       List<Cuenta> obtenerCuentasPorUsuario(int idUsuario);
         
 
 }

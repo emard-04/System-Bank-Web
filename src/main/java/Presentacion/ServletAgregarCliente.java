@@ -43,7 +43,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	    // Responder JSON con provincias si se pide
 	    if (request.getParameter("listarProvincias") != null) {
 	        List<Provincia> provincias = ProvinciaNeg.listarProvincias();
-
+	        
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 
@@ -67,7 +67,7 @@ public class ServletAgregarCliente extends HttpServlet {
 
 	    // Responder JSON con localidades si se pide
 	    if (request.getParameter("listarLocalidades") != null) {
-	    	int idProvincia = Integer.parseInt(request.getParameter("idProvincia"));
+	    	int idProvincia = Integer.parseInt(request.getParameter("idProvincia").trim());
 	    	List<Localidad> localidades = localidadNeg.listarLocalidadesPorProvincia(idProvincia);
 
 	        response.setContentType("application/json");
@@ -94,16 +94,15 @@ public class ServletAgregarCliente extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
-		int idLocalidad = Integer.parseInt(request.getParameter("localidad"));
-		int idProvincia = Integer.parseInt(request.getParameter("provincia"));
+		System.out.println("provincia"+ request.getParameter("provincia"));
 	    try {
 	        // 1. Obtener datos del formulario
 	        String nombre = request.getParameter("nombre");
 	        String apellido = request.getParameter("apellido");
 	        String dni = request.getParameter("dni");
 	        String cuil = request.getParameter("cuil");
-	       // String localidad = request.getParameter("localidad");
-	        //String provincia = request.getParameter("provincia");
+	        int localidad = Integer.parseInt( request.getParameter("localidad"));
+	        int provincia = Integer.parseInt(request.getParameter("provincia"));
 	        String direccion = request.getParameter("direccion");
 	        String nacionalidad = request.getParameter("nacionalidad");
 	        LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fecha_nacimiento"));
@@ -120,11 +119,9 @@ public class ServletAgregarCliente extends HttpServlet {
 	        persona.setCuil(cuil);
 	        persona.setNombre(nombre);
 	        persona.setApellido(apellido);
-	        Localidad loc = new Localidad();
-	        loc.setIdLocalidad(idLocalidad);
+	        Provincia prov = ProvinciaNeg.buscarPorId(provincia);
+	        Localidad loc = localidadNeg.buscarPorId(localidad, prov.getIdProvincia());
 	        persona.setLocalidad(loc);    
-	        Provincia prov = new Provincia();
-	        prov.setIdProvincia(idProvincia);
 	        persona.setProvincia(prov);
 	        persona.setDireccion(direccion);
 	        persona.setNacionalidad(nacionalidad);

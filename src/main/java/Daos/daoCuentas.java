@@ -346,42 +346,4 @@ public class daoCuentas implements inCuentas{
 	        }
 		    return cue;
 	}
-	@Override
-	public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario) {
-		List<Cuenta> cuentas = new ArrayList<>();
-
-	    String query = """
-	        SELECT c.NroCuenta, c.CBU, c.Saldo, c.Estado, c.FechaCreacion, 
-	               tc.IdTipoCuenta, tc.Descripcion 
-	        FROM cuentas c
-	        INNER JOIN tipocuenta tc ON c.IdtipoCuenta = tc.IdTipoCuenta
-	        WHERE c.IdUsuario = ? AND c.Estado = 'Activa'
-	    """;
-
-	    try (Connection conn = Conexion.getConexion().getSQLConnection();
-	         PreparedStatement stmt = conn.prepareStatement(query)) {
-
-	        stmt.setInt(1, idUsuario);
-	        try (ResultSet rs = stmt.executeQuery()) {
-	            while (rs.next()) {
-	                Cuenta cuenta = new Cuenta();
-	                cuenta.setNroCuenta(rs.getInt("NroCuenta"));
-	                cuenta.setCbu(rs.getString("CBU"));
-	                cuenta.setSaldo(rs.getBigDecimal("Saldo"));
-	                cuenta.setEstado(rs.getString("Estado"));
-	                cuenta.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate());
-
-	                TipoCuenta tipoCuenta = new TipoCuenta();
-	                tipoCuenta.setIdTipoCuenta(rs.getInt("IdTipoCuenta"));
-	                tipoCuenta.setDescripcion(rs.getString("Descripcion"));
-	                cuenta.setTipoCuenta(tipoCuenta);
-
-	                cuentas.add(cuenta);
-	            }
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return cuentas;
-	}
 }

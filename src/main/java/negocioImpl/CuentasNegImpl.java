@@ -4,20 +4,23 @@ import Interfaces.inCuentas;
 import negocio.CuentasNeg;
 import java.util.ArrayList;
 import java.util.List;
-
+import negocio.*;
 import Daos.*;
 import Entidades.Cuenta;
 
 public class CuentasNegImpl implements CuentasNeg{
 	private inCuentas dao = new daoCuentas();
+	private UsuarioNeg nUsuario= new UsuarioNegImpl();
     @Override
     public boolean Agregar(Cuenta cuenta) {
     	PersonaNegImpl negPersona= new PersonaNegImpl();
-    	if(negPersona.existe(cuenta.getUsuario().getPersona().getDni())) {
-    		if(dao.maximoCuentas(cuenta.getUsuario().getIdUsuario())<3)
+    	//Perosna no existe dni return false
+    	if(!negPersona.existe(cuenta.getUsuario().getPersona().getDni()))return false;
+    	//Usuario Administrador return false
+    	if(nUsuario.BuscarDni(cuenta.getUsuario().getPersona().getDni()).isTipoUsuario())return false;
+    	//persona tiene 3 cuentas return false
+    	if(dao.maximoCuentas(cuenta.getUsuario().getIdUsuario())>=3)return false;
         return dao.Agregar(cuenta);
-        }
-    	return false;
     }
     public ArrayList<Cuenta> ListarxUsuario(int Id){
     	return dao.ListarxUsuario(Id);
@@ -56,9 +59,5 @@ public class CuentasNegImpl implements CuentasNeg{
 		return dao.cuentaxCbu(cbu);
 	}
 		
-	public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario){
-		return dao.obtenerCuentasPorUsuario(idUsuario);
-
-	}
 }
 

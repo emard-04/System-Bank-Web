@@ -45,7 +45,7 @@ public class ServletPersonalCliente extends HttpServlet {
         Provincia pro = proNeg.buscarPorId(usuario.getPersona().getProvincia().getIdProvincia());
         String proUsu = pro != null ? pro.getNombre() : "";
      // Obtener Localidad
-        Localidad loc = LocNeg.buscarPorId(usuario.getPersona().getLocalidad().getIdLocalidad());
+        Localidad loc = LocNeg.buscarPorId(usuario.getPersona().getLocalidad().getIdLocalidad(),pro.getIdProvincia());
         String locUsu = loc != null ? loc.getNombre() : "";
 
         // Pasar datos al JSP

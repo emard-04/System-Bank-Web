@@ -8,5 +8,5 @@ import Entidades.Movimiento;
 public interface inMovimiento {
 boolean Agregar(Movimiento mov);
  ArrayList<Movimiento> Listarxcuentas(Movimiento mov);
- public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operador, LocalDate desde, LocalDate hasta);
+ ArrayList<Movimiento> Filtrar(int idUsuario, int cuentaEmisor, String nombreUsuario, String condicionesExtras, ArrayList<Object> parametrosExtras);
 }

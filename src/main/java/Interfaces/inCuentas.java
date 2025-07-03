@@ -16,6 +16,5 @@ package Interfaces;
 	        int maximoCuentas(int Id);
 	        Cuenta cuentaxCbu(String cbu);
 	        ArrayList<Cuenta> ListarxUsuario(int Id);
-	        public List<Cuenta> obtenerCuentasPorUsuario(int idUsuario);
 	}
 

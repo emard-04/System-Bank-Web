@@ -74,6 +74,8 @@ public class daoPersonas implements inPersona {
     private Persona valoresPersona(ResultSet rs) {
         Persona persona = new Persona();
         daoTelefono dTel = new daoTelefono();
+        daoLocalidad dLoc= new daoLocalidad();
+        daoProvincia dProv= new daoProvincia();
         try {
             persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
             persona.setCuil(rs.getString("Cuil"));
@@ -83,12 +85,11 @@ public class daoPersonas implements inPersona {
             persona.setNacionalidad(rs.getString("Nacionalidad"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
-            Localidad loc = new Localidad();
-            loc.setIdLocalidad(rs.getInt("IdLocalidad")); 
+            Localidad loc = dLoc.buscarPorId(rs.getInt("IdLocalidad"),rs.getInt("IdProvincia"));
+            System.out.println( " nombre Loc "+loc.getNombre());
             persona.setLocalidad(loc);
-
-            Provincia prov = new Provincia();
-            prov.setIdProvincia(rs.getInt("IdProvincia")); 
+            Provincia prov = dProv.buscarPorId(rs.getInt("IdProvincia"));
+            System.out.println(prov.getNombre()+ " nombre prov");
             persona.setProvincia(prov);
             persona.setDni(rs.getString("Dni"));
             ArrayList<TelefonoxPersona>Lista=dTel.listarTelefonos(persona.getDni());

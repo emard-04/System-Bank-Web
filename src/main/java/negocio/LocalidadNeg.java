@@ -6,5 +6,5 @@ import Entidades.Localidad;
 
 public interface LocalidadNeg {
 	List<Localidad> listarLocalidadesPorProvincia(int idProvincia);
-    Localidad buscarPorId(int idLocalidad);
+    Localidad buscarPorId(int idLocalidad, int idProvincia);
 }

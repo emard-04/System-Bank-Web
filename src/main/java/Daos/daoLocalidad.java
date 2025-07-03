@@ -35,20 +35,21 @@ public class daoLocalidad implements inLocalidad{
 	        return lista;
 	    }
 	 @Override
-	    public Localidad buscarPorId(int idLocalidad) {
+	    public Localidad buscarPorId(int idLocalidad, int idProvincia) {
 	        Localidad loc = null;
-	        String query = "SELECT * FROM Localidad WHERE IdLocalidad = ?";
+	        daoProvincia dp= new daoProvincia();
+	        String query = "SELECT * FROM Localidad WHERE IdLocalidad = ? and IdProvincia=?";
 	        try (Connection conn = Conexion.getConexion().getSQLConnection();
 	             PreparedStatement stmt = conn.prepareStatement(query)) {
 
 	            stmt.setInt(1, idLocalidad);
+	            stmt.setInt(2, idProvincia);
 	            ResultSet rs = stmt.executeQuery();
 	            if (rs.next()) {
 	                loc = new Localidad();
 	                loc.setIdLocalidad(rs.getInt("IdLocalidad"));
 	                loc.setNombre(rs.getString("Nombre"));
-	                Provincia provincia = new Provincia();
-	                provincia.setIdProvincia(rs.getInt("IdLocalidad"));
+	                Provincia provincia = dp.buscarPorId(rs.getInt("IdProvincia"));
 	                loc.setProvincia(provincia);
 	            }
 

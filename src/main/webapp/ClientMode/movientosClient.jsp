@@ -51,8 +51,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 			</h3>
 			<% Cuenta cuenta = null;
 			if(request.getSession().getAttribute("cuenta")!=null){
-				CuentasNeg cn = new CuentasNegImpl();
-			    cuenta = cn.BuscarPorNro((Integer) session.getAttribute("cuenta"));
+			    cuenta =  (Cuenta)session.getAttribute("cuenta");
 			}
 			%>
 			<% if (cuenta != null) { %>

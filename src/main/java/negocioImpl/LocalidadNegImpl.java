@@ -14,8 +14,8 @@ public class LocalidadNegImpl implements LocalidadNeg{
 		 return daoL.listarLocalidadesPorProvincia(idProvincia);
 	}
 	@Override
-    public Localidad buscarPorId(int idLocalidad) {
-        return daoL.buscarPorId(idLocalidad);
+    public Localidad buscarPorId(int idLocalidad, int idProvincia) {
+        return daoL.buscarPorId(idLocalidad, idProvincia);
     }
 
 }

@@ -45,10 +45,9 @@ public class ServletTransferencia extends HttpServlet {
 				    // Leer número de cuenta desde sesión
 				    int cuentaSeleccionada = Integer.parseInt(request.getParameter("cuentaSeleccionada"));
 				    if (cuentaSeleccionada > 0) {
-				    	Cuenta cuenta=new Cuenta();
-						cuenta.setNroCuenta(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
-					request.setAttribute("nroCuenta", cuentaSeleccionada);
-						request.getSession().setAttribute("cuenta", cuenta.getNroCuenta());
+				    	Cuenta cuenta=nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
+					    request.setAttribute("nroCuenta", cuenta.getNroCuenta());
+						request.getSession().setAttribute("cuenta",cuenta);
 				}
 				RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
 				rd.forward(request, response);
@@ -64,7 +63,7 @@ public class ServletTransferencia extends HttpServlet {
 		tm.setIdTipoMovimiento(3);
 		movEmisor.setTipoMovimiento(tm);
 		movEmisor.setFecha(LocalDate.now());
-		movEmisor.setCuentaEmisor(nCuenta.BuscarPorNro((Integer)request.getSession().getAttribute("cuenta")));
+		movEmisor.setCuentaEmisor((Cuenta)request.getSession().getAttribute("cuenta"));
 		Cuenta c=nCuenta.cuentaxCbu(request.getParameter("alias_cbu"));
 		if(c==null)return;
 		movEmisor.setCuentaReceptor(c);
@@ -76,7 +75,7 @@ public class ServletTransferencia extends HttpServlet {
 		movReceptor.setImporte(monto);
 		movReceptor.setDetalle(request.getParameter("referencia"));
 		movReceptor.setCuentaEmisor(c);
-		movReceptor.setCuentaReceptor(nCuenta.BuscarPorNro((Integer)request.getSession().getAttribute("cuenta")));
+		movReceptor.setCuentaReceptor((Cuenta)request.getSession().getAttribute("cuenta"));
 		movReceptor.setUsuario(c.getUsuario());
 		movReceptor.setTipoMovimiento(tm);
 		movReceptor.setFecha(LocalDate.now());

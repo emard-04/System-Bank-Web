@@ -26,13 +26,19 @@ function confirmarLogout(e) {
     e.preventDefault(); // Detiene la acción por defecto del enlace
 
     if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
-        // Si el usuario confirma, redirige al servlet de logout
+        // Si el usario confirma, redirige al servlet de logout
         window.location.href = "<%=request.getContextPath()%>/ServletLogout";
     }
 }
 </script>
 </head>
-<%Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado"); %>
+<%if(session.getAttribute("usuarioLogueado")==null){
+	 response.sendRedirect(request.getContextPath() + "/login.jsp");
+	    return;
+}
+else{
+	Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado");
+%>
 <body class="bg-gray-100 h-screen overflow-hidden">
 	<div class="flex h-full">
 
@@ -48,8 +54,7 @@ function confirmarLogout(e) {
 			</h3>
 			<% Cuenta cuenta = null;
 			if(request.getSession().getAttribute("cuenta")!=null){
-				CuentasNeg cn = new CuentasNegImpl();
-			    cuenta = cn.BuscarPorNro((Integer) session.getAttribute("cuenta"));
+			    cuenta =  (Cuenta)session.getAttribute("cuenta");
 			}
 			%>
 			<% if (cuenta != null) { %>
@@ -234,5 +239,6 @@ function confirmarLogout(e) {
 			}
 		});
 	</script>
+	<% } %>
 </body>
 </html>

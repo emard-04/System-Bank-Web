@@ -141,7 +141,7 @@ function confirmarLogout(e) {
                         <div id="grupoProvincia" class="hidden">
   <label for="provincia" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
   <select id="provincia" name="provincia"
-          class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
+         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white text-black">
     <option value="">Seleccione provincia</option>
   </select>
 </div>
@@ -292,6 +292,7 @@ function confirmarLogout(e) {
         </main>
 
     </div>
+
     <script>
     function validarContrasena() {
         var contrasena = document.getElementById("contrasena").value;
@@ -374,25 +375,33 @@ function confirmarLogout(e) {
         });
 
         function cargarProvincias() {
-            fetch("<%=request.getContextPath()%>/ServletAgregarCliente?listarProvincias=1")
+        	fetch("<%=request.getContextPath()%>/ServletAgregarCliente?listarProvincias=1")
                 .then(response => response.json())
                 .then(data => {
+                	console.log("Provincias recibidas:", data);
                     provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
                     data.forEach(p => {
-                        provinciaSelect.innerHTML += `<option value="${p.idProvincia}">${p.nombre}</option>`;
+                    	const option = document.createElement("option");
+                    	option.value = p.idProvincia;
+                    	option.textContent = p.nombre;
+                    	provinciaSelect.appendChild(option);
                     });
                 })
                 .catch(err => console.error("Error cargando provincias:", err));
         }
-
+        const contextPath = "<%= request.getContextPath() %>";
         function cargarLocalidades(idProvincia) {
             if (!idProvincia) return;
-            fetch(`<%=request.getContextPath()%>/ServletAgregarCliente?listarLocalidades=1&idProvincia=${idProvincia}`)
+            const url = contextPath + "/ServletAgregarCliente?listarLocalidades=1&idProvincia=" + idProvincia;
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
                     data.forEach(l => {
-                        localidadSelect.innerHTML += `<option value="${l.idLocalidad}">${l.nombre}</option>`;
+                    	const option = document.createElement("option");
+                    	option.value = l.idLocalidad;
+                    	option.textContent = l.nombre;
+                    	localidadSelect.appendChild(option);
                     });
                 })
                 .catch(err => console.error("Error cargando localidades:", err));
