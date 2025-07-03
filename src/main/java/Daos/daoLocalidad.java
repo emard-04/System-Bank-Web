@@ -49,7 +49,6 @@ public class daoLocalidad implements inLocalidad{
 	                loc = new Localidad();
 	                loc.setIdLocalidad(rs.getInt("IdLocalidad"));
 	                loc.setNombre(rs.getString("Nombre"));
-	                System.out.println("NOmbre localidad dao" +loc.getNombre());
 	                Provincia provincia = dp.buscarPorId(rs.getInt("IdProvincia"));
 	                loc.setProvincia(provincia);
 	            }
