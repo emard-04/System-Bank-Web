@@ -10,15 +10,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Daos.daoCuentas;
 import Entidades.*;
 import negocio.TipoCuentaNeg;
 import negocio.UsuarioNeg;
 import negocioImpl.CuentasNegImpl;
 import negocioImpl.TipoCuentaNegImpl;
 import negocioImpl.UsuarioNegImpl;
-import Daos.*;
 
 /**
  * Servlet implementation class ServletAgregarCuentas

@@ -11,4 +11,6 @@ public interface CuotasNeg {
     boolean pagarCuota(int idCuota, int nroCuenta) throws SQLException;
      boolean generarCuotasParaPrestamo(int idPrestamo, BigDecimal importeCuota, int cantidadCuotas);
      List<Cuota> obtenerCuotasPendientesPorCuenta(int nroCuenta) throws SQLException;
+     Cuota obtenerCuotaPorId(int idCuota);
+     boolean existenCuotasPendientesPorPrestamo(int idPrestamo) throws SQLException;
 }

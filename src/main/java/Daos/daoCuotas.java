@@ -1,6 +1,7 @@
 package Daos;
 
 import java.sql.SQLException;
+import Interfaces.*;
 import java.util.List;
 import java.sql.Connection;
 import Entidades.Cuota;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 
 
 public class daoCuotas implements inCuotas{
-
+	private final InPrestamos prestamosNeg = new daoPrestamos(); 
 	@Override
     public List<Cuota> obtenerCuotasPendientesPorUsuario(int idUsuario) throws SQLException {
         List<Cuota> cuotasPendientes = new ArrayList<>();
@@ -106,6 +107,14 @@ public class daoCuotas implements inCuotas{
             psUpdateCuota = conn.prepareStatement(sqlUpdateCuota);
             psUpdateCuota.setInt(1, idCuota);
             psUpdateCuota.executeUpdate();
+            
+         // 5. Verificar si fue la última cuota
+            int idPrestamo = prestamosNeg.obtenerIdPrestamoPorCuota(idCuota);
+            int cuotasPendientes = prestamosNeg.contarCuotasPendientesPorPrestamo(idPrestamo);
+
+            if (cuotasPendientes == 0) {
+                prestamosNeg.cambiarEstadoPago(idPrestamo, "Pagado");
+            }
 
             // Si querés, acá podrías insertar un registro en tabla movimientos bancarios.
 
@@ -207,6 +216,60 @@ public class daoCuotas implements inCuotas{
 	        System.out.println("No se encontraron cuotas pendientes para la cuenta: " + nroCuenta);
 	    }
 	    return lista;
+	}
+	@Override
+	public Cuota obtenerCuotaPorId(int idCuota) {
+		System.out.println("obtenerCuotaPorId llamado con idCuota=" + idCuota);
+	    Cuota cuota = null;
+	    String query = "SELECT * FROM Cuotas WHERE IdCuota = ?";
+
+	    try (Connection conn = Conexion.getConexion().getSQLConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+	        stmt.setInt(1, idCuota);
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            cuota = new Cuota();
+	            cuota.setIdCuota(rs.getInt("IdCuota"));
+	            cuota.setNroCuota(rs.getInt("NroCuota"));
+	            cuota.setImporte(rs.getBigDecimal("Importe"));
+	            
+	            Date fechaVenc = rs.getDate("FechaVencimiento");
+	            if (fechaVenc != null) {
+	                cuota.setFechaVencimiento(fechaVenc.toLocalDate());
+	            }
+
+	            Date fechaPago = rs.getDate("FechaPago");
+	            if (fechaPago != null) {
+	                cuota.setFechaPago(fechaPago.toLocalDate());
+	            }
+
+	            cuota.setIdPrestamo(rs.getInt("IdPrestamo"));
+	            System.out.println("Cuota encontrada: ID=" + cuota.getIdCuota() + ", Importe=" + cuota.getImporte());
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return cuota;
+	}
+	public boolean existenCuotasPendientesPorPrestamo(int idPrestamo) throws SQLException {
+	    String query = "SELECT COUNT(*) FROM Cuotas WHERE IdPrestamo = ? AND FechaPago IS NULL";
+	    
+	    try (Connection conn = Conexion.getConexion().getSQLConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        
+	        stmt.setInt(1, idPrestamo);
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0;
+	        }
+	    }
+
+	    return false;
 	}
 
 }

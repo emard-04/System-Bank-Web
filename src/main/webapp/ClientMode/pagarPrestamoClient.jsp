@@ -168,10 +168,10 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
     <input type="hidden" name="cuenta" value="<%= request.getParameter("cuenta") != null ? request.getParameter("cuenta") : "" %>" />
 
     <!-- Selector de cuota -->
-    <div class="flex-1 mb-4">
-        <label for="cuotaSeleccionada" class="block text-gray-700 text-lg font-semibold mb-2">Seleccione Cuota</label>
-        <select id="cuotaSeleccionada" name="cuotaSeleccionada"
-            class="p-3 border border-gray-300 rounded-md w-full bg-white text-lg" onchange="actualizarImporte()" required>
+    <div class="col-span-1 md:col-start-2 md:col-span-1 mb-4 flex flex-col items-center">
+    <label for="cuotaSeleccionada" class="block text-gray-700 text-lg font-semibold mb-2 text-center w-full">Seleccione Cuota</label>
+    <select id="cuotaSeleccionada" name="cuotaSeleccionada"
+        class="p-3 border border-gray-300 rounded-md w-full max-w-md bg-white text-lg" onchange="actualizarImporte()" required>
             <option value="">-- Seleccione una cuota --</option>
             <%
                 List<Cuota> cuotasPendientes = (List<Cuota>) request.getAttribute("cuotasPendientes");
@@ -188,13 +188,7 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
         </select>
     </div>
 
-    <!-- Mostrar el importe -->
-    <div class="flex-1 mb-4">
-        <label for="importe_cuota" class="block text-gray-700 text-lg font-semibold mb-2">Importe</label>
-        <p id="importe_cuota" class="text-gray-900 text-2xl font-bold">$0.00</p>
-        <input type="hidden" name="importe_hardcodeado" id="importe_hidden" value="0.00">
-    </div>
-
+    
     <!-- Botones -->
     <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
         <button type="submit"

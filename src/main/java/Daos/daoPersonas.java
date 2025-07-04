@@ -16,13 +16,13 @@ public class daoPersonas implements inPersona {
     private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, IdLocalidad, IdProvincia, Dni, Estado) values(?,?,?,?,?,?,?,?,?,?,?,?);";
     private final String Eliminar = "UPDATE Persona SET Estado = 'Inactiva' where Dni=?;";
     private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, IdLocalidad=?, IdProvincia=? where Dni=?;";
-    private final String ListarTodo = "SELECT p.Dni, p.Cuil, p.Nombre, p.Apellido, p.CorreoElectronico,\r\n"
-    		+ "       loc.IdLocalidad, loc.Nombre AS NombreLocalidad,\r\n"
-    		+ "       prov.IdProvincia, prov.Nombre AS NombreProvincia,\r\n"
-    		+ "       p.Nacionalidad, p.Sexo, p.fechaNacimiento, p.Direccion\r\n"
+    private final String ListarTodo = "SELECT p.Dni, p.Cuil, p.Nombre, p.Apellido, p.CorreoElectronico,"
+    		+ "       loc.IdLocalidad, loc.Nombre AS NombreLocalidad,"
+    		+ "       prov.IdProvincia, prov.Nombre AS NombreProvincia,"
+    		+ "       p.Nacionalidad, p.Sexo, p.fechaNacimiento, p.Direccion"
     		+ "FROM Persona p\r\n"
-    		+ "JOIN Localidad loc ON p.IdLocalidad = loc.IdLocalidad\r\n"
-    		+ "JOIN Provincia prov ON p.IdProvincia = prov.IdProvincia\r\n"
+    		+ "JOIN Localidad loc ON p.IdLocalidad = loc.IdLocalidad"
+    		+ "JOIN Provincia prov ON p.IdProvincia = prov.IdProvincia"
     		+ "WHERE p.Estado = 'Activo';";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
@@ -58,7 +58,7 @@ public class daoPersonas implements inPersona {
             cs.setString(3, persona.getNombre());
             cs.setString(4, persona.getApellido());
             cs.setString(5, persona.getSexo());
-            cs.setString(6, persona.getNacionalidad());
+            cs.setInt(6, persona.getPais().getIdPais());
             cs.setDate(7, java.sql.Date.valueOf(persona.getFechaNacimiento()));
             cs.setString(8, persona.getDireccion());
             cs.setInt(9, persona.getLocalidad().getIdLocalidad());
@@ -76,16 +76,22 @@ public class daoPersonas implements inPersona {
         daoTelefono dTel = new daoTelefono();
         daoLocalidad dLoc= new daoLocalidad();
         daoProvincia dProv= new daoProvincia();
+        daoPais dPa= new daoPais();
         try {
             persona.setCorreoElectronico(rs.getString("CorreoElectronico"));
             persona.setCuil(rs.getString("Cuil"));
             persona.setNombre(rs.getString("Nombre"));
             persona.setApellido(rs.getString("Apellido"));
             persona.setSexo(rs.getString("Sexo"));
-            persona.setNacionalidad(rs.getString("Nacionalidad"));
+            Pais pa=dPa.buscarXID(rs.getInt("IdPais"));
             persona.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
             persona.setDireccion(rs.getString("Direccion"));
             Localidad loc = dLoc.buscarPorId(rs.getInt("IdLocalidad"),rs.getInt("IdProvincia"));
+            if (pa != null) {
+                persona.setPais(pa);
+            } else {
+                persona.setPais(pa); // o lanzar excepción si es obligatorio
+            }
             if (loc != null) {
                 persona.setLocalidad(loc);
             } else {

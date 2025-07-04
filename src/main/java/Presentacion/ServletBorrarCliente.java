@@ -2,7 +2,6 @@ package Presentacion;
 
 import java.io.IOException;
 import negocioImpl.*;
-import Daos.*;
 import negocioImpl.PersonaNegImpl;
 
 import javax.servlet.RequestDispatcher;

@@ -11,8 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Daos.daoTelefono;
 import Interfaces.inTelefono;
 import negocio.ClientesNeg;
 import negocio.TelefonoNeg;
@@ -76,7 +74,7 @@ public class ServletModificarCliente extends HttpServlet {
 					    + "\"provincia_id\": " + us.getPersona().getProvincia().getIdProvincia() + ","
 					    + "\"provincia_nombre\": \"" + us.getPersona().getProvincia().getNombre() + "\","
 					    + "\"direccion\": \"" + us.getPersona().getDireccion() + "\","
-					    + "\"nacionalidad\": \"" + us.getPersona().getNacionalidad() + "\","
+					   // + "\"nacionalidad\": \"" + us.getPersona().getNacionalidad() + "\","
 					    + "\"fechaNacimiento\": \"" + us.getPersona().getFechaNacimiento() + "\","
 					    + "\"correoElectronico\": \"" + us.getPersona().getCorreoElectronico() + "\","
 					    + "\"sexo\": \"" + us.getPersona().getSexo() + "\","
@@ -136,7 +134,7 @@ public class ServletModificarCliente extends HttpServlet {
 		persona.setProvincia(provincia);
 		persona.setLocalidad(localidad);
 		persona.setDireccion(request.getParameter("direccion_mod"));
-		persona.setNacionalidad(request.getParameter("nacionalidad_mod"));
+		//persona.setNacionalidad(request.getParameter("nacionalidad_mod"));
 		persona.setCorreoElectronico(request.getParameter("correo_electronico_mod"));
 		persona.setSexo(request.getParameter("sexo_mod"));
 		persona.setFechaNacimiento(LocalDate.parse(request.getParameter("fecha_nacimiento_mod")));

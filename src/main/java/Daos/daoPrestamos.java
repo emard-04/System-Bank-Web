@@ -534,5 +534,33 @@ public class daoPrestamos implements InPrestamos{
 			    }
 			    return null;
 			}
+			public int contarCuotasPendientesPorPrestamo(int idPrestamo) {
+			    String sql = "SELECT COUNT(*) FROM Cuotas WHERE IdPrestamo = ? AND FechaPago IS NULL";
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(sql)) {
+			        stmt.setInt(1, idPrestamo);
+			        ResultSet rs = stmt.executeQuery();
+			        if (rs.next()) {
+			            return rs.getInt(1);
+			        }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+			    return -1;
+			}
+			public int obtenerIdPrestamoPorCuota(int idCuota) {
+			    String sql = "SELECT IdPrestamo FROM Cuotas WHERE IdCuota = ?";
+			    try (Connection conn = Conexion.getConexion().getSQLConnection();
+			         PreparedStatement stmt = conn.prepareStatement(sql)) {
+			        stmt.setInt(1, idCuota);
+			        ResultSet rs = stmt.executeQuery();
+			        if (rs.next()) {
+			            return rs.getInt("IdPrestamo");
+			        }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+			    return -1;
+			}
 		}
 

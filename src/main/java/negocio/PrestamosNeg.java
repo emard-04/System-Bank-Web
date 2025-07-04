@@ -21,4 +21,7 @@ public interface PrestamosNeg {
     List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
     List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
     Prestamos obtenerPorId(int idPrestamo, Connection conn);
+    boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago);
+    int obtenerIdPrestamoPorCuota(int idCuota);
+    int contarCuotasPendientesPorPrestamo(int idPrestamo);
 }

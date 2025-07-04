@@ -170,6 +170,10 @@ function confirmarLogout(e) {
                             <label class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
                             <input type="text" value="<%= usuario.getPersona().getDni() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
+                         <div>
+                            <label class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
+                            <input type="text" value="<%= request.getAttribute("nombrePais") %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
+                        </div>
 
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
@@ -191,10 +195,6 @@ function confirmarLogout(e) {
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">Fecha de Nacimiento</label>
                             <input type="text" value="<%= usuario.getPersona().getFechaNacimiento() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
-                            <input type="text" value="<%= usuario.getPersona().getNacionalidad() %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly>
                         </div>
 
                         <div>

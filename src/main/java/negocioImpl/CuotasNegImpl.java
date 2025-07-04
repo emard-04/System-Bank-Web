@@ -32,4 +32,16 @@ public class CuotasNegImpl implements CuotasNeg{
 		return dao.obtenerCuotasPendientesPorCuenta(nroCuenta);
 	}
 
+	@Override
+	public Cuota obtenerCuotaPorId(int idCuota) {
+		// TODO Auto-generated method stub
+		return dao.obtenerCuotaPorId(idCuota);
+	}
+
+	@Override
+	public boolean existenCuotasPendientesPorPrestamo(int idPrestamo) throws SQLException {
+		// TODO Auto-generated method stub
+		return dao.existenCuotasPendientesPorPrestamo(idPrestamo);
+	}
+
 }

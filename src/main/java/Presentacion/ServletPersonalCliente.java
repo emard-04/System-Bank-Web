@@ -20,6 +20,7 @@ public class ServletPersonalCliente extends HttpServlet {
 	private TelefonoNeg telefonoNeg = new TelefonoNegImpl();
 	private ProvinciaNeg proNeg = new ProvinciaNegImpl();
 	private LocalidadNeg LocNeg = new LocalidadNegImpl();
+	private PaisNeg paisNeg = new PaisNegImpl();
        
   
     public ServletPersonalCliente() {
@@ -47,6 +48,9 @@ public class ServletPersonalCliente extends HttpServlet {
      // Obtener Localidad
         Localidad loc = LocNeg.buscarPorId(usuario.getPersona().getLocalidad().getIdLocalidad(),pro.getIdProvincia());
         String locUsu = loc != null ? loc.getNombre() : "";
+        //Obtener Pais
+        Pais pa = paisNeg.buscarXID(usuario.getPersona().getPais().getIdPais());
+        String PaUsu = pa !=null ? pa.getNombre() : "";
 
         // Pasar datos al JSP
         request.setAttribute("usuario", usuario);
@@ -54,9 +58,12 @@ public class ServletPersonalCliente extends HttpServlet {
         
         String nombreProvincia = pro != null ? pro.getNombre() : "";
         String nombreLocalidad = loc != null ? loc.getNombre() : "";
+        String nombrePais = pa != null ? pa.getNombre() : "";
 
         request.setAttribute("nombreProvincia", nombreProvincia);
         request.setAttribute("nombreLocalidad", nombreLocalidad);
+        request.setAttribute("nombrePais", nombrePais);
+        //System.out.println("¿País en persona?: " + usuario.getPersona().getPais());
 
         // Forward al JSP que muestra la info personal
         request.getRequestDispatcher("/ClientMode/personalClient.jsp").forward(request, response);

@@ -20,4 +20,6 @@ public interface InPrestamos {
      List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
      List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
      Prestamos obtenerPorId(int idPrestamo, Connection conn);
+     int contarCuotasPendientesPorPrestamo(int idPrestamo);
+     int obtenerIdPrestamoPorCuota(int idCuota);
 }

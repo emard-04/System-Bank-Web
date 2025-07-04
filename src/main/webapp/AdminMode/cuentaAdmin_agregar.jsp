@@ -121,7 +121,7 @@ function confirmarLogout(e) {
 						<div>
 							<label for="dni_cliente"
 								class="block text-gray-700 text-lg font-semibold mb-2">DNI
-								del Cliente</label> <input type="text" id="dni_cliente"
+								del Cliente</label> <input type="number" id="dni_cliente"
 								name="dni_cliente" placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
@@ -158,7 +158,7 @@ function confirmarLogout(e) {
 						<div>
 							<label for="cbu"
 								class="block text-gray-700 text-lg font-semibold mb-2">CBU</label>
-							<input type="text" id="cbu" name="cbu" value=<%=nroCBU%> placeholder=""
+							<input type="number" id="cbu" name="cbu" value=<%=nroCBU%> placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
@@ -175,7 +175,7 @@ function confirmarLogout(e) {
 							<button type="submit"
 								class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
 								Guardar</button>
-							<button type="button"
+							<button type="reset"
 								class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
 								Cancelar</button>
 						</div>

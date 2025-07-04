@@ -62,6 +62,11 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
                 // Si no hay cuenta seleccionada, podés mostrar todas o ninguna
                 cuotasPendientes = new ArrayList<>();
             }
+            if (cuentaSeleccionada > 0 && request.getParameter("cuotaSeleccionada") != null) {
+                int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
+                Cuota cuotaElegida = cuotaNeg.obtenerCuotaPorId(idCuota);
+                request.setAttribute("cuotaElegida", cuotaElegida);
+            }
 
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);
@@ -93,7 +98,19 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 
             if (exito) {
                 request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
-            } else {
+
+                // 🔥 Obtener la cuota pagada para saber a qué préstamo pertenece
+                Cuota cuotaPagada = cuotaNeg.obtenerCuotaPorId(idCuota);
+                int idPrestamo = cuotaPagada.getIdPrestamo();
+
+                // 🔍 Verificar si quedan cuotas pendientes de ese préstamo
+                boolean quedanCuotasPendientes = cuotaNeg.existenCuotasPendientesPorPrestamo(idPrestamo);
+
+                if (!quedanCuotasPendientes) {
+                    prestamosNeg.cambiarEstadoPago(idPrestamo, "Pagado");
+                    System.out.println("✔ Estado del préstamo " + idPrestamo + " cambiado a Pagado");
+                } 
+            }else {
                 request.setAttribute("mensaje", "❌ Error al pagar cuota.");
             }
 

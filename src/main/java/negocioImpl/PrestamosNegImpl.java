@@ -164,4 +164,22 @@ public class PrestamosNegImpl implements PrestamosNeg{
 		public Prestamos obtenerPorId(int idPrestamo, Connection conn) {
 			return prestamoDao.obtenerPorId(idPrestamo, conn);
 		}
+
+		@Override
+		public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago) {
+			// TODO Auto-generated method stub
+			return prestamoDao.cambiarEstadoPago(idPrestamo, nuevoEstadoPago);
+		}
+
+		@Override
+		public int obtenerIdPrestamoPorCuota(int idCuota) {
+			// TODO Auto-generated method stub
+			return prestamoDao.obtenerIdPrestamoPorCuota(idCuota);
+		}
+
+		@Override
+		public int contarCuotasPendientesPorPrestamo(int idPrestamo) {
+			// TODO Auto-generated method stub
+			return prestamoDao.contarCuotasPendientesPorPrestamo(idPrestamo);
+		}
 }

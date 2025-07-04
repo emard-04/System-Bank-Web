@@ -1,7 +1,6 @@
 package Presentacion;
 
 import java.io.IOException;
-import Daos.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -124,7 +123,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        persona.setLocalidad(loc);    
 	        persona.setProvincia(prov);
 	        persona.setDireccion(direccion);
-	        persona.setNacionalidad(nacionalidad);
+	        //persona.setNacionalidad(nacionalidad);
 	        persona.setFechaNacimiento(fechaNacimiento);
 	        persona.setCorreoElectronico(correo);
 	        persona.setSexo(sexo);

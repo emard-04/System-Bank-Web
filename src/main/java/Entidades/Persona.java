@@ -9,7 +9,7 @@ public class Persona {
 	    private String nombre;
 	    private String apellido;
 	    private String sexo;
-	    private String nacionalidad;
+	    private Pais pais;
 	    private List<String> telefonos;
 	    private LocalDate fechaNacimiento;
 	    private String direccion;
@@ -20,14 +20,14 @@ public class Persona {
 
 	    public Persona() {}
 
-	    public Persona(String dni, String cuil, String nombre, String apellido, String sexo, String nacionalidad,
+	    public Persona(String dni, String cuil, String nombre, String apellido, String sexo, Pais pais,
 	                   LocalDate fechaNacimiento, String direccion, Localidad localidad,Provincia provincia, String correoElectronico) {
 	        this.dni = dni;
 	        this.cuil = cuil;
 	        this.nombre = nombre;
 	        this.apellido = apellido;
 	        this.sexo = sexo;
-	        this.nacionalidad = nacionalidad;
+	        this.pais = pais;
 	        this.fechaNacimiento = fechaNacimiento;
 	        this.direccion = direccion;
 	        this.localidad = localidad;
@@ -66,13 +66,16 @@ public class Persona {
 	    public void setSexo(String sexo) {
 	        this.sexo = sexo;
 	    }
-	    public String getNacionalidad() {
-	        return nacionalidad;
-	    }
-	    public void setNacionalidad(String nacionalidad) {
-	        this.nacionalidad = nacionalidad;
-	    }
-	    public LocalDate getFechaNacimiento() {
+	    
+	    public Pais getPais() {
+			return pais;
+		}
+
+		public void setPais(Pais pais) {
+			this.pais = pais;
+		}
+
+		public LocalDate getFechaNacimiento() {
 	        return fechaNacimiento;
 	    }
 	    public void setFechaNacimiento(LocalDate fechaNacimiento) {
@@ -127,7 +130,7 @@ public class Persona {
 
 		@Override
 	    public String toString() {
-	        return nombre + " " + apellido + " | DNI: " + dni + " | CUIL: " + cuil + " | " + nacionalidad + " | Nacido: " + fechaNacimiento;
+	        return nombre + " " + apellido + " | DNI: " + dni + " | CUIL: " + cuil + " | Nacido: " + fechaNacimiento;
 	    }
 	}
 

@@ -190,7 +190,7 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-blue focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
             Solicitar
         </button>
-        <button type="button"
+        <button type="reset"
             class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
             Cancelar
         </button>
@@ -230,5 +230,18 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
     // Inicializar al cargar
     selectCuenta.addEventListener('change', actualizarSaldo);
     window.addEventListener('DOMContentLoaded', actualizarSaldo); // por si ya hay opción preseleccionada
+</script>
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    const montoInput = document.getElementById('monto_solicitar');
+    const monto = parseFloat(montoInput.value);
+
+    if (isNaN(monto) || monto <= 0) {
+        event.preventDefault();  // Evita que el formulario se envíe
+        alert("El monto a solicitar debe ser un número positivo mayor que cero.");
+        montoInput.focus();
+        return false;
+    }
+});
 </script>
 </html>

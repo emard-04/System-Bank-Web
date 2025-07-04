@@ -3,7 +3,6 @@ package Presentacion;
 import java.io.IOException;
 import Entidades.*;
 import exceptions.ErrorAlEliminarException;
-import Daos.*;
 import negocioImpl.CuentasNegImpl;
 import java.util.List;
 import javax.servlet.ServletException;

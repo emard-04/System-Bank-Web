@@ -21,7 +21,7 @@ import Interfaces.inPais;
 import java.util.List;
 	public class daoPais implements inPais {
 
-	    private String buscarxNombre = "SELECT * FROM pais WHERE nombre = ?";
+	    private String buscarxNombre = "SELECT * FROM pais WHERE Nombre = ?";
 	    private String buscarxID = "SELECT * FROM pais WHERE idPais = ?";
 	    private String listarTodo = "SELECT * FROM pais";
 
@@ -65,7 +65,7 @@ import java.util.List;
 	            Pais p = new Pais();
 	            if (rs.next()) {
 	                p.setIdPais(id);
-	                p.setNombre(rs.getString("nombre"));
+	                p.setNombre(rs.getString("Nombre"));
 	                return p;
 	            }
 	        } catch (Exception e) {
@@ -92,7 +92,7 @@ import java.util.List;
 	            while (rs.next()) {
 	                Pais p = new Pais();
 	                p.setIdPais(rs.getInt("idPais"));
-	                p.setNombre(rs.getString("nombre"));
+	                p.setNombre(rs.getString("Nombre"));
 	                listaPaises.add(p);
 	            }
 	        } catch (Exception e) {
