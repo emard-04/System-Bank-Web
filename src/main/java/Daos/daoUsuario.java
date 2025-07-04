@@ -54,7 +54,7 @@ public class daoUsuario implements InUsuario {
             query.append("INNER JOIN persona ON persona.dni = usuarios.dni ");
             query.append("INNER JOIN provincia ON persona.idprovincia = provincia.IdProvincia ");
             query.append("INNER JOIN localidad ON persona.IdLocalidad = localidad.IdLocalidad ");
-            query.append("WHERE 1=1 "); // base para agregar condiciones dinámicas
+            query.append("WHERE 1=1 and tipoUsuario=0"); // base para agregar condiciones dinámicas
             query.append(condicionesExtras);
 
             ps = cn.prepareStatement(query.toString());

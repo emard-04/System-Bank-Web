@@ -1,5 +1,7 @@
 package negocioImpl;
 
+import java.util.ArrayList;
+
 import Daos.daoTipoCuenta;
 import Entidades.TipoCuenta;
 import Interfaces.inTipoCuenta;
@@ -13,5 +15,8 @@ public TipoCuenta buscarXDescripcion(String Descripcion) {
 	return dTipCuenta.buscarXDescripcion(Descripcion);
 	}
 	return null;
+}
+public ArrayList<TipoCuenta> ListarTodo(){
+	return dTipCuenta.ListarTodo();
 }
 }

@@ -20,6 +20,8 @@ public interface CuentasNeg {
         ArrayList<Cuenta> ListarxUsuario(int Id);
         boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
         int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException;
+        ArrayList<Cuenta> filtrar(String dniParcial, int idTipoCuenta, String ordenSaldo);
+        
 
 }
 

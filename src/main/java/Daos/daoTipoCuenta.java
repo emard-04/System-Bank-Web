@@ -3,14 +3,18 @@ package Daos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import Entidades.TipoCuenta;
+import Entidades.Usuario;
 import Interfaces.Conexion;
 import Interfaces.inTipoCuenta;
 
 public class daoTipoCuenta implements inTipoCuenta{
 private String buscarxDescripcion="Select * from tipoCuenta where descripcion=?";
 private String buscarxID="Select * from tipoCuenta where idTipoCuenta=?";
+private String listarTodo="select * from tipoCuenta";
 @Override
 public TipoCuenta buscarXDescripcion(String Descripcion) {
         Connection cn = null;
@@ -38,6 +42,7 @@ public TipoCuenta buscarXDescripcion(String Descripcion) {
         return null;
     }
 @Override
+
 public TipoCuenta buscarXID(int Id) {
         Connection cn = null;
         PreparedStatement cs = null;
@@ -50,7 +55,7 @@ public TipoCuenta buscarXID(int Id) {
             TipoCuenta tp=new TipoCuenta();
             if (rs.next()) {
                 tp.setIdTipoCuenta(Id);
-                tp.setDescripcion("Descripcion");
+                tp.setDescripcion(rs.getString("Descripcion"));
                 return tp;
             }
         } catch (Exception e) {
@@ -63,4 +68,29 @@ public TipoCuenta buscarXID(int Id) {
         }
         return null;
     }
+public ArrayList<TipoCuenta> ListarTodo() {
+    ArrayList<TipoCuenta> listaTipoCuenta = new ArrayList<>();
+    Connection cn = null;
+    Statement st = null;
+    ResultSet rs = null;
+    try {
+        cn = Conexion.getConexion().getSQLConnection();
+        st = cn.createStatement();
+        rs = st.executeQuery(listarTodo);
+        while (rs.next()) {
+            TipoCuenta tipCuenta= new TipoCuenta();
+            tipCuenta.setIdTipoCuenta(rs.getInt("idTipoCuenta"));
+            tipCuenta.setDescripcion(rs.getString("Descripcion"));
+            listaTipoCuenta.add(tipCuenta);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("No se pudieron listar los usuarios.");
+    } finally {
+        try { if (rs != null) rs.close(); } catch (Exception e) {}
+        try { if (st != null) st.close(); } catch (Exception e) {}
+        try { if (cn != null) cn.close(); } catch (Exception e) {}
+    }
+    return listaTipoCuenta;
+}
 }

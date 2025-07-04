@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="Entidades.TipoCuenta"%>
 <%@ page import="Entidades.Usuario" %>
 <%@ page import="Entidades.Persona" %>
 <%@ page import="java.util.List" %>
@@ -89,7 +91,36 @@ function confirmarLogout(e) {
 					<li></li>
 				</ul>
 			</nav>
+<%ArrayList<TipoCuenta> listaTipoCuenta=null;
+if(request.getAttribute("listaTipoCuenta")!=null){
+	listaTipoCuenta=(ArrayList<TipoCuenta>)request.getAttribute("listaTipoCuenta");}%>
+			<div
+				class="bg-gray-50 border-b border-gray-200 p-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center">
+				<form action="ServletListarCuentas" method="get"
+					class="flex flex-wrap items-center space-x-2">
+					<input type="text" name="busqueda" placeholder="Buscar Dni"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-48">
+								<input type="hidden" 
+								name="Filtrar" value="1"> 
+					<select name="TipoCuenta" id="TipoCuenta"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="" >Seleccionar cuenta</option>
+						<% for(TipoCuenta tp: listaTipoCuenta){%>
+						<option value="<%=tp.getIdTipoCuenta()%>"><%=tp.getDescripcion()%></option>
+						<%} %>
+						</select>
+					<select name="orden" 
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="">Ordenar saldo</option>
+						<option value="ASC">Menor a mayor</option>
+						<option value="DESC">Mayor a menor</option>
+						</select>
+					<button type="submit"
+						class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-10 h-10 flex items-center justify-center">
+						🔍</button>
 
+				</form>
+				</div>
 			<div class="p-6 flex-1 overflow-y-auto">
 				<div class="bg-white rounded-lg shadow overflow-hidden">
 					<table class="min-w-full divide-y divide-gray-200">
@@ -120,7 +151,7 @@ function confirmarLogout(e) {
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getUsuario().getPersona().getDni() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getFechaCreacion() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-            <%= (c.getTipoCuenta().getIdTipoCuenta() == 1) ? "Cuenta corriente" : "Caja de ahorro" %>
+            <%=c.getTipoCuenta().getDescripcion() %>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getCbu() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getSaldo() %></td>

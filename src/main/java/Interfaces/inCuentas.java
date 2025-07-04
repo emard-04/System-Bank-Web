@@ -21,5 +21,6 @@ import java.util.ArrayList;
 	        ArrayList<Cuenta> ListarxUsuario(int Id);
 	        boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
 	        int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException;
+	        public ArrayList<Cuenta> filtrar(String condicionesExtras, String orden, ArrayList<Object> parametrosExtras);
 	}
 

@@ -87,6 +87,55 @@ public class daoCuentas implements inCuentas{
         }
         return false;
     }
+    public ArrayList<Cuenta> filtrar(String condicionesExtras, String orden, ArrayList<Object> parametrosExtras) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT * ");
+            query.append("FROM cuentas ");
+            query.append("INNER JOIN usuarios ON cuentas.IdUsuario = usuarios.IdUsuario ");
+            query.append("WHERE cuentas.Estado = 'Activa' ");
+            query.append(condicionesExtras);
+            query.append(orden);  // ← lo agregás acá
+
+
+            ps = cn.prepareStatement(query.toString());
+
+            int paramIndex = 1;
+            for (Object param : parametrosExtras) {
+                if (param instanceof Integer) {
+                    ps.setInt(paramIndex++, (Integer) param);
+                } else if (param instanceof String) {
+                    ps.setString(paramIndex++, (String) param);
+                }
+            }
+
+            ArrayList<Cuenta> lista = new ArrayList<>();
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                lista.add(valoresCuenta(rs));
+            }
+
+            return lista;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (cn != null) cn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
     public Cuenta cuentaxCbu(String cbu) {
     	Connection cn = null;
     	PreparedStatement ps = null;
@@ -158,14 +207,13 @@ public class daoCuentas implements inCuentas{
 
     private Cuenta valoresCuenta(ResultSet rs) {
         Cuenta cuenta = new Cuenta();
+        daoTipoCuenta dtp=new daoTipoCuenta();
         try {
             cuenta.setNroCuenta(rs.getInt("NroCuenta"));
             daoUsuario du=new daoUsuario();
             cuenta.setUsuario(du.BuscarIdusuario(rs.getInt("IdUsuario")));
             cuenta.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate());
-            TipoCuenta tipoCuenta = new TipoCuenta();
-            tipoCuenta.setIdTipoCuenta(rs.getInt("IdtipoCuenta"));
-            cuenta.setTipoCuenta(tipoCuenta);
+            cuenta.setTipoCuenta(dtp.buscarXID(rs.getInt("IdTipoCuenta")));
             cuenta.setCbu(rs.getString("Cbu"));
             cuenta.setSaldo(rs.getBigDecimal("Saldo"));
             cuenta.setEstado(rs.getString("Estado"));

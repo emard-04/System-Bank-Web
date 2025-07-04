@@ -70,6 +70,29 @@ public class CuentasNegImpl implements CuentasNeg{
 	public int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException {
 		return dao.obtenerNroCuentaPorIdUsuario(idUsuario, conn);
 	}
+	public ArrayList<Cuenta> filtrar(String dniParcial, int idTipoCuenta, String ordenSaldo){
+		StringBuilder condicionesExtras = new StringBuilder();
+		StringBuilder orden = new StringBuilder();
+		ArrayList<Object> parametrosExtras = new ArrayList<>();
+
+		if (dniParcial != null && !dniParcial.isEmpty()) {
+		    condicionesExtras.append(" AND usuarios.dni LIKE ? ");
+		    parametrosExtras.add("%" + dniParcial + "%");
+		}
+
+		if (idTipoCuenta > 0) {
+		    condicionesExtras.append(" AND cuentas.IdtipoCuenta = ? ");
+		    System.out.println(idTipoCuenta);
+		    parametrosExtras.add(idTipoCuenta);
+		}
+
+		if (ordenSaldo != null && (ordenSaldo.equalsIgnoreCase("ASC") || ordenSaldo.equalsIgnoreCase("DESC"))) {
+		    orden.append(" ORDER BY cuentas.Saldo ").append(ordenSaldo);
+		} else {
+		    orden.append(" ORDER BY cuentas.Saldo ASC"); // por defecto
+		}
+		return dao.filtrar(condicionesExtras.toString(), orden.toString(), parametrosExtras);
+	}
 		
 }
 

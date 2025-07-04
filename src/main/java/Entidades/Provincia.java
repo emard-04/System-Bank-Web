@@ -3,7 +3,7 @@ package Entidades;
 public class Provincia {
 	private int idProvincia;
     private String nombre;
-
+    private Pais pais;
   
     public int getIdProvincia() {
         return idProvincia;
@@ -18,4 +18,11 @@ public class Provincia {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+	public Pais getPais() {
+		return pais;
+	}
+	public void setPais(Pais pais) {
+		this.pais = pais;
+	}
+    
 }
