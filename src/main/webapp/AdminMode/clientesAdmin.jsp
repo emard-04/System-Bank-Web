@@ -1,3 +1,4 @@
+<%@page import="Entidades.Provincia"%>
 <%@ page import="Entidades.Usuario" %>
 <%@ page import="Entidades.Persona" %>
 <%@page import="java.util.ArrayList"%>
@@ -91,7 +92,36 @@ function confirmarLogout(e) {
 					</li>
 				</ul>
 			</nav>
+			<%ArrayList<Provincia> listaProvincias=null;
+			if(request.getAttribute("listaProvincias")!=null){
+				listaProvincias=(ArrayList<Provincia>)request.getAttribute("listaProvincias");}%>
+			
+			
+			<div
+				class="bg-gray-50 border-b border-gray-200 p-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center">
+				<form action="ServletListarClientes" method="get"
+					class="flex flex-wrap items-center space-x-2">
+					<input type="text" name="busqueda" placeholder="Buscar Dni"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-48">
+								<input type="hidden" 
+								name="Filtrar" value="1"> 
+					<select name="provincias" id="provincias"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="" >Seleccionar provincia</option>
+						<% for(Provincia provincia: listaProvincias){%>
+						<option value="<%=provincia.getIdProvincia()%>"><%=provincia.getNombre()%></option>
+						<%} %>
+						</select>
+					<select name="Localidad" id="localidad"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="">Seleccione una localidad</option>
+						</select>
+					<button type="submit"
+						class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-10 h-10 flex items-center justify-center">
+						🔍</button>
 
+				</form>
+				</div>
 			<div class="p-6 flex-1 overflow-y-auto">
 				<div class="bg-white rounded-lg shadow overflow-hidden">
 					<div class="overflow-x-auto">
@@ -124,8 +154,9 @@ function confirmarLogout(e) {
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200">
-								<% if (request.getAttribute("personas")!=null) {
-									List<Usuario> usuario=(List<Usuario>)request.getAttribute("personas");
+							<%
+								 if (request.getAttribute("personas")!=null) {
+									 List<Usuario> usuario=(List<Usuario>)request.getAttribute("personas");
     							 for (Usuario u : usuario) { %>
 								<tr>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getDni() %></td>
@@ -149,7 +180,8 @@ function confirmarLogout(e) {
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getSexo() %></td>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getFechaNacimiento() %></td>
 								</tr>
-								<% } } %>
+								<% }}
+							%>
 							</tbody>
 						</table>
 					</div>
@@ -189,6 +221,35 @@ function confirmarLogout(e) {
 		</main>
 
 	</div>
-
 </body>
+<script>
+document.getElementById('provincias').addEventListener('change', function () {
+    var provinciaId = this.value;
+    cargarLocalidades(provinciaId);
+});
+function cargarLocalidades(provinciaId, localidadIdSeleccionada = null) {
+    const localidadSelect = document.getElementById('localidad');
+    localidadSelect.innerHTML = '<option value="">Cargando...</option>';
+
+    if (!provinciaId) {
+        localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+        return;
+    }
+
+    const contextPath = "<%= request.getContextPath() %>";
+    const url = contextPath + "/ServletListarClientes?listarLocalidades=1&provinciaId=" + provinciaId;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(localidades => {
+            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+            localidades.forEach(localidad => {
+                const option = document.createElement('option');
+                option.value = localidad.idLocalidad;
+                option.textContent = localidad.nombre;
+                localidadSelect.appendChild(option);
+            });
+        })
+}
+</script>
 </html>

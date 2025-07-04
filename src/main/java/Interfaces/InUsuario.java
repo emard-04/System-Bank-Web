@@ -11,4 +11,5 @@ public interface InUsuario {
     Usuario BuscarIdusuario(int id);
     Usuario Login(String nombreUsuario, String contrasena);
     int obtenerIdUsuarioPorNombre(String nombreUsuario);
+    ArrayList<Usuario> filtrar(String condicionesExtras, ArrayList<Object> parametrosExtras);
 }

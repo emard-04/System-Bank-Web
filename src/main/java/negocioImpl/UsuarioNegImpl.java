@@ -50,4 +50,27 @@ public class UsuarioNegImpl implements UsuarioNeg {
     public boolean Eliminar(String nombreUsuario) {
         return daoUsuario.Eliminar(nombreUsuario);
     }
+    public ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad) {
+        StringBuilder condicionesExtras = new StringBuilder();
+        ArrayList<Object> parametrosExtras = new ArrayList<>();
+
+        // Agregar condición por provincia
+        if (idProvincia > 0) {
+            condicionesExtras.append(" AND provincia.idProvincia = ? ");
+            parametrosExtras.add(idProvincia);
+        }
+
+        // Agregar condición por localidad
+        if (idLocalidad > 0) {
+            condicionesExtras.append(" AND localidad.idLocalidad = ? ");
+            parametrosExtras.add(idLocalidad);
+        }
+
+        // Agregar condición por DNI (si viene algo escrito)
+        if (dniParcial != null && !dniParcial.trim().isEmpty()) {
+            condicionesExtras.append(" AND usuarios.dni LIKE ? ");
+            parametrosExtras.add("%" + dniParcial + "%");
+        }
+        return daoUsuario.filtrar(condicionesExtras.toString(), parametrosExtras);
+    }
 }

@@ -314,8 +314,9 @@ $('#seleccionar_cliente_dni').on('change', function ()  {
                  document.getElementById('cuil_mod').value = data.cuil;
                  document.getElementById('nombre_mod').value = data.nombre;
                  document.getElementById('apellido_mod').value = data.apellido;
-                 document.getElementById('localidad_mod').value = data.localidad;
-                 document.getElementById('provincia_mod').value = data.provincia;
+                 document.getElementById('provincia_mod').value = data.provincia_id;
+                 cargarLocalidades(data.provincia_id, data.localidad_id); 
+                 document.getElementById('localidad_mod').value = data.localidad_id;
                  document.getElementById('direccion_mod').value = data.direccion;
                  document.getElementById('nacionalidad_mod').value = data.nacionalidad;
                  document.getElementById('fecha_nacimiento_mod').value = data.fechaNacimiento;
@@ -383,6 +384,37 @@ $('#seleccionar_cliente_dni').on('change', function ()  {
     	  document.getElementById('telefono_input').readOnly = true;
     	  document.getElementById('Accion').value = 'Eliminar';
     	});
+    	function cargarLocalidades(provinciaId, localidadIdSeleccionada = null) {
+    	    const localidadSelect = document.getElementById('localidad_mod');
+    	    localidadSelect.innerHTML = '<option value="">Cargando...</option>';
+
+    	    if (!provinciaId) {
+    	        localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+    	        return;
+    	    }
+
+    	    const contextPath = "/BancoParcial"; // o <%= request.getContextPath() %> si es inline JSP
+    	    const url = contextPath + "/ServletModificarCliente?listarLocalidades=1&provinciaId=" + provinciaId;
+
+    	    fetch(url)
+    	        .then(response => response.json())
+    	        .then(localidades => {
+    	            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+    	            localidades.forEach(localidad => {
+    	                const option = document.createElement('option');
+    	                option.value = localidad.idLocalidad;
+    	                option.textContent = localidad.nombre;
+    	                localidadSelect.appendChild(option);
+    	            });
+
+    	            if (localidadIdSeleccionada) {
+    	                localidadSelect.value = localidadIdSeleccionada;
+    	            }
+    	        })
+    	        .catch(() => {
+    	            localidadSelect.innerHTML = '<option value="">Error cargando localidades</option>';
+    	        });
+    	}
     function limpiarCampos() {
     document.getElementById('dni_mod').value = '';
     document.getElementById('cuil_mod').value = '';
@@ -401,29 +433,9 @@ $('#seleccionar_cliente_dni').on('change', function ()  {
     document.getElementById('telefono_input').value = '';
     document.getElementById('telefono_select').value = '';
     }
-    document.getElementById('provincia_mod').addEventListener('change', function() {
+    document.getElementById('provincia_mod').addEventListener('change', function () {
         var provinciaId = this.value;
-        var localidadSelect = document.getElementById('localidad_mod');
-        localidadSelect.innerHTML = '<option value="">Cargando...</option>';
-        if (!provinciaId) {
-            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-            return;
-        }
-
-        fetch('/BancoParcial/ServletLocalidades?provinciaId=' + provinciaId)
-            .then(response => response.json())
-            .then(data => {
-                localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-                data.forEach(localidad => {
-                    var option = document.createElement('option');
-                    option.value = localidad.id;
-                    option.textContent = localidad.nombre;
-                    localidadSelect.appendChild(option);
-                });
-            })
-            .catch(() => {
-                localidadSelect.innerHTML = '<option value="">Error cargando localidades</option>';
-            });
+        cargarLocalidades(provinciaId); // sin localidad seleccionada
     });
 </script>
 </html>

@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Daos.daoTelefono;
-import Entidades.Cuenta;
-import Entidades.Persona;
-import Entidades.TelefonoxPersona;
-import Entidades.Usuario;
 import Interfaces.inTelefono;
 import negocio.ClientesNeg;
 import negocio.TelefonoNeg;
@@ -68,7 +64,9 @@ public class ServletModificarCliente extends HttpServlet {
 			        }
 			    }
 			    telefonosJson.append("]");
+			    
 			 String json = "{"
+					 
 					 + "\"dni\": \"" + us.getPersona().getDni() + "\","
 					    + "\"cuil\": \"" + us.getPersona().getCuil() + "\","
 					    + "\"nombre\": \"" + us.getPersona().getNombre() + "\","
@@ -90,6 +88,30 @@ public class ServletModificarCliente extends HttpServlet {
              response.setCharacterEncoding("UTF-8");
              response.getWriter().write(json);
 		}
+		if (request.getParameter("listarLocalidades") != null) {
+	    	int idProvincia = Integer.parseInt(request.getParameter("provinciaId").trim());
+	    	List<Localidad> localidades = localidadNeg.listarLocalidadesPorProvincia(idProvincia);
+
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+
+	        StringBuilder json = new StringBuilder();
+	        json.append("[");
+	        for (int i = 0; i < localidades.size(); i++) {
+	            Localidad loc = localidades.get(i);
+	            json.append("{");
+	            json.append("\"idLocalidad\":").append(loc.getIdLocalidad()).append(",");
+	            json.append("\"nombre\":\"").append(loc.getNombre().replace("\"", "\\\"")).append("\"");
+	            json.append("}");
+	            if (i < localidades.size() - 1) {
+	                json.append(",");
+	            }
+	        }
+	        json.append("]");
+
+	        response.getWriter().write(json.toString());
+	        return;
+	    }
 	}
 
 	/**

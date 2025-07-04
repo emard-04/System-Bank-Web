@@ -5,8 +5,9 @@ import Entidades.*;
 public interface UsuarioNeg {
 	 boolean AgregarUsuario(Usuario usuario);
 	    Usuario Login(String nombreUsuario, String contrasena); 
-	    public Usuario BuscarDni(String dni);
-	    public ArrayList<Usuario> listarTodo();
-	    public boolean Modificar(Usuario usuario);
-	    public boolean Eliminar(String nombreUsuario);
+	     Usuario BuscarDni(String dni);
+	     ArrayList<Usuario> listarTodo();
+	     boolean Eliminar(String nombreUsuario);
+	     boolean Modificar(Usuario usuario);
+	    ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad);
 }

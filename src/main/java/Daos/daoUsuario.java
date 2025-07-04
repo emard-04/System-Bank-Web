@@ -16,10 +16,11 @@ public class daoUsuario implements InUsuario {
     private final String Eliminar = "UPDATE Usuarios SET Estado = 'Inactivo' WHERE NombreUsuario = ?";
     private final String Modificar = "UPDATE Usuarios SET NombreUsuario=?,Contraseña=? WHERE Dni=?;";
     private final String ListarTodo = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario, Estado FROM Usuarios where TipoUsuario=0 AND Estado = 'Activo';";
-    private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=?;";
+    private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=? ;";
     private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
-    private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=?;";
+    private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=? AND Estado = 'Activo';";
     private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario, Estado FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
+    
     private static daoPersonas dp;
     public boolean Agregar(Usuario usuario) {
         Connection cn = null;
@@ -40,6 +41,54 @@ public class daoUsuario implements InUsuario {
         }
         return false;
     }
+    public ArrayList<Usuario> filtrar(String condicionesExtras, ArrayList<Object> parametrosExtras) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT * ");
+            query.append("FROM usuarios ");
+            query.append("INNER JOIN persona ON persona.dni = usuarios.dni ");
+            query.append("INNER JOIN provincia ON persona.idprovincia = provincia.IdProvincia ");
+            query.append("INNER JOIN localidad ON persona.IdLocalidad = localidad.IdLocalidad ");
+            query.append("WHERE 1=1 "); // base para agregar condiciones dinámicas
+            query.append(condicionesExtras);
+
+            ps = cn.prepareStatement(query.toString());
+
+            int paramIndex = 1;
+            for (Object param : parametrosExtras) {
+                if (param instanceof Integer) {
+                    ps.setInt(paramIndex++, (Integer) param);
+                } else if (param instanceof String) {
+                    ps.setString(paramIndex++, (String) param);
+                }
+            }
+
+            ArrayList<Usuario> lista = new ArrayList<>();
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                lista.add(valoresUsuario(rs)); // método que mapea el ResultSet a un objeto Usuario
+            }
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (cn != null) cn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+    
 
     private PreparedStatement valoresQuery(Connection cn, String query, Usuario usuario) {
         PreparedStatement ps = null;
