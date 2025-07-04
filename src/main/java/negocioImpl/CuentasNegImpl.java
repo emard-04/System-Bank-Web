@@ -2,6 +2,10 @@ package negocioImpl;
 
 import Interfaces.inCuentas;
 import negocio.CuentasNeg;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import negocio.*;
@@ -57,6 +61,14 @@ public class CuentasNegImpl implements CuentasNeg{
 	}
 	public Cuenta cuentaxCbu(String cbu) {
 		return dao.cuentaxCbu(cbu);
+	}
+	@Override
+	public boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn) {
+		return dao.actualizarSaldo(nroCuenta, monto, conn);
+	}
+	@Override
+	public int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException {
+		return dao.obtenerNroCuentaPorIdUsuario(idUsuario, conn);
 	}
 		
 }

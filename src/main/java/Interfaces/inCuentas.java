@@ -1,8 +1,11 @@
 package Interfaces;
 
 	import Entidades.*;
-	import java.util.List; 
-	import java.util.ArrayList;
+	import java.util.List;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 	public interface inCuentas {
 	    
 	        boolean Agregar(Cuenta cuenta);
@@ -16,5 +19,7 @@ package Interfaces;
 	        int maximoCuentas(int Id);
 	        Cuenta cuentaxCbu(String cbu);
 	        ArrayList<Cuenta> ListarxUsuario(int Id);
+	        boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
+	        int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException;
 	}
 

@@ -1,11 +1,19 @@
 package negocioImpl;
-import Daos.daoPrestamos;
+import Daos.*;
+import java.sql.Connection;
+
+import Interfaces.Conexion;
 import Interfaces.InPrestamos;
 import negocio.*;
 import Entidades.*;
 import java.util.List; 
+import java.sql.SQLException;
+import java.math.BigDecimal;
+import Daos.*;
+import Interfaces.*;
 public class PrestamosNegImpl implements PrestamosNeg{
 	 private final InPrestamos prestamoDao = new daoPrestamos();
+	 private final inCuentas cuentaDao = new daoCuentas();
 
 	    
 
@@ -21,12 +29,77 @@ public class PrestamosNegImpl implements PrestamosNeg{
 
 	    @Override
 	    public boolean aprobarPrestamo(int idPrestamo) {
-	        return prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aceptado");
+	    	Connection conn = null;
+	        boolean exito = false;
+
+	        try {
+	        	  System.out.println("Intentando aprobar préstamo id: " + idPrestamo);
+	            conn = Conexion.getConexion().getSQLConnection();
+	            conn.setAutoCommit(false); // Iniciar transacción
+
+	            // 1. Obtener préstamo con importe y usuario
+	            Prestamos prestamo = prestamoDao.obtenerPorId(idPrestamo, conn);
+	           // System.out.println("Usuario del préstamo: " + (prestamo.getUsuario() != null ? prestamo.getUsuario().getIdUsuario() : "null"));
+	           // System.out.println("Préstamo encontrado: " + prestamo);
+	            if (prestamo == null) return false;
+
+	            int idUsuario = prestamo.getUsuario().getIdUsuario();
+	            BigDecimal importe = prestamo.getImportePedido();
+	           // System.out.println("Id Usuario: " + idUsuario + ", Importe: " + importe);
+
+	            // 2. Obtener cuenta del usuario
+	            int nroCuenta = cuentaDao.obtenerNroCuentaPorIdUsuario(idUsuario, conn);
+	            //System.out.println("Nro Cuenta: " + nroCuenta);
+
+	            // 3. Cambiar estado del préstamo a 'Aceptado'
+	            boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aceptado", conn);
+	           // System.out.println("Estado actualizado: " + actualizado);
+
+	            // 4. Acreditar importe a la cuenta del usuario
+	            boolean saldoActualizado = cuentaDao.actualizarSaldo(nroCuenta, importe, conn);
+	           // System.out.println("Saldo actualizado: " + saldoActualizado);
+
+	            exito = actualizado && saldoActualizado;
+
+	            if (exito) {
+	                conn.commit();
+	            } else {
+	                conn.rollback();
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            if (conn != null) try { conn.rollback(); } catch (SQLException ignored) {}
+	        } finally {
+	            if (conn != null) {
+	                try {
+	                    conn.setAutoCommit(true);
+	                    conn.close();
+	                } catch (SQLException ignored) {}
+	            }
+	        }
+
+	        return exito;
 	    }
 
 	    @Override
 	    public boolean rechazarPrestamo(int idPrestamo) {
-	        return prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Rechazado");
+	        Connection conn = null;
+	        boolean exito = false;
+
+	        try {
+	            conn = Conexion.getConexion().getSQLConnection();
+	            conn.setAutoCommit(true); 
+	            exito = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Rechazado", conn);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            if (conn != null) {
+	                try { conn.close(); } catch (SQLException ignored) {}
+	            }
+	        }
+
+	        return exito;
 	    }
 	    public boolean marcarPrestamoPagado(int idPrestamo) {
 	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Pagado");
@@ -85,5 +158,10 @@ public class PrestamosNegImpl implements PrestamosNeg{
 				int prestamosPorPagina) {
 			// TODO Auto-generated method stub
 			return prestamoDao.obtenerPrestamosPendientesPorDniPaginado(dni, pagina, prestamosPorPagina);
+		}
+
+		@Override
+		public Prestamos obtenerPorId(int idPrestamo, Connection conn) {
+			return prestamoDao.obtenerPorId(idPrestamo, conn);
 		}
 }

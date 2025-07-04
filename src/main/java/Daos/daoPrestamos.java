@@ -172,27 +172,17 @@ public class daoPrestamos implements InPrestamos{
 		        return false;
 		    }
 
-			@Override
-			public boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstadoSoli) {
-				String query = "UPDATE Prestamos SET EstadoSolicitud = ? WHERE IdPrestamo = ?";
-
-		        try (Connection conn = Conexion.getConexion().getSQLConnection();
-		             PreparedStatement stmt = conn.prepareStatement(query)) {
-		            
-		            stmt.setString(1, nuevoEstadoSoli);
+		    public boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstado, Connection conn) {
+		        String query = "UPDATE Prestamos SET EstadoSolicitud = ? WHERE IdPrestamo = ?";
+		        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+		            stmt.setString(1, nuevoEstado);
 		            stmt.setInt(2, idPrestamo);
-
-		            if(stmt.executeUpdate() > 0) {
-		            	conn.commit();
-		            	return true;
-		            }
-
-		        } catch (Exception e) {
+		            return stmt.executeUpdate() > 0;
+		        } catch (SQLException e) {
 		            e.printStackTrace();
+		            return false;
 		        }
-
-		        return false;
-			}
+		    }
 			public List<Prestamos> obtenerPrestamosPendientes() {
 			    List<Prestamos> prestamos = new ArrayList<>();
 
@@ -510,6 +500,39 @@ public class daoPrestamos implements InPrestamos{
 				    }
 
 				    return lista;
+			}
+			public Prestamos obtenerPorId(int idPrestamo, Connection conn) {
+			    String sql = "SELECT * FROM Prestamos p INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario "
+			               + "INNER JOIN Persona pe ON u.Dni = pe.Dni WHERE p.IdPrestamo = ?";
+			    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			        stmt.setInt(1, idPrestamo);
+			        ResultSet rs = stmt.executeQuery();
+			        if (rs.next()) {
+			            Prestamos p = new Prestamos();
+			            // Seteá los datos del préstamo, usuario y persona
+			            // Asumimos que tenés las clases Usuario, Persona, etc.
+			            Usuario u = new Usuario();
+			            Persona persona = new Persona();
+			            persona.setDni(rs.getString("Dni"));
+			            persona.setNombre(rs.getString("Nombre"));
+			            persona.setApellido(rs.getString("Apellido"));
+			            u.setIdUsuario(rs.getInt("IdUsuario"));
+			            u.setPersona(persona);
+
+			            p.setIdPrestamo(rs.getInt("IdPrestamo"));
+			            p.setUsuario(u);
+			            p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+			            p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+			            p.setPlazoDePago(rs.getString("PlazoDePago"));
+			            p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+			            p.setFecha(rs.getDate("Fecha").toLocalDate()); // si es tipo DATE
+
+			            return p;
+			        }
+			    } catch (SQLException e) {
+			        e.printStackTrace();
+			    }
+			    return null;
 			}
 		}
 

@@ -78,19 +78,27 @@ public class ServletPrestamosAdmi extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String accion = request.getParameter("accion");
-		String idPrestamoStr = request.getParameter("idPrestamo");
+    	String accion = request.getParameter("accion");
+        String idPrestamoStr = request.getParameter("idPrestamo");
 
-		if (accion != null && idPrestamoStr != null) {
-			int idPrestamo = Integer.parseInt(idPrestamoStr);
+        String mensaje = "error"; // mensaje por defecto
 
-			if (accion.equalsIgnoreCase("aceptar")) {
-				prestamoNeg.aprobarPrestamo(idPrestamo);
-			} else if (accion.equalsIgnoreCase("rechazar")) {
-				prestamoNeg.rechazarPrestamo(idPrestamo);
-			}
-		}
-		// Redirige al mismo servlet para actualizar la tabla
-		response.sendRedirect(request.getContextPath() + "/ServletPrestamosAdmi");
+        if (accion != null && idPrestamoStr != null) {
+            int idPrestamo = Integer.parseInt(idPrestamoStr);
+
+            if (accion.equalsIgnoreCase("aceptar")) {
+                if (prestamoNeg.aprobarPrestamo(idPrestamo)) {
+                    mensaje = "aprobado";
+                }
+            } else if (accion.equalsIgnoreCase("rechazar")) {
+                if (prestamoNeg.rechazarPrestamo(idPrestamo)) {
+                    mensaje = "rechazado";
+                }
+            }
+        }
+
+        // Redirige con mensaje en la URL
+        response.sendRedirect(request.getContextPath() + "/ServletPrestamosAdmi?mensaje=" + mensaje);
+
 	}
 }

@@ -1,5 +1,7 @@
 package negocio;
 import Entidades.*;
+
+import java.sql.Connection;
 import java.util.List; 
 
 public interface PrestamosNeg {
@@ -18,5 +20,5 @@ public interface PrestamosNeg {
     int contarPrestamosPendientesPorDni(String dni);
     List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
     List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
-      
+    Prestamos obtenerPorId(int idPrestamo, Connection conn);
 }

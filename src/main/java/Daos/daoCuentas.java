@@ -1,6 +1,7 @@
 package Daos;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -345,5 +346,28 @@ public class daoCuentas implements inCuentas{
 	            try { if (cn != null) cn.close(); } catch (Exception e) {}
 	        }
 		    return cue;
+	}
+	public boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn) {
+	    String sql = "UPDATE Cuentas SET Saldo = Saldo + ? WHERE NroCuenta = ?";
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setBigDecimal(1, monto);
+	        stmt.setInt(2, nroCuenta);
+	        return stmt.executeUpdate() > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	public int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException {
+	    String sql = "SELECT NroCuenta FROM Cuentas WHERE IdUsuario = ? AND (Estado = 'Activa' or Estado = 'Activo') LIMIT 1";
+	    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, idUsuario);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt("NroCuenta");
+	        }
+	    }
+	    System.out.println("No se encontró cuenta activa para usuario " + idUsuario);
+	    return -1;
 	}
 }

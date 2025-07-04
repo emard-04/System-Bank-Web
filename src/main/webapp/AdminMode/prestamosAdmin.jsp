@@ -80,7 +80,26 @@ function confirmarLogout(e) {
                     <li><a href="/BancoParcial//AdminMode/reportesAdmin.jsp" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Reportes</a></li>
                 </ul>
             </nav>
-
+<%
+    String mensaje = request.getParameter("mensaje");
+    if (mensaje != null) {
+%>
+    <div class="mb-4 p-4 rounded-md 
+        <% if ("aprobado".equals(mensaje)) { %> bg-green-100 text-green-800 
+        <% } else if ("rechazado".equals(mensaje)) { %> bg-yellow-100 text-yellow-800 
+        <% } else { %> bg-red-100 text-red-800 <% } %> 
+        border font-semibold text-center">
+        <% if ("aprobado".equals(mensaje)) { %>
+            ✅ Préstamo aprobado correctamente.
+        <% } else if ("rechazado".equals(mensaje)) { %>
+            ❌ Préstamo rechazado correctamente.
+        <% } else { %>
+            ⚠️ Ocurrió un error al procesar el préstamo.
+        <% } %>
+    </div>
+<%
+    }
+%>
             <div class="p-6 flex-1 overflow-y-auto">
              
                 <form method="get" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="flex items-center space-x-4">

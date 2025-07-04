@@ -1,5 +1,8 @@
 package negocio;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,8 @@ public interface CuentasNeg {
         String generarCBU();
         Cuenta cuentaxCbu(String cbu);
         ArrayList<Cuenta> ListarxUsuario(int Id);
-        
+        boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
+        int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException;
 
 }
 
