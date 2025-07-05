@@ -32,15 +32,26 @@ public class ServletHomeCliente extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
 			return;
 		}
+		String cuentaParam = request.getParameter("cuentaSeleccionada");
+        if (cuentaParam != null && !cuentaParam.isEmpty()) {
+            int nroCuenta = Integer.parseInt(cuentaParam);
+            Cuenta cuenta = new CuentasNegImpl().BuscarPorNro(nroCuenta);
+            if (cuenta != null) {
+                session.setAttribute("cuenta", cuenta);
+            }
+        }
 
-		 if (session.getAttribute("cuenta") == null) {
-	            @SuppressWarnings("unchecked")
-	            ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
-	            if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
-	                session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
-	            }
-	        }
+       
+        
+        if (session.getAttribute("cuenta") == null) {
+            @SuppressWarnings("unchecked")
+            ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+            if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
+                session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
+            }
+        }
 
+		 
 		// Volver al home después de seleccionar
 		response.sendRedirect(request.getContextPath() + "/ClientMode/homeClient.jsp");
 	}

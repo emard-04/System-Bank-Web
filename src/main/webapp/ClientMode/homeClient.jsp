@@ -56,7 +56,7 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
                 <%= usuario.getPersona().getNombre() %> <%= usuario.getPersona().getApellido() %>
             </h3>
 
-           <%
+            <%
     Cuenta cuentaSeleccionada = (Cuenta) session.getAttribute("cuenta");
     String saldo = cuentaSeleccionada != null ? cuentaSeleccionada.getSaldo().toString() : "---";
 %>
@@ -65,7 +65,7 @@ class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col it
 </p>
 
             <div class="relative w-full mb-6">
-            <form action="<%=request.getContextPath()%>/ServletHomeCliente" method="get">
+            <form id="formCuenta" action="<%=request.getContextPath()%>/ServletHomeCliente" method="get">
                 <select name="cuentaSeleccionada" id="cuenta"
                     class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md w-full text-left focus:outline-none focus:shadow-outline flex items-center justify-between"
                      onchange="document.getElementById('formCuenta').submit()">
@@ -97,6 +97,7 @@ for (Cuenta c : listaCuenta) {
                 </select>
             </div>
             </form>
+           
 
 
 			<a href="#"
