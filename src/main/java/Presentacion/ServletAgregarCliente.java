@@ -27,6 +27,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	private static final UsuarioNeg negUsuario = new UsuarioNegImpl();
 	private static final ProvinciaNegImpl ProvinciaNeg = new ProvinciaNegImpl();
 	private static final LocalidadNegImpl localidadNeg = new LocalidadNegImpl();
+	private static final PaisNeg negPais = new PaisNegImpl();
     public ServletAgregarCliente() {
         super();
         // TODO Auto-generated constructor stub
@@ -40,8 +41,9 @@ public class ServletAgregarCliente extends HttpServlet {
 	    }
 
 	    // Responder JSON con provincias si se pide
-	    if (request.getParameter("listarProvincias") != null) {
-	        List<Provincia> provincias = ProvinciaNeg.listarProvincias();
+	   /* if (request.getParameter("listarProvincias") != null) {
+	    	int idPais=Integer.parseInt(request.getParameter("idPais"));
+	        List<Provincia> provincias = ProvinciaNeg.listarProvinciasxPais(idPais);
 	        
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
@@ -62,8 +64,32 @@ public class ServletAgregarCliente extends HttpServlet {
 
 	        response.getWriter().write(json.toString());
 	        return;
-	    }
+	    }*/
 
+	    if (request.getParameter("listarProvincias") != null) {
+	    	int idPais = Integer.parseInt(request.getParameter("idPais").trim());
+	    	List<Provincia> provincia = ProvinciaNeg.listarProvinciasxPais(idPais);
+
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+
+	        StringBuilder json = new StringBuilder();
+	        json.append("[");
+	        for (int i = 0; i < provincia.size(); i++) {
+	            Provincia prov = provincia.get(i);
+	            json.append("{");
+	            json.append("\"idProvincia\":").append(prov.getIdProvincia()).append(",");
+	            json.append("\"nombre\":\"").append(prov.getNombre().replace("\"", "\\\"")).append("\"");
+	            json.append("}");
+	            if (i < provincia.size() - 1) {
+	                json.append(",");
+	            }
+	        }
+	        json.append("]");
+
+	        response.getWriter().write(json.toString());
+	        return;
+	    }
 	    // Responder JSON con localidades si se pide
 	    if (request.getParameter("listarLocalidades") != null) {
 	    	int idProvincia = Integer.parseInt(request.getParameter("idProvincia").trim());
@@ -103,7 +129,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        int localidad = Integer.parseInt( request.getParameter("localidad"));
 	        int provincia = Integer.parseInt(request.getParameter("provincia"));
 	        String direccion = request.getParameter("direccion");
-	        String nacionalidad = request.getParameter("nacionalidad");
+	        int nacionalidad = Integer.parseInt(request.getParameter("nacionalidad"));
 	        LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fecha_nacimiento"));
 	        String correo = request.getParameter("correo_electronico");
 	        String sexo = request.getParameter("sexo");
@@ -123,7 +149,8 @@ public class ServletAgregarCliente extends HttpServlet {
 	        persona.setLocalidad(loc);    
 	        persona.setProvincia(prov);
 	        persona.setDireccion(direccion);
-	        //persona.setNacionalidad(nacionalidad);
+	        Pais pais = negPais.buscarXID(nacionalidad);
+	        persona.setPais(pais);
 	        persona.setFechaNacimiento(fechaNacimiento);
 	        persona.setCorreoElectronico(correo);
 	        persona.setSexo(sexo);
@@ -165,7 +192,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	    }
 	}
 	private void windowDefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException{
-		 
+		 request.setAttribute("ListaPais",  negPais.listarTodo());
 		 RequestDispatcher rd= request.getRequestDispatcher(jsp);
 		 rd.forward(request, response);
 	}

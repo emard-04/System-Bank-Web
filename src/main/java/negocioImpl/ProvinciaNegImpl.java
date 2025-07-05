@@ -18,5 +18,7 @@ public class ProvinciaNegImpl implements ProvinciaNeg{
     public Provincia buscarPorId(int idProvincia) {
         return daoP.buscarPorId(idProvincia);
     }
-
+	public List<Provincia>listarProvinciasxPais(int idPais){
+		return daoP.listarProvinciasxPais(idPais);
+	}
 }

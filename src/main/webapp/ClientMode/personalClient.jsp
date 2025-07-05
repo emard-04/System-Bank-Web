@@ -154,7 +154,7 @@ for (Cuenta c : listaCuenta) {
             Transferencia
         </a>
 
-        <a href="/BancoParcial/ClientMode/movientosClient.jsp"
+        <a href="/BancoParcial/ServletListarMovimientos?Actualizar=1"
            class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
             Movimientos
         </a>

@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 
 public class daoProvincia implements inProvincia{
 	 private final String Listar = "SELECT IdProvincia, Nombre FROM Provincia ORDER BY Nombre";
-
+	 private final String ListarProvinciaxPais="select * from Provincia where idPais=?";
 	@Override
 	public List<Provincia> listarProvincias() {
 		 List<Provincia> lista = new ArrayList<>();
@@ -32,6 +32,25 @@ public class daoProvincia implements inProvincia{
 	        return lista;
 	    
 	}
+	public List<Provincia>listarProvinciasxPais(int idPais){
+		 List<Provincia> lista = new ArrayList<>();
+	        try {Connection cn = Conexion.getConexion().getSQLConnection();
+	             PreparedStatement ps = cn.prepareStatement(ListarProvinciaxPais);
+	        	ps.setInt(1, idPais);
+	        	ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	                Provincia prov = new Provincia();
+	                prov.setIdProvincia(rs.getInt("IdProvincia"));
+	                prov.setNombre(rs.getString("Nombre"));
+	                lista.add(prov);
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return lista;
+	    
+	}
+	
 	@Override
     public Provincia buscarPorId(int idProvincia) {
         Provincia provincia = null;

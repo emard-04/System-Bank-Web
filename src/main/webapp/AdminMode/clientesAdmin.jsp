@@ -176,7 +176,7 @@ function confirmarLogout(e) {
 									</td>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getLocalidad().getNombre() %></td>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getProvincia().getNombre()%></td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getNacionalidad() %></td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getPais().getNombre() %></td>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getSexo() %></td>
 									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= u.getPersona().getFechaNacimiento() %></td>
 								</tr>

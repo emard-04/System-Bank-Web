@@ -4,4 +4,5 @@ import Entidades.*;
 public interface inProvincia {
 	List<Provincia> listarProvincias();
 	 Provincia buscarPorId(int idProvincia);
+	 List<Provincia>listarProvinciasxPais(int idPais);
 }

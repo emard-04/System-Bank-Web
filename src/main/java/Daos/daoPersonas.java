@@ -13,17 +13,18 @@ import Entidades.TelefonoxPersona;
 import Interfaces.Conexion;
 
 public class daoPersonas implements inPersona {
-    private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, Nacionalidad, fechaNacimiento, Direccion, IdLocalidad, IdProvincia, Dni, Estado) values(?,?,?,?,?,?,?,?,?,?,?,?);";
+    private final String Agregar = "insert into Persona(CorreoElectronico, Cuil, Nombre, Apellido, Sexo, IdPais, fechaNacimiento, Direccion, IdLocalidad, IdProvincia, Dni, Estado) values(?,?,?,?,?,?,?,?,?,?,?,?);";
     private final String Eliminar = "UPDATE Persona SET Estado = 'Inactiva' where Dni=?;";
-    private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, fechaNacimiento=?, Direccion=?, IdLocalidad=?, IdProvincia=? where Dni=?;";
-    private final String ListarTodo = "SELECT p.Dni, p.Cuil, p.Nombre, p.Apellido, p.CorreoElectronico,"
+    private final String Modificar = "Update Persona set CorreoElectronico=?, Cuil=?, Nombre=?, Apellido=?, Sexo=?, fechaNacimiento=?, Direccion=?, IdLocalidad=?, IdProvincia=?, IdPais=? where Dni=?;";
+   /* private final String ListarTodo = "SELECT p.Dni, p.Cuil, p.Nombre, p.Apellido, p.CorreoElectronico,"
     		+ "       loc.IdLocalidad, loc.Nombre AS NombreLocalidad,"
     		+ "       prov.IdProvincia, prov.Nombre AS NombreProvincia,"
     		+ "       p.Nacionalidad, p.Sexo, p.fechaNacimiento, p.Direccion"
     		+ "FROM Persona p\r\n"
     		+ "JOIN Localidad loc ON p.IdLocalidad = loc.IdLocalidad"
     		+ "JOIN Provincia prov ON p.IdProvincia = prov.IdProvincia"
-    		+ "WHERE p.Estado = 'Activo';";
+    		+ "WHERE p.Estado = 'Activo';";*/
+    private final String ListarTodo = "SELECT * from persona where estado='activo'";
     private final String Existe = "Select * from Persona where dni=?;";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
 
@@ -53,6 +54,7 @@ public class daoPersonas implements inPersona {
         PreparedStatement cs = null;
         try {
             cs = cn.prepareStatement(query);
+            if(query.equals(Agregar)) {
             cs.setString(1, persona.getCorreoElectronico());
             cs.setString(2, persona.getCuil());
             cs.setString(3, persona.getNombre());
@@ -65,6 +67,20 @@ public class daoPersonas implements inPersona {
             cs.setInt(10, persona.getProvincia().getIdProvincia());
             cs.setString(11, persona.getDni());
             cs.setString(12, "Activo");
+            }
+            if(query.equals(Modificar)) {
+            	cs.setString(1, persona.getCorreoElectronico());
+                cs.setString(2, persona.getCuil());
+                cs.setString(3, persona.getNombre());
+                cs.setString(4, persona.getApellido());
+                cs.setString(5, persona.getSexo());
+                cs.setDate(6, java.sql.Date.valueOf(persona.getFechaNacimiento()));
+                cs.setString(7, persona.getDireccion());
+                cs.setInt(8, persona.getLocalidad().getIdLocalidad());
+                cs.setInt(9, persona.getProvincia().getIdProvincia());
+                cs.setInt(10, persona.getPais().getIdPais());
+                cs.setString(11, persona.getDni());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

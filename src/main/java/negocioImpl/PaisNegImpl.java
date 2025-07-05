@@ -1,9 +1,11 @@
 package negocioImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Daos.daoPais;
 import Entidades.Pais;
+import Entidades.Provincia;
 import negocio.PaisNeg;
 
 public class PaisNegImpl implements PaisNeg{

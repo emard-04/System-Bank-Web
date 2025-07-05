@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Entidades.*;
 import negocio.LocalidadNeg;
+import negocio.PaisNeg;
 import negocio.ProvinciaNeg;
 import negocio.UsuarioNeg;
 import negocioImpl.LocalidadNegImpl;
+import negocioImpl.PaisNegImpl;
 import negocioImpl.ProvinciaNegImpl;
 import negocioImpl.UsuarioNegImpl;
 
@@ -23,6 +25,7 @@ import javax.servlet.RequestDispatcher;
 public class ServletListarClientes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UsuarioNeg nUsuario= new UsuarioNegImpl();
+	private PaisNeg nPais= new PaisNegImpl();
   private ProvinciaNeg nProvincia= new ProvinciaNegImpl();
   private LocalidadNeg nLocalidad=new LocalidadNegImpl();
     public ServletListarClientes() {

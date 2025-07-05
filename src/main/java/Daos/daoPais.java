@@ -93,6 +93,7 @@ import java.util.List;
 	                Pais p = new Pais();
 	                p.setIdPais(rs.getInt("idPais"));
 	                p.setNombre(rs.getString("Nombre"));
+	                System.out.println( p.getIdPais()+" pais "+p.getNombre());
 	                listaPaises.add(p);
 	            }
 	        } catch (Exception e) {

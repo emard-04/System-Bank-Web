@@ -1,27 +1,28 @@
-<%@ page import="Entidades.Usuario" %>
-<%@ page import="Entidades.Persona" %>
+<%@page import="java.util.ArrayList"%>
+<%@ page import="Entidades.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ page import="java.util.List" %>
+	pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
 <%
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Cliente Admin - Tu Banco</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
-        }
-        .profile-photo-placeholder {
-            background-size: cover;
-            background-position: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agregar Cliente Admin - Tu Banco</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+	font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
+}
+
+.profile-photo-placeholder {
+	background-size: cover;
+	background-position: center;
+}
+</style>
 </head>
 <script>
 function confirmarLogout(e) {
@@ -34,49 +35,56 @@ function confirmarLogout(e) {
 }
 </script>
 <body class="bg-gray-100 h-screen overflow-hidden">
-    <div class="flex h-full">
+	<div class="flex h-full">
 
-        <aside class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
-            
-             <img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
-     alt="Foto de perfil"
-     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
-            
-               <h3 class="text-xl font-bold text-gray-800 text-center mb-6">
-    <%= usuarioLogueado.getPersona().getNombre() %> <%= usuarioLogueado.getPersona().getApellido() %>
-</h3>
-            
-            <a href="#"
-   onclick="confirmarLogout(event)"
-   class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
-   Salir
-</a>
-        </aside>
+		<aside
+			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
-        <main class="flex-1 flex flex-col overflow-y-auto">
-            
-            <header class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
-                <h1 class="text-xl font-semibold text-gray-800">CLIENTES</h1>
-                 <div class="flex items-center">
-				<img src="<%=request.getContextPath()%>/img/FotoLogo.webp" alt="Logo del banco" class="h-12 object-contain">
-				<span class="text-gray-700 font-bold text-lg">Universidad Tecnológica Nacional</span>
+			<img src="<%=request.getContextPath()%>/img/perfilAdmi.webp"
+				alt="Foto de perfil"
+				class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
+
+			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">
+				<%= usuarioLogueado.getPersona().getNombre() %>
+				<%= usuarioLogueado.getPersona().getApellido() %>
+			</h3>
+
+			<a href="#" onclick="confirmarLogout(event)"
+				class="mt-auto bg-red-500 hover:bg-red-600 text-white text-center font-semibold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline block">
+				Salir </a>
+		</aside>
+
+		<main class="flex-1 flex flex-col overflow-y-auto">
+
+			<header
+				class="bg-white p-4 border-b border-gray-200 flex justify-between items-center">
+				<h1 class="text-xl font-semibold text-gray-800">CLIENTES</h1>
+				<div class="flex items-center">
+					<img src="<%=request.getContextPath()%>/img/FotoLogo.webp"
+						alt="Logo del banco" class="h-12 object-contain"> <span
+						class="text-gray-700 font-bold text-lg">Universidad
+						Tecnológica Nacional</span>
 				</div>
-            </header>
+			</header>
 
-           <nav class="bg-gray-50 border-b border-gray-200 p-4">
+			<nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<ul class="flex items-center justify-between w-full">
-					<li><a href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp"
+					<li><a
+						href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp"
 						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
 					</li>
 
-					<li class="flex space-x-10 mx-auto">
-					<a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
+					<li class="flex space-x-10 mx-auto"><a
+						href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
-						<a href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregarUsu=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletAgregarCliente?openAgregarUsu=1"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletModificarCliente?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
-						<a href="<%=request.getContextPath()%>/ServletBorrarCliente?openBorrar=1"
+						<a
+						href="<%=request.getContextPath()%>/ServletBorrarCliente?openBorrar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
 					</li>
 
@@ -84,217 +92,180 @@ function confirmarLogout(e) {
 				</ul>
 			</nav>
 
-            <div class="p-6 flex-1 flex flex-col justify-center items-center">
-                <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-                <% if (request.getAttribute("mensaje") != null) { %>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
-        <%= request.getAttribute("mensaje") %>
-    </div>
-<% } %>
-                    <form action="/BancoParcial/ServletAgregarCliente" method="post" onsubmit="return validarContrasena()" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
-                    
-                        <div>
-                            <label for="nombre" class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
-                            <input
-                                type="text"
-                                id="nombre"
-                                name="nombre"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        <div>
-                            <label for="apellido" class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
-                            <input
-                                type="text"
-                                id="apellido"
-                                name="apellido"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        <div>
-                            <label for="dni" class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
-                            <input
-                                type="text"
-                                id="dni"
-                                name="dni"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        
-                        <div>
-    <label for="cuil" class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
-    <input
-        type="text"
-        id="cuil"
-        name="cuil"
-        placeholder=""
-        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-        required
-    >
-</div>
+			<div class="p-6 flex-1 flex flex-col justify-center items-center">
+				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+					<% if (request.getAttribute("mensaje") != null) { %>
+					<div
+						class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+						<%= request.getAttribute("mensaje") %>
+					</div>
+					<% } %>
+					<form action="/BancoParcial/ServletAgregarCliente" method="post"
+						onsubmit="return validarContrasena()"
+						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 
-                        <div id="grupoProvincia" class="hidden">
-  <label for="provincia" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-  <select id="provincia" name="provincia"
-         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white text-black">
-    <option value="">Seleccione provincia</option>
-  </select>
-</div>
-<div id="grupoProvinciaManual" class="hidden">
-  <label for="provincia_manual" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
-  <input type="text" id="provincia_manual" name="provincia"
-         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg" />
-</div>
+						<div>
+							<label for="nombre"
+								class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
+							<input type="text" id="nombre" name="nombre" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
+						<div>
+							<label for="apellido"
+								class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
+							<input type="text" id="apellido" name="apellido" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
+						<div>
+							<label for="dni"
+								class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
+							<input type="text" id="dni" name="dni" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
 
-<!-- LOCALIDAD -->
-<div id="grupoLocalidad" class="hidden">
-  <label for="localidad" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-  <select id="localidad" name="localidad"
-          class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
-    <option value="">Seleccione localidad</option>
-  </select>
-</div>
-<div id="grupoLocalidadManual" class="hidden">
-  <label for="localidad_manual" class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
-  <input type="text" id="localidad_manual" name="localidad"
-         class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg" />
-</div>
-                        <div>
-                            <label for="direccion" class="block text-gray-700 text-lg font-semibold mb-2">Direccion</label>
-                            <input
-                                type="text"
-                                id="direccion"
-                                name="direccion"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
+						<div>
+							<label for="cuil"
+								class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
+							<input type="text" id="cuil" name="cuil" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
+						<div>
+							<label for="direccion"
+								class="block text-gray-700 text-lg font-semibold mb-2">Direccion</label>
+							<input type="text" id="direccion" name="direccion" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
 
-                       <div>
-                            <label for="nacionalidad" class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
-                            <input
-                                type="text"
-                                id="nacionalidad"
-                                name="nacionalidad"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div> 
-                        <div>
-                            <label for="fecha_nacimiento" class="block text-gray-700 text-lg font-semibold mb-2">Fec Nacimiento</label>
-                            <input
-                                type="date"
-                                id="fecha_nacimiento"
-                                name="fecha_nacimiento"
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-                                required
-                            >
-                        </div>
-                        <div>
-                            <label for="correo_electronico" class="block text-gray-700 text-lg font-semibold mb-2">Correo Electronico</label>
-                            <input
-                                type="email"
-                                id="correo_electronico"
-                                name="correo_electronico"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        
-<div>
-  <label class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos (máx 3)</label>
-  <div id="telefonosContainer">
-    <div class="flex items-center space-x-2 mb-2" id="telefono_group_1">
-      <input
-        type="text"
-        id="telefono_1"
-        name="telefonos"
-        placeholder="Teléfono 1"
-        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-        oninput="mostrarSiguiente(1)"
-        required
-      >
-    </div>
-  </div>
-</div>
+						<div>
+							<label for="nacionalidad"
+								class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
+							<select id="nacionalidad" name="nacionalidad"
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+								required>
+								<option value="">Seleccionar país</option>
+								<%
+        if (request.getAttribute("ListaPais") != null) {
+            ArrayList<Pais> ListaPais = (ArrayList<Pais>) request.getAttribute("ListaPais");
+            for (Pais p : ListaPais) {
+        %>
+								<option value="<%= p.getIdPais() %>"><%= p.getNombre() %></option>
+								<%
+            }
+        }
+        %>
+							</select>
+						</div>
 
-                        <div>
-                            <label for="sexo" class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
-                            <select
-                                id="sexo"
-                                name="sexo"
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-                                required
-                            >
-                                <option value="">Seleccione</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                                <option value="X">Otro</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="usuario" class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
-                            <input
-                                type="text"
-                                id="usuario"
-                                name="usuario"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        <div>
-                            <label for="contrasena" class="block text-gray-700 text-lg font-semibold mb-2">Contraseña</label>
-                            <input
-                                type="password"
-                                id="contrasena"
-                                name="contrasena"
-                                placeholder=""
-                                class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                                required
-                            >
-                        </div>
-                        <div>
-    <label for="confirmar_contrasena" class="block text-gray-700 text-lg font-semibold mb-2">Confirmar Contraseña</label>
-    <input
-        type="password"
-        id="confirmar_contrasena"
-        name="confirmar_contrasena"
-        placeholder=""
-        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-        required
-    >
-</div>
+						<!-- PROVINCIA -->
+						<div>
+							<label for="provincia"
+								class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
+							<select id="provincia" name="provincia"
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white text-black"
+								required>
+								<option value="">Seleccione provincia</option>
+							</select>
+						</div>
 
-                        <div class="col-span-1 md:col-span-3 flex justify-center pt-4">
-                            <button
-                                type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md focus:outline-none focus:shadow-outline-green focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
-                            >
-                                AGREGAR
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+						<!-- LOCALIDAD -->
+						<div>
+							<label for="localidad"
+								class="block text-gray-700 text-lg font-semibold mb-2">Localidad</label>
+							<select id="localidad" name="localidad"
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+								required>
+								<option value="">Seleccione localidad</option>
+							</select>
+						</div>
+						<div>
+							<label for="fecha_nacimiento"
+								class="block text-gray-700 text-lg font-semibold mb-2">Fec
+								Nacimiento</label> <input type="date" id="fecha_nacimiento"
+								name="fecha_nacimiento"
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+								required>
+						</div>
+						<div>
+							<label for="correo_electronico"
+								class="block text-gray-700 text-lg font-semibold mb-2">Correo
+								Electronico</label> <input type="email" id="correo_electronico"
+								name="correo_electronico" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
 
-            <footer class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
-                GRUPO_N7
-            </footer>
-        </main>
+						<div>
+							<label class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos
+								(máx 3)</label>
+							<div id="telefonosContainer">
+								<div class="flex items-center space-x-2 mb-2"
+									id="telefono_group_1">
+									<input type="text" id="telefono_1" name="telefonos"
+										placeholder="Teléfono 1"
+										class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+										oninput="mostrarSiguiente(1)" required>
+								</div>
+							</div>
+						</div>
 
-    </div>
+						<div>
+							<label for="sexo"
+								class="block text-gray-700 text-lg font-semibold mb-2">Sexo</label>
+							<select id="sexo" name="sexo"
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+								required>
+								<option value="">Seleccione</option>
+								<option value="Masculino">Masculino</option>
+								<option value="Femenino">Femenino</option>
+								<option value="X">Otro</option>
+							</select>
+						</div>
+						<div>
+							<label for="usuario"
+								class="block text-gray-700 text-lg font-semibold mb-2">Usuario</label>
+							<input type="text" id="usuario" name="usuario" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
+						<div>
+							<label for="contrasena"
+								class="block text-gray-700 text-lg font-semibold mb-2">Contraseña</label>
+							<input type="password" id="contrasena" name="contrasena"
+								placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
+						<div>
+							<label for="confirmar_contrasena"
+								class="block text-gray-700 text-lg font-semibold mb-2">Confirmar
+								Contraseña</label> <input type="password" id="confirmar_contrasena"
+								name="confirmar_contrasena" placeholder=""
+								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+								required>
+						</div>
 
-    <script>
+						<div class="col-span-1 md:col-span-3 flex justify-center pt-4">
+							<button type="submit"
+								class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md focus:outline-none focus:shadow-outline-green focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
+								AGREGAR</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<footer
+				class="bg-gray-200 p-4 text-center text-gray-600 border-t border-gray-200 flex-shrink-0">
+				GRUPO_N7 </footer>
+		</main>
+
+	</div>
+
+	<script>
     function validarContrasena() {
         var contrasena = document.getElementById("contrasena").value;
         var confirmar = document.getElementById("confirmar_contrasena").value;
@@ -347,62 +318,55 @@ function confirmarLogout(e) {
     		}
     document.addEventListener("DOMContentLoaded", function () {
         const nacionalidad = document.getElementById("nacionalidad");
-        const grupoProvincia = document.getElementById("grupoProvincia");
-        const grupoProvinciaManual = document.getElementById("grupoProvinciaManual");
-        const grupoLocalidad = document.getElementById("grupoLocalidad");
-        const grupoLocalidadManual = document.getElementById("grupoLocalidadManual");
-
         const provinciaSelect = document.getElementById("provincia");
         const localidadSelect = document.getElementById("localidad");
+        const contextPath = "<%= request.getContextPath() %>";
 
-        nacionalidad.addEventListener("input", function () {
-            if (nacionalidad.value.toLowerCase() === "argentina") {
-                grupoProvincia.classList.remove("hidden");
-                grupoLocalidad.classList.remove("hidden");
-                grupoProvinciaManual.classList.add("hidden");
-                grupoLocalidadManual.classList.add("hidden");
-                cargarProvincias();
+        nacionalidad.addEventListener("change", function () {
+            const idPais = nacionalidad.value;
+            if (idPais) {
+                cargarProvincias(idPais);
             } else {
-                grupoProvincia.classList.add("hidden");
-                grupoLocalidad.classList.add("hidden");
-                grupoProvinciaManual.classList.remove("hidden");
-                grupoLocalidadManual.classList.remove("hidden");
+                provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
             }
         });
 
         provinciaSelect.addEventListener("change", function () {
             const idProvincia = provinciaSelect.value;
-            cargarLocalidades(idProvincia);
+            if (idProvincia) {
+                cargarLocalidades(idProvincia);
+            } else {
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+            }
         });
 
-        function cargarProvincias() {
-        	fetch("<%=request.getContextPath()%>/ServletAgregarCliente?listarProvincias=1")
+        function cargarProvincias(idPais) {
+            fetch(contextPath + "/ServletAgregarCliente?listarProvincias=1&idPais=" + idPais)
                 .then(response => response.json())
                 .then(data => {
-                	console.log("Provincias recibidas:", data);
                     provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+                    localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
                     data.forEach(p => {
-                    	const option = document.createElement("option");
-                    	option.value = p.idProvincia;
-                    	option.textContent = p.nombre;
-                    	provinciaSelect.appendChild(option);
+                        const option = document.createElement("option");
+                        option.value = p.idProvincia;
+                        option.textContent = p.nombre;
+                        provinciaSelect.appendChild(option);
                     });
                 })
                 .catch(err => console.error("Error cargando provincias:", err));
         }
-        const contextPath = "<%= request.getContextPath() %>";
+
         function cargarLocalidades(idProvincia) {
-            if (!idProvincia) return;
-            const url = contextPath + "/ServletAgregarCliente?listarLocalidades=1&idProvincia=" + idProvincia;
-            fetch(url)
+            fetch(contextPath + "/ServletAgregarCliente?listarLocalidades=1&idProvincia=" + idProvincia)
                 .then(response => response.json())
                 .then(data => {
                     localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
                     data.forEach(l => {
-                    	const option = document.createElement("option");
-                    	option.value = l.idLocalidad;
-                    	option.textContent = l.nombre;
-                    	localidadSelect.appendChild(option);
+                        const option = document.createElement("option");
+                        option.value = l.idLocalidad;
+                        option.textContent = l.nombre;
+                        localidadSelect.appendChild(option);
                     });
                 })
                 .catch(err => console.error("Error cargando localidades:", err));

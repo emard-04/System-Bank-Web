@@ -13,9 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Interfaces.inTelefono;
 import negocio.ClientesNeg;
+import negocio.PaisNeg;
+import negocio.ProvinciaNeg;
 import negocio.TelefonoNeg;
 import negocio.UsuarioNeg;
 import negocioImpl.LocalidadNegImpl;
+import negocioImpl.PaisNegImpl;
 import negocioImpl.PersonaNegImpl;
 import negocioImpl.ProvinciaNegImpl;
 import negocioImpl.TelefonoNegImpl;
@@ -33,14 +36,13 @@ public class ServletModificarCliente extends HttpServlet {
     private static TelefonoNeg negTelefono=new TelefonoNegImpl();
     private static final ProvinciaNegImpl ProvinciaNeg = new ProvinciaNegImpl();
 	private static final LocalidadNegImpl localidadNeg = new LocalidadNegImpl();
+	private static final PaisNeg nPais= new PaisNegImpl();
     public ServletModificarCliente() {
         super();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("openModificar") != null) {
 	        // Obtener lista de provincias
-	        List<Provincia> listaProvincias = ProvinciaNeg.listarProvincias();
-	        request.setAttribute("listaProvincias", listaProvincias);
 
 	        String ventana = "AdminMode/clienteAdmin_modificar.jsp";
 	        windowdefault(request, response, ventana);
@@ -74,7 +76,8 @@ public class ServletModificarCliente extends HttpServlet {
 					    + "\"provincia_id\": " + us.getPersona().getProvincia().getIdProvincia() + ","
 					    + "\"provincia_nombre\": \"" + us.getPersona().getProvincia().getNombre() + "\","
 					    + "\"direccion\": \"" + us.getPersona().getDireccion() + "\","
-					   // + "\"nacionalidad\": \"" + us.getPersona().getNacionalidad() + "\","
+					    + "\"pais_Id\": \"" + us.getPersona().getPais().getIdPais() + "\","
+					    + "\"pais_nombre\": \"" + us.getPersona().getPais().getNombre() + "\","
 					    + "\"fechaNacimiento\": \"" + us.getPersona().getFechaNacimiento() + "\","
 					    + "\"correoElectronico\": \"" + us.getPersona().getCorreoElectronico() + "\","
 					    + "\"sexo\": \"" + us.getPersona().getSexo() + "\","
@@ -86,8 +89,32 @@ public class ServletModificarCliente extends HttpServlet {
              response.setCharacterEncoding("UTF-8");
              response.getWriter().write(json);
 		}
+		if (request.getParameter("listarProvincias") != null) {
+	    	int idPais = Integer.parseInt(request.getParameter("idPais").trim());
+	    	List<Provincia> provincia = ProvinciaNeg.listarProvinciasxPais(idPais);
+
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+
+	        StringBuilder json = new StringBuilder();
+	        json.append("[");
+	        for (int i = 0; i < provincia.size(); i++) {
+	            Provincia prov = provincia.get(i);
+	            json.append("{");
+	            json.append("\"idProvincia\":").append(prov.getIdProvincia()).append(",");
+	            json.append("\"nombre\":\"").append(prov.getNombre().replace("\"", "\\\"")).append("\"");
+	            json.append("}");
+	            if (i < provincia.size() - 1) {
+	                json.append(",");
+	            }
+	        }
+	        json.append("]");
+
+	        response.getWriter().write(json.toString());
+	        return;
+	    }
 		if (request.getParameter("listarLocalidades") != null) {
-	    	int idProvincia = Integer.parseInt(request.getParameter("provinciaId").trim());
+	    	int idProvincia = Integer.parseInt(request.getParameter("idProvincia").trim());
 	    	List<Localidad> localidades = localidadNeg.listarLocalidadesPorProvincia(idProvincia);
 
 	        response.setContentType("application/json");
@@ -124,6 +151,9 @@ public class ServletModificarCliente extends HttpServlet {
 		persona.setCuil(request.getParameter("cuil_mod"));
 		persona.setNombre(request.getParameter("nombre_mod"));
 		persona.setApellido(request.getParameter("apellido_mod"));
+		
+		Pais pais= new Pais();
+		pais.setIdPais(Integer.parseInt(request.getParameter("Nacionalidad_mod")));
 		Provincia provincia = new Provincia();
 		provincia.setIdProvincia(Integer.parseInt(idProvincia));
 
@@ -131,6 +161,7 @@ public class ServletModificarCliente extends HttpServlet {
 		localidad.setIdLocalidad(Integer.parseInt(idLocalidad));
 
 		// Asignar a persona
+		persona.setPais(pais);
 		persona.setProvincia(provincia);
 		persona.setLocalidad(localidad);
 		persona.setDireccion(request.getParameter("direccion_mod"));
@@ -164,6 +195,7 @@ public class ServletModificarCliente extends HttpServlet {
 		doGet(request, response);
 	}
 	private void windowdefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException {
+		request.setAttribute("listaPais", nPais.listarTodo());
 		request.setAttribute("ListaUsuario", negUsuario.listarTodo());
 		RequestDispatcher rd= request.getRequestDispatcher(jsp);
 		rd.forward(request, response);

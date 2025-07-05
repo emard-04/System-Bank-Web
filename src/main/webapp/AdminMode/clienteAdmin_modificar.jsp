@@ -1,7 +1,5 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="Entidades.Usuario"%>
-<%@ page import="Entidades.Persona" %>
-<%@ page import="Entidades.Provincia" %>
+<%@ page import="Entidades.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -43,7 +41,7 @@ function confirmarLogout(e) {
     }
 }
 </script>
-<body class="bg-gray-100 h-screen overflow-hidden">
+<body class="bg-gray-100 h-screen overflow-hidden" data-context-path="<%= request.getContextPath() %>">
 	<div class="flex h-full">
 
 		<aside
@@ -153,6 +151,24 @@ function confirmarLogout(e) {
 								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
+												<div>
+    <label for="Nacionalidad_mod" class="block text-gray-700 text-lg font-semibold mb-2">Pais</label>
+    <select id="Nacionalidad_mod" name="Nacionalidad_mod" 
+            class="p-3 border border-gray-300 rounded-md w-full text-lg" required>
+        <option value="">Seleccione un pais</option>
+        <%-- Aquí llenás las opciones dinámicamente --%>
+        <% 
+            // Supongamos que pasaste la lista de provincias en el request como "listaProvincias"
+            ArrayList<Pais> listaPais = (ArrayList<Pais>) request.getAttribute("listaPais");
+            if (listaPais != null) {
+                for (Pais p : listaPais) {
+        %>
+                    <option value="<%= p.getIdPais() %>"><%= p.getNombre() %></option>
+        <%      }
+            }
+        %>
+    </select>
+</div>
 						<div>
     <label for="provincia_mod" class="block text-gray-700 text-lg font-semibold mb-2">Provincia</label>
     <select id="provincia_mod" name="provincia_mod" 
@@ -185,13 +201,6 @@ function confirmarLogout(e) {
 							<label for="direccion_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Dirección</label>
 							<input type="text" id="direccion_mod" name="direccion_mod"
-								class="p-3 border border-gray-300 rounded-md w-full text-lg"
-								required>
-						</div>
-						<div>
-							<label for="nacionalidad_mod"
-								class="block text-gray-700 text-lg font-semibold mb-2">Nacionalidad</label>
-							<input type="text" id="nacionalidad_mod" name="nacionalidad_mod"
 								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
@@ -289,153 +298,131 @@ function confirmarLogout(e) {
 
 </body>
 <script>
-$(document).ready(function() {
-    $('#seleccionar_cliente_dni').select2({
-      placeholder: "Seleccione un DNI",
-      allowClear: true,
-      width: '50%' // Se adapta al ancho del contenedor
-    });
-  });
-$('#seleccionar_cliente_dni').on('change', function ()  {
-        var dniCliente = this.value;
-        if (!dniCliente) {
-            // limpiar campos si se deselecciona
-            limpiarCampos();
-            return;
-        }
+    // Estas funciones ahora están afuera para que puedan ser usadas globalmente
+    function cargarProvincias(idPais) {
+        const provinciaSelect = document.getElementById("provincia_mod");
+        const localidadSelect = document.getElementById("localidad_mod");
+        const contextPath = document.body.getAttribute("data-context-path");
 
-        fetch('/BancoParcial/ServletModificarCliente?dniCliente=' + dniCliente)
-            .then(response => {
-                if (!response.ok) throw new Error('Usuario no encontrado');
-                return response.json();
-            })
+        return fetch(contextPath + "/ServletModificarCliente?listarProvincias=1&idPais=" + idPais)
+            .then(response => response.json())
             .then(data => {
-            	 document.getElementById('dni_mod').value = data.dni;
-                 document.getElementById('cuil_mod').value = data.cuil;
-                 document.getElementById('nombre_mod').value = data.nombre;
-                 document.getElementById('apellido_mod').value = data.apellido;
-                 document.getElementById('provincia_mod').value = data.provincia_id;
-                 cargarLocalidades(data.provincia_id, data.localidad_id); 
-                 document.getElementById('localidad_mod').value = data.localidad_id;
-                 document.getElementById('direccion_mod').value = data.direccion;
-                 document.getElementById('nacionalidad_mod').value = data.nacionalidad;
-                 document.getElementById('fecha_nacimiento_mod').value = data.fechaNacimiento;
-                 document.getElementById('correo_electronico_mod').value = data.correoElectronico;
-                 //document.getElementById('telefono_mod').value = data.telefono;
-                 document.getElementById('sexo_mod').value = data.sexo;
-                 document.getElementById('usuario_mod').value = data.usuario;
-                 document.getElementById('contrasena_mod').value = data.contrasena;
-                 let selectTelefonos = document.getElementById('telefono_select');
-                 selectTelefonos.innerHTML = '<option value="">-- Seleccione un teléfono --</option>';
-
-                 data.telefonos.forEach(tel => {
-                     let option = document.createElement('option');
-                     option.value = tel.numero;
-                     option.textContent = tel.numero;
-                     selectTelefonos.appendChild(option);
-                 });
+                provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+                data.forEach(p => {
+                    const option = document.createElement("option");
+                    option.value = p.idProvincia;
+                    option.textContent = p.nombre;
+                    provinciaSelect.appendChild(option);
+                });
             })
-            .catch(error => {
-                alert(error.message);
-                limpiarCampos();
-            });
-    });
-    document.getElementById('btnCancelar').addEventListener('click', function () {
-        location.reload();
-    });
-    document.getElementById('telefono_select').addEventListener('change', function() {
-    	var telefono=this.value;
-    	document.getElementById('telefono_input').value=telefono;
-    	document.getElementById('oldTelefono').value=telefono;
-    	document.getElementById('telefono_select').disabled=true;
-    });
-    document.getElementById('btnAgregarTelefono').addEventListener('click', function () {
-    	document.getElementById('telefono_select').value = '';
-    	  document.getElementById('telefono_select').disabled = true;
-    	  document.getElementById('telefono_select').style.backgroundColor= 'silver';
-    	  document.getElementById('telefono_select').disabled = true;
-    	  document.getElementById('telefono_input').value = '';
-    	  document.getElementById('telefono_input').required = true;
-    	  document.getElementById('telefono_input').readOnly = false;
-    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
-    	  document.getElementById('Accion').value = 'Agregar';
-    	});
-
-    	document.getElementById('btnEditarTelefono').addEventListener('click', function () {
-    	document.getElementById('telefono_select').value = '';
-    	  document.getElementById('telefono_select').disabled = false;
-    	  document.getElementById('telefono_select').style.backgroundColor= 'white';
-    	  document.getElementById('telefono_select').required = true;
-    	  document.getElementById('telefono_input').required = true;
-    	  document.getElementById('telefono_input').value = '';
-    	  document.getElementById('telefono_input').readOnly = false;
-    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
-    	  document.getElementById('Accion').value = 'Editar';
-    	});
-
-    	document.getElementById('btnEliminarTelefono').addEventListener('click', function () {
-    		document.getElementById('telefono_select').value = '';
-    	  document.getElementById('telefono_select').disabled = false;
-    	  document.getElementById('telefono_select').style.backgroundColor= 'white';
-    	  document.getElementById('telefono_select').required = true;
-    	  document.getElementById('telefono_input').value = '';
-    	  document.getElementById('telefono_input').required = true;
-    	  document.getElementById('telefono_input').style.backgroundColor = 'white';
-    	  document.getElementById('telefono_input').readOnly = true;
-    	  document.getElementById('Accion').value = 'Eliminar';
-    	});
-    	function cargarLocalidades(provinciaId, localidadIdSeleccionada = null) {
-    	    const localidadSelect = document.getElementById('localidad_mod');
-    	    localidadSelect.innerHTML = '<option value="">Cargando...</option>';
-
-    	    if (!provinciaId) {
-    	        localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-    	        return;
-    	    }
-
-    	    const contextPath = "/BancoParcial"; // o <%= request.getContextPath() %> si es inline JSP
-    	    const url = contextPath + "/ServletModificarCliente?listarLocalidades=1&provinciaId=" + provinciaId;
-
-    	    fetch(url)
-    	        .then(response => response.json())
-    	        .then(localidades => {
-    	            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-    	            localidades.forEach(localidad => {
-    	                const option = document.createElement('option');
-    	                option.value = localidad.idLocalidad;
-    	                option.textContent = localidad.nombre;
-    	                localidadSelect.appendChild(option);
-    	            });
-
-    	            if (localidadIdSeleccionada) {
-    	                localidadSelect.value = localidadIdSeleccionada;
-    	            }
-    	        })
-    	        .catch(() => {
-    	            localidadSelect.innerHTML = '<option value="">Error cargando localidades</option>';
-    	        });
-    	}
-    function limpiarCampos() {
-    document.getElementById('dni_mod').value = '';
-    document.getElementById('cuil_mod').value = '';
-    document.getElementById('nombre_mod').value = '';
-    document.getElementById('apellido_mod').value = '';
-    document.getElementById('localidad_mod').value = '';
-    document.getElementById('provincia_mod').value = '';
-    document.getElementById('direccion_mod').value = '';
-    document.getElementById('nacionalidad_mod').value = '';
-    document.getElementById('fecha_nacimiento_mod').value = '';
-    document.getElementById('correo_electronico_mod').value = '';
-    // document.getElementById('telefono_mod').value = ''; // si es único
-    document.getElementById('sexo_mod').value = '';
-    document.getElementById('usuario_mod').value = '';
-    document.getElementById('contrasena_mod').value = '';
-    document.getElementById('telefono_input').value = '';
-    document.getElementById('telefono_select').value = '';
+            .catch(err => console.error("Error cargando provincias:", err));
     }
-    document.getElementById('provincia_mod').addEventListener('change', function () {
-        var provinciaId = this.value;
-        cargarLocalidades(provinciaId); // sin localidad seleccionada
+
+    function cargarLocalidades(idProvincia) {
+        const localidadSelect = document.getElementById("localidad_mod");
+        const contextPath = document.body.getAttribute("data-context-path");
+
+        return fetch(contextPath + "/ServletModificarCliente?listarLocalidades=1&idProvincia=" + idProvincia)
+            .then(response => response.json())
+            .then(data => {
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+                data.forEach(l => {
+                    const option = document.createElement("option");
+                    option.value = l.idLocalidad;
+                    option.textContent = l.nombre;
+                    localidadSelect.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Error cargando localidades:", err));
+    }
+
+    // Esperamos que el DOM esté listo
+    document.addEventListener("DOMContentLoaded", function () {
+        const nacionalidad = document.getElementById("Nacionalidad_mod");
+        const provinciaSelect = document.getElementById("provincia_mod");
+        const localidadSelect = document.getElementById("localidad_mod");
+
+        // Cargar provincias cuando cambia el país
+        nacionalidad.addEventListener("change", function () {
+            const idPais = nacionalidad.value;
+            if (idPais) {
+                cargarProvincias(idPais);
+            } else {
+                provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+            }
+        });
+
+        // Cargar localidades cuando cambia la provincia
+        provinciaSelect.addEventListener("change", function () {
+            const idProvincia = provinciaSelect.value;
+            if (idProvincia) {
+                cargarLocalidades(idProvincia);
+            } else {
+                localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+            }
+        });
+
+        // Cuando se selecciona un cliente por DNI
+        document.getElementById("seleccionar_cliente_dni").addEventListener("change", function () {
+            const dniCliente = this.value;
+            if (!dniCliente) {
+                limpiarCampos();
+                return;
+            }
+
+            fetch("/BancoParcial/ServletModificarCliente?dniCliente=" + dniCliente)
+                .then(response => {
+                    if (!response.ok) throw new Error('Usuario no encontrado');
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('dni_mod').value = data.dni;
+                    document.getElementById('cuil_mod').value = data.cuil;
+                    document.getElementById('nombre_mod').value = data.nombre;
+                    document.getElementById('apellido_mod').value = data.apellido;
+                    document.getElementById('Nacionalidad_mod').value = data.pais_Id;
+
+                    // Esperar a que se carguen provincias antes de seleccionar la del usuario
+                    cargarProvincias(data.pais_Id).then(() => {
+                        document.getElementById('provincia_mod').value = data.provincia_id;
+
+                        // Luego esperamos a que se carguen localidades
+                        cargarLocalidades(data.provincia_id).then(() => {
+                            document.getElementById('localidad_mod').value = data.localidad_id;
+                        });
+                    });
+
+                    document.getElementById('direccion_mod').value = data.direccion;
+                    document.getElementById('fecha_nacimiento_mod').value = data.fechaNacimiento;
+                    document.getElementById('correo_electronico_mod').value = data.correoElectronico;
+                    document.getElementById('sexo_mod').value = data.sexo;
+                    document.getElementById('usuario_mod').value = data.usuario;
+                    document.getElementById('contrasena_mod').value = data.contrasena;
+                })
+                .catch(error => {
+                    alert(error.message);
+                    limpiarCampos();
+                });
+        });
+
+        function limpiarCampos() {
+            document.getElementById('dni_mod').value = '';
+            document.getElementById('cuil_mod').value = '';
+            document.getElementById('nombre_mod').value = '';
+            document.getElementById('apellido_mod').value = '';
+            document.getElementById('localidad_mod').value = '';
+            document.getElementById('provincia_mod').value = '';
+            document.getElementById('direccion_mod').value = '';
+            document.getElementById('Nacionalidad_mod').value = '';
+            document.getElementById('fecha_nacimiento_mod').value = '';
+            document.getElementById('correo_electronico_mod').value = '';
+            document.getElementById('sexo_mod').value = '';
+            document.getElementById('usuario_mod').value = '';
+            document.getElementById('contrasena_mod').value = '';
+        }
     });
 </script>
+
 </html>
