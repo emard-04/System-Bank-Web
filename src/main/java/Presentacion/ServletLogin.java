@@ -40,21 +40,21 @@ public class ServletLogin extends HttpServlet {
         Usuario usuario = usuarioNeg.Login(username, password); // método que debería validar y devolver usuario o null
         ArrayList<Cuenta> ListaCuentas= cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
         if (usuario != null && usuario.getIdUsuario() != 0) {
-			// LOGIN CORRECTO: guardamos en sesión
-			HttpSession session = request.getSession();
-			session.setAttribute("usuarioLogueado", usuario);
-			session.setAttribute("cuentasUsuario", ListaCuentas);
-			// Redireccionamos según tipo de usuario
-			if (usuario.isTipoUsuario()) {
-				// Admin
-				
-				response.sendRedirect("AdminMode/HomeAdmin.jsp");
-			} else {
-				// Cliente
-				
-				response.sendRedirect("ClientMode/homeClient.jsp");
-			}
-		} else {
+            HttpSession session = request.getSession();
+            session.setAttribute("usuarioLogueado", usuario);
+            session.setAttribute("cuentasUsuario", ListaCuentas);
+
+            // ✅ Establecer la primera cuenta como cuenta activa
+            if (!ListaCuentas.isEmpty()) {
+                session.setAttribute("cuenta", ListaCuentas.get(0)); // GUARDÁS UN OBJETO Cuenta
+            }
+
+            if (usuario.isTipoUsuario()) {
+                response.sendRedirect("AdminMode/HomeAdmin.jsp");
+            } else {
+                response.sendRedirect("ClientMode/homeClient.jsp");
+            }
+        } else {
 			// LOGIN FALLIDO: mostramos error
 			request.setAttribute("errorMessage", "Usuario o contraseña incorrectos");
 			request.getRequestDispatcher("login.jsp").forward(request, response);

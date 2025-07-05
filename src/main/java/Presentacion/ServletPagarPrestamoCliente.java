@@ -45,24 +45,25 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 
         try {
             String paramCuenta = request.getParameter("cuenta");
-            int cuentaSeleccionada = -1;
+            Cuenta cuentaSeleccionada = null;
             if (paramCuenta != null && !paramCuenta.isEmpty()) {
-                cuentaSeleccionada = Integer.parseInt(paramCuenta);
-                request.getSession().setAttribute("cuenta", cuentaSeleccionada);
+                int nroCuenta = Integer.parseInt(paramCuenta);
+                cuentaSeleccionada = cuentaNeg.BuscarPorNro(nroCuenta);
+                request.getSession().setAttribute("cuenta", cuentaSeleccionada); // ✅ BIEN
             }
             
 
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
             List<Cuota> cuotasPendientes;
 
-            if (cuentaSeleccionada > 0) {
+            if (cuentaSeleccionada != null) {
                 // Filtrar cuotas solo para la cuenta seleccionada
-                cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(cuentaSeleccionada);
+                cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(cuentaSeleccionada.getNroCuenta());
             } else {
                 // Si no hay cuenta seleccionada, podés mostrar todas o ninguna
                 cuotasPendientes = new ArrayList<>();
             }
-            if (cuentaSeleccionada > 0 && request.getParameter("cuotaSeleccionada") != null) {
+            if (cuentaSeleccionada != null && request.getParameter("cuotaSeleccionada") != null) {
                 int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
                 Cuota cuotaElegida = cuotaNeg.obtenerCuotaPorId(idCuota);
                 request.setAttribute("cuotaElegida", cuotaElegida);
