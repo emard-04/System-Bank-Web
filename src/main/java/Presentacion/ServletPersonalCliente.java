@@ -1,6 +1,7 @@
 package Presentacion;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +37,24 @@ public class ServletPersonalCliente extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
+        String cuentaParam = request.getParameter("cuentaSeleccionada");
+        if (cuentaParam != null && !cuentaParam.isEmpty()) {
+            int nroCuenta = Integer.parseInt(cuentaParam);
+            Cuenta cuenta = new CuentasNegImpl().BuscarPorNro(nroCuenta);
+            if (cuenta != null) {
+                session.setAttribute("cuenta", cuenta);
+            }
+        }
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        
+        if (session.getAttribute("cuenta") == null) {
+            @SuppressWarnings("unchecked")
+            ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+            if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
+                session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
+            }
+        }
 
         // Obtener teléfono
         TelefonoxPersona telefono = telefonoNeg.buscarPorDni(usuario.getPersona().getDni());
