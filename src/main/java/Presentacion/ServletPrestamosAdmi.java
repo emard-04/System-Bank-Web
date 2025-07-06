@@ -1,6 +1,7 @@
 package Presentacion;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import javax.servlet.RequestDispatcher;
 public class ServletPrestamosAdmi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 private PrestamosNeg prestamoNeg = new PrestamosNegImpl();
-       
+	 private final CuotasNeg cuotaNeg = new CuotasNegImpl();
   
     public ServletPrestamosAdmi() {
         super();
@@ -88,7 +89,20 @@ public class ServletPrestamosAdmi extends HttpServlet {
 
             if (accion.equalsIgnoreCase("aceptar")) {
                 if (prestamoNeg.aprobarPrestamo(idPrestamo)) {
-                    mensaje = "aprobado";
+                    // ✅ El préstamo fue aprobado, ahora generamos las cuotas
+                    Prestamos prestamo = prestamoNeg.buscarPorId(idPrestamo); // Necesitás este método en tu capa negocio
+
+                    if (prestamo != null) {
+                        BigDecimal montoCuota = prestamo.getMontoCuotasxMes();
+                        int cantidadCuotas = Integer.parseInt(prestamo.getPlazoDePago().split(" ")[0]); // Extraer número de cuotas
+                        boolean cuotasGeneradas = cuotaNeg.generarCuotasParaPrestamo(idPrestamo, montoCuota, cantidadCuotas);
+
+                        if (cuotasGeneradas) {
+                            mensaje = "aprobado";
+                        } else {
+                            mensaje = "cuotasError";
+                        }
+                    }
                 }
             } else if (accion.equalsIgnoreCase("rechazar")) {
                 if (prestamoNeg.rechazarPrestamo(idPrestamo)) {

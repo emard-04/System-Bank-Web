@@ -83,12 +83,7 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	        int idPrestamo = prestamoNeg.insertarYObtenerId(prestamo);
 
 	        if (idPrestamo > 0) {
-	            boolean cuotasGeneradas = cuotaNeg.generarCuotasParaPrestamo(idPrestamo, montoCuota, cantidadCuotas);
-	            if (cuotasGeneradas) {
-	                request.setAttribute("mensaje", "✅ Préstamo y cuotas generados correctamente.");
-	            } else {
-	                request.setAttribute("mensaje", "⚠️ Préstamo creado, pero error al generar cuotas.");
-	            }
+	            request.setAttribute("mensaje", "✅ Solicitud de préstamo enviada. Esperando aprobación del administrador.");
 	        } else {
 	            request.setAttribute("mensaje", "❌ Error al crear préstamo.");
 	        }

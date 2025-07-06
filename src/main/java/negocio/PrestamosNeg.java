@@ -24,4 +24,5 @@ public interface PrestamosNeg {
     boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago);
     int obtenerIdPrestamoPorCuota(int idCuota);
     int contarCuotasPendientesPorPrestamo(int idPrestamo);
+    Prestamos buscarPorId(int idPrestamo);
 }

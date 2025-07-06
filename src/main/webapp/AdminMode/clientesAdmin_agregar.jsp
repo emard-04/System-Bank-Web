@@ -101,7 +101,7 @@ function confirmarLogout(e) {
 					</div>
 					<% } %>
 					<form action="/BancoParcial/ServletAgregarCliente" method="post"
-						onsubmit="return validarContrasena()"
+						onsubmit="return validarFormulario()"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 
 						<div>
@@ -266,16 +266,39 @@ function confirmarLogout(e) {
 	</div>
 
 	<script>
-    function validarContrasena() {
-        var contrasena = document.getElementById("contrasena").value;
-        var confirmar = document.getElementById("confirmar_contrasena").value;
+	function validarFormulario() {
+	    // Validar contraseñas
+	    var contrasena = document.getElementById("contrasena").value;
+	    var confirmar = document.getElementById("confirmar_contrasena").value;
 
-        if (contrasena !== confirmar) {
-            alert("Las contraseñas no coinciden.");
-            return false; // evita el submit
-        }
-        return true; // permite el submit
-    }
+	    if (contrasena !== confirmar) {
+	        alert("❌ Las contraseñas no coinciden.");
+	        return false;
+	    }
+
+	    // Validar edad mínima
+	    var fechaNacimiento = document.getElementById("fecha_nacimiento").value;
+	    if (!fechaNacimiento) {
+	        alert("❌ Debe ingresar una fecha de nacimiento.");
+	        return false;
+	    }
+
+	    var hoy = new Date();
+	    var nacimiento = new Date(fechaNacimiento);
+
+	    var edad = hoy.getFullYear() - nacimiento.getFullYear();
+	    var mes = hoy.getMonth() - nacimiento.getMonth();
+	    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+	        edad--;
+	    }
+
+	    if (edad < 18) {
+	        alert("❌ Debe ser mayor de 18 años para registrarse.");
+	        return false;
+	    }
+
+	    return true; // Todo correcto
+	}
     function mostrarSiguiente(n) {
     		  const actual = document.getElementById('telefono_' + n);
     		  const contenedor = document.getElementById('telefonosContainer');

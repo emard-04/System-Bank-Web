@@ -51,7 +51,7 @@ public class PrestamosNegImpl implements PrestamosNeg{
 	            //System.out.println("Nro Cuenta: " + nroCuenta);
 
 	            // 3. Cambiar estado del préstamo a 'Aceptado'
-	            boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aceptado", conn);
+	            boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aprobado", conn);
 	           // System.out.println("Estado actualizado: " + actualizado);
 
 	            // 4. Acreditar importe a la cuenta del usuario
@@ -180,5 +180,15 @@ public class PrestamosNegImpl implements PrestamosNeg{
 		public int contarCuotasPendientesPorPrestamo(int idPrestamo) {
 			// TODO Auto-generated method stub
 			return prestamoDao.contarCuotasPendientesPorPrestamo(idPrestamo);
+		}
+		@Override
+		public Prestamos buscarPorId(int idPrestamo) {
+		    Prestamos p = null;
+		    try (Connection conn = Conexion.getConexion().getSQLConnection()) {
+		        p = new daoPrestamos().obtenerPorId(idPrestamo, conn); // <- Usás tu función existente
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return p;
 		}
 }
