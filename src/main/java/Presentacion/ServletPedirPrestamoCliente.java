@@ -22,7 +22,7 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final PrestamosNeg prestamoNeg = new PrestamosNegImpl();
 	  private final CuotasNeg cuotaNeg = new CuotasNegImpl();
-  
+	  private final CuentasNeg cuentaNeg = new CuentasNegImpl();
     public ServletPedirPrestamoCliente() {
         super();
         // TODO Auto-generated constructor stub
@@ -77,7 +77,7 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	        prestamo.setMontoCuotasxMes(montoCuota);
 	        prestamo.setEstadoSolicitud("Pendiente");
 	        prestamo.setEstadoPago("En curso");
-	        prestamo.setIdCuenta(nroCuenta);
+	        prestamo.setCuenta(cuentaNeg.BuscarPorNro(nroCuenta));
 
 	        // Aquí usamos el método que devuelve el ID
 	        int idPrestamo = prestamoNeg.insertarYObtenerId(prestamo);

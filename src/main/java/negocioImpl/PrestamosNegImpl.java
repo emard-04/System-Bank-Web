@@ -48,7 +48,6 @@ public class PrestamosNegImpl implements PrestamosNeg{
 	           // System.out.println("Id Usuario: " + idUsuario + ", Importe: " + importe);
 
 	            // 2. Obtener cuenta del usuario
-	            int nroCuenta = cuentaDao.obtenerNroCuentaPorIdUsuario(idUsuario, conn);
 	            //System.out.println("Nro Cuenta: " + nroCuenta);
 
 	            // 3. Cambiar estado del préstamo a 'Aceptado'
@@ -56,7 +55,7 @@ public class PrestamosNegImpl implements PrestamosNeg{
 	           // System.out.println("Estado actualizado: " + actualizado);
 
 	            // 4. Acreditar importe a la cuenta del usuario
-	            boolean saldoActualizado = cuentaDao.actualizarSaldo(nroCuenta, importe, conn);
+	            boolean saldoActualizado = cuentaDao.actualizarSaldo(prestamo.getCuenta().getNroCuenta(), importe, conn);
 	           // System.out.println("Saldo actualizado: " + saldoActualizado);
 
 	            exito = actualizado && saldoActualizado;

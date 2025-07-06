@@ -26,7 +26,7 @@ public class daoPrestamos implements InPrestamos{
 		            stmt.setBigDecimal(6, p.getMontoCuotasxMes());
 		            stmt.setString(7, p.getEstadoSolicitud());
 		            stmt.setString(8, p.getEstadoPago());
-		            stmt.setInt(9, p.getIdCuenta());
+		            stmt.setInt(9, p.getCuenta().getNroCuenta());
 		           
 		            
 
@@ -93,12 +93,13 @@ public class daoPrestamos implements InPrestamos{
 
 		    private Prestamos mapear(ResultSet rs) throws SQLException {
 		        Prestamos p = new Prestamos();
+		        daoCuentas dc= new daoCuentas();
 		        p.setIdPrestamo(rs.getInt("IdPrestamo"));
 
 		        Usuario u = new Usuario();
 		        u.setIdUsuario(rs.getInt("IdUsuario"));
 		        p.setUsuario(u);
-
+		        
 		        p.setFecha(rs.getDate("Fecha").toLocalDate());
 		        p.setImporteApagar(rs.getBigDecimal("ImporteAPagar"));
 		        p.setImportePedido(rs.getBigDecimal("ImportePedido"));
@@ -106,7 +107,7 @@ public class daoPrestamos implements InPrestamos{
 		        p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
 		        p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
 		        p.setEstadoPago(rs.getString("EstadoPago"));
-		        
+		        p.setCuenta(dc.BuscarPorNro(rs.getInt("idCuenta")));
 		        return p;
 		    }
 		    @Override
@@ -296,7 +297,7 @@ public class daoPrestamos implements InPrestamos{
 			}
 			public int insertarYObtenerId(Prestamos p) {
 			    String sql = "INSERT INTO Prestamos (IdUsuario, IdCuenta, Fecha, ImportePedido, ImporteApagar, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+daoCuentas dc=new daoCuentas();
 			    try (Connection conn = Conexion.getConexion().getSQLConnection();
 			         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -304,7 +305,7 @@ public class daoPrestamos implements InPrestamos{
 			        conn.setAutoCommit(false);
 
 			        stmt.setInt(1, p.getUsuario().getIdUsuario());
-			        stmt.setInt(2, p.getIdCuenta());
+			         stmt.setInt(2, p.getCuenta().getNroCuenta());
 			        stmt.setDate(3, Date.valueOf(p.getFecha()));
 			        stmt.setBigDecimal(4, p.getImportePedido());
 			        stmt.setBigDecimal(5, p.getImporteApagar());
@@ -504,6 +505,7 @@ public class daoPrestamos implements InPrestamos{
 			public Prestamos obtenerPorId(int idPrestamo, Connection conn) {
 			    String sql = "SELECT * FROM Prestamos p INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario "
 			               + "INNER JOIN Persona pe ON u.Dni = pe.Dni WHERE p.IdPrestamo = ?";
+			    daoCuentas dc=new daoCuentas();
 			    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			        stmt.setInt(1, idPrestamo);
 			        ResultSet rs = stmt.executeQuery();
@@ -518,7 +520,7 @@ public class daoPrestamos implements InPrestamos{
 			            persona.setApellido(rs.getString("Apellido"));
 			            u.setIdUsuario(rs.getInt("IdUsuario"));
 			            u.setPersona(persona);
-
+			            p.setCuenta(dc.BuscarPorNro(rs.getInt("IdCuenta")));
 			            p.setIdPrestamo(rs.getInt("IdPrestamo"));
 			            p.setUsuario(u);
 			            p.setImportePedido(rs.getBigDecimal("ImportePedido"));
