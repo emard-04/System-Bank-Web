@@ -111,6 +111,11 @@ function confirmarLogout(e) {
     <%
     java.time.LocalDate hoy = java.time.LocalDate.now();
 %>
+ <% if (request.getAttribute("mensaje") != null) { %>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+                            <%= request.getAttribute("mensaje") %>
+                        </div>
+                    <% } %>
 					<form action="/BancoParcial/ServletAgregarCuentas" method="post"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 						<div>

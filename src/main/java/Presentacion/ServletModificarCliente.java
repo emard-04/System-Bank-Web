@@ -170,29 +170,44 @@ public class ServletModificarCliente extends HttpServlet {
 		persona.setSexo(request.getParameter("sexo_mod"));
 		persona.setFechaNacimiento(LocalDate.parse(request.getParameter("fecha_nacimiento_mod")));
 		if(!negCliente.Modificar(persona)) {
+			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
 			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error persona";
-			windowdefault(request, response, ventana);
+			RequestDispatcher rd = request.getRequestDispatcher(ventana);
+			rd.forward(request, response);
+			//windowdefault(request, response, ventana);
 			return;
 		}
 		String accion=request.getParameter("Accion");
 		if(!accion.trim().isEmpty()) {
 		if(!actualizarTelefonos(request, response, persona)) {
+			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
 			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error telefono";
-			windowdefault(request, response, ventana);
+			RequestDispatcher rd = request.getRequestDispatcher(ventana);
+			rd.forward(request, response);
+			//windowdefault(request, response, ventana);
 			return;
 		}}
 		usuario.setPersona(persona);
 		usuario.setNombreUsuario(request.getParameter("usuario_mod"));
 		usuario.setContrasena(request.getParameter("contrasena_mod"));
 		if(!negUsuario.Modificar(usuario)) {
+			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
 		String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error usuario";
-		windowdefault(request, response, ventana);
+		RequestDispatcher rd = request.getRequestDispatcher(ventana);
+		rd.forward(request, response);
+		//windowdefault(request, response, ventana);
 		return;
 		}
+		request.setAttribute("mensaje", "✅ Cliente modificado correctamente.");
 		System.out.println("todo ok");
 		String ventana="AdminMode/clienteAdmin_modificar.jsp";
-		windowdefault(request,response, ventana);
-		doGet(request, response);
+		request.setAttribute("listaPais", nPais.listarTodo());
+		//request.setAttribute("listaProvincias", ProvinciaNeg.listarProvinciasxPais(/* algún idPais por defecto o null */));
+		request.setAttribute("ListaUsuario", negUsuario.listarTodo());
+		RequestDispatcher rd = request.getRequestDispatcher(ventana);
+		rd.forward(request, response);
+		//windowdefault(request,response, ventana);
+		//doGet(request, response);
 	}
 	private void windowdefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException {
 		request.setAttribute("listaPais", nPais.listarTodo());

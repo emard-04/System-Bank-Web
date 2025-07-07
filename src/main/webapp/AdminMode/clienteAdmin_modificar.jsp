@@ -116,7 +116,11 @@ function confirmarLogout(e) {
 							%>
 						</select>
 					</div>
-
+<% if (request.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 text-green-700 p-4 rounded-md mb-4 text-center font-semibold">
+        <%= request.getAttribute("mensaje") %>
+    </div>
+<% } %>
 					<form action="<%=request.getContextPath()%>/ServletModificarCliente" method="post"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 

@@ -80,11 +80,19 @@ public class ServletAgregarCuentas extends HttpServlet {
         // 6. Redirigir según resultado
         if (exito) {
         	agregarMovimiento(cuenta);
+        	request.setAttribute("mensaje", "✅ Cuenta agregada correctamente.");
         	 String ventana="/AdminMode/cuentaAdmin_agregar.jsp";
-            windowDefault(request, response, ventana);
+           // windowDefault(request, response, ventana);
+            RequestDispatcher rd = request.getRequestDispatcher(ventana);
+            request.setAttribute("nroCuenta",negCuenta.obtenerId());
+   		 request.setAttribute("nroCBU", negCuenta.generarCBU());
+    		rd.forward(request, response);
         } else {
+        	request.setAttribute("mensaje", "❌ Error al agregar cuenta.");
             String ventana="/AdminMode/cuentaAdmin_agregar.jsp?error=Error al agregar";
-            windowDefault(request, response, ventana);
+            //windowDefault(request, response, ventana);
+            RequestDispatcher rd = request.getRequestDispatcher(ventana);
+    		rd.forward(request, response);
         }
     }
 	private void windowDefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException{
