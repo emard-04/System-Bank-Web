@@ -34,7 +34,7 @@ public class ServletBorrarCuenta extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException,ErrorAlEliminarException {
 
 		String nroCuentaStr = request.getParameter("dni_eliminar"); // ojo con el name en el select
 
@@ -46,30 +46,23 @@ public class ServletBorrarCuenta extends HttpServlet {
 		}
 
 		try {
-			if (exitoAlEliminarCuenta(Integer.parseInt(nroCuentaStr))) {
+			if (negCuenta.Eliminar((Integer.parseInt(nroCuentaStr)))) {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?msg=CuentaEliminada");
+			} else {
+				throw new ErrorAlEliminarException();
 			}
 
 		} catch (NumberFormatException e) {
 			// En caso de que el nroCuenta no es válido
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=NroCuenta inválido");
 		} catch (ErrorAlEliminarException e) {
-			// En caso de que haya un error al eliminar la cuenta
+			request.getSession().setAttribute("mensaje", " ❌ Hubo un error al eliminar la cuenta ❌ ");
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=Error al eliminar cuenta");
 		} catch (Exception e) {
 			// En caso de un error por fuera de los exceptions ya marcados
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=Error inesperado");
-		}
-	}
-
-	public static boolean exitoAlEliminarCuenta(int nroCuenta) throws ErrorAlEliminarException {
-		CuentasNegImpl negCuenta = new CuentasNegImpl();
-		if (negCuenta.Eliminar(nroCuenta)) {
-			return true;
-		} else {
-			throw new ErrorAlEliminarException();
 		}
 	}
 }

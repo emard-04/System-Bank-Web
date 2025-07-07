@@ -61,19 +61,16 @@ public class ServletLogin extends HttpServlet {
 					response.sendRedirect("ClientMode/homeClient.jsp");
 				}
 			} else {
-				request.getSession().setAttribute("mensaje", "❌ Usuario o contrasenia icorrectos ❌");
-				throw new ErrorUserContraseniaException(); // Poner mal el usuario o la contraseña, causa esta exception
-				// LOGIN FALLIDO: mostramos error
-				//request.setAttribute("errorMessage", "Usuario o contraseña incorrectos");
-				//request.getRequestDispatcher("login.jsp").forward(request, response);
+				// Poner mal el usuario o la contraseña, causa una exception
+				throw new ErrorUserContraseniaException(); 
 			}
 		} catch (ErrorUserContraseniaException e) {
-			e.printStackTrace();
+			//Al mandarse esta exception, se carga el mensaje correspondiente
+			request.getSession().setAttribute("mensaje", "❌ Usuario o contrasenia icorrectos ❌");
 			response.sendRedirect(request.getContextPath() + "/ServletLogin?error=Usuario o contrasenia incorrectos");
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/ServletLogin?error=Error inesperado");
 		}
 	}
-
 }

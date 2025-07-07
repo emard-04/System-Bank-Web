@@ -46,9 +46,11 @@ public class ServletBorrarCliente extends HttpServlet {
 		}
 
 		try {
-			if (exitoAlEliminarCliente(nroDniStr)) {
+			if (negUsuario.Eliminar(nroDniStr)) {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
+			} else {
+				throw new ErrorAlEliminarException();
 			}
 
 		} catch (NumberFormatException e) {
@@ -56,49 +58,12 @@ public class ServletBorrarCliente extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=NroCuenta inválido");
 		} catch (ErrorAlEliminarException e) {
 			// En caso de que haya un error al eliminar la cuenta
+			request.getSession().setAttribute("mensaje", " ❌ Hubo un error al eliminar la cuenta ❌ ");
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error al eliminar cuenta");
 		} catch (Exception e) {
 			// En caso de un error por fuera de los exceptions ya marcados
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
-		}
-//		
-//		
-//		try {
-//			// Buscar el usuario por DNI
-//			Usuario usuario = negUsuario.BuscarDni(nroDniStr);
-//
-//			if (usuario == null || usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()) {
-//				response.sendRedirect(
-//						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
-//				return;
-//			}
-//
-//			String nombreUsuario = usuario.getNombreUsuario();
-//
-//			// Eliminar usuario y marcar persona como inactiva
-//			boolean exitoPersona = negPersona.Eliminar(nroDniStr);
-//			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
-//
-//			if (exitoPersona && exitoUsuario) {
-//				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
-//				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
-//			} else {
-//				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error al eliminar cuenta");
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
-//		}
-	}
-
-	public static boolean exitoAlEliminarCliente(String Dni) throws ErrorAlEliminarException {
-		UsuarioNegImpl negUs = new UsuarioNegImpl();
-		if (negUs.Eliminar(Dni)) {
-			return true;
-		} else {
-			throw new ErrorAlEliminarException();
 		}
 	}
 }
