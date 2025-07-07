@@ -2,6 +2,9 @@
 <%@ page import="Entidades.Persona"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.List, Entidades.Usuario"%>
+<%
+List<Usuario> users = (List<Usuario>) request.getAttribute("users");
+%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -122,11 +125,10 @@ function confirmarLogout(e) {
 							<select id="seleccionar_cliente_dni" name="dni_eliminar"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
-								<option value="" required>Seleccione DNI</option>
+								<option value="" required>Seleccione el DNI del cliente</option>
 								<%
-								if (request.getAttribute("ListarUsuario") != null) {
-									ArrayList<Usuario> usuarios = (ArrayList<Usuario>) request.getAttribute("ListarUsuario");
-									for (Usuario u : usuarios) {
+								if (users != null) {
+									for (Usuario u : users) {
 								%>
 								<option value="<%=u.getPersona().getDni()%>">Usuario:
 									<%=u.getIdUsuario()%> - Dni =

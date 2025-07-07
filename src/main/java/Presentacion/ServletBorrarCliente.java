@@ -1,21 +1,22 @@
 package Presentacion;
 
 import java.io.IOException;
-import negocioImpl.*;
-import negocioImpl.PersonaNegImpl;
+import java.util.List;
 
-import javax.servlet.RequestDispatcher;
+import negocioImpl.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import Entidades.*;
+import exceptions.ErrorAlEliminarException;
 
 @WebServlet("/ServletBorrarCliente")
 public class ServletBorrarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private PersonaNegImpl negPersona = new PersonaNegImpl();
 	private UsuarioNegImpl negUsuario = new UsuarioNegImpl();
 
 	public ServletBorrarCliente() {
@@ -24,9 +25,14 @@ public class ServletBorrarCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("openBorrar") != null) {
-			windowDefault(request, response);
-		}
+		
+		List<Usuario> users = negUsuario.listarTodo();
+		
+		request.setAttribute("users", users);
+		
+		request.getRequestDispatcher("/AdminMode/clientesAdmin_borrar.jsp").forward(request, response);
+		
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -35,46 +41,64 @@ public class ServletBorrarCliente extends HttpServlet {
 
 		if (nroDniStr == null || nroDniStr.isEmpty()) {
 			response.sendRedirect(
-					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó DNI");
+					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó Ningun cliente");
 			return;
 		}
 
 		try {
-			// Buscar el usuario por DNI
-			Usuario usuario = negUsuario.BuscarDni(nroDniStr);
-
-			if (usuario == null || usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()) {
-				response.sendRedirect(
-						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
-				return;
-			}
-
-			String nombreUsuario = usuario.getNombreUsuario();
-
-			// Eliminar usuario y marcar persona como inactiva
-			boolean exitoPersona = negPersona.Eliminar(nroDniStr);
-			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
-
-			if (exitoPersona && exitoUsuario) {
+			if (exitoAlEliminarCliente(nroDniStr)) {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
-				response.sendRedirect(
-						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?msg=CuentaEliminada");
-			} else {
-				response.sendRedirect(request.getContextPath()
-						+ "/AdminMode/clientesAdmin_borrar.jsp?error=Error al eliminar cuenta");
+				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
 			}
-
+			
+		}  catch (NumberFormatException e) {
+			// En caso de que el nroCuenta no es válido
+			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=NroCuenta inválido");
+		} catch (ErrorAlEliminarException e) {
+			// En caso de que haya un error al eliminar la cuenta
+			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error al eliminar cuenta");
 		} catch (Exception e) {
+			// En caso de un error por fuera de los exceptions ya marcados
 			e.printStackTrace();
-			response.sendRedirect(
-					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Error inesperado");
+			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
 		}
+//		
+//		
+//		try {
+//			// Buscar el usuario por DNI
+//			Usuario usuario = negUsuario.BuscarDni(nroDniStr);
+//
+//			if (usuario == null || usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()) {
+//				response.sendRedirect(
+//						request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=Usuario no encontrado");
+//				return;
+//			}
+//
+//			String nombreUsuario = usuario.getNombreUsuario();
+//
+//			// Eliminar usuario y marcar persona como inactiva
+//			boolean exitoPersona = negPersona.Eliminar(nroDniStr);
+//			boolean exitoUsuario = negUsuario.Eliminar(nombreUsuario);
+//
+//			if (exitoPersona && exitoUsuario) {
+//				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
+//				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
+//			} else {
+//				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error al eliminar cuenta");
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
+//		}
 	}
-
-	private void windowDefault(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		request.setAttribute("ListarUsuario", negUsuario.listarTodo());
-		RequestDispatcher rd = request.getRequestDispatcher("/AdminMode/clientesAdmin_borrar.jsp");
-		rd.forward(request, response);
+	
+	public static boolean exitoAlEliminarCliente(String Dni) throws ErrorAlEliminarException {
+		UsuarioNegImpl negUs = new UsuarioNegImpl();
+		if (negUs.Eliminar(Dni)) {
+			return true;
+		} else {
+			throw new ErrorAlEliminarException();
+		}
 	}
 }
