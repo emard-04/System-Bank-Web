@@ -428,7 +428,7 @@ public class daoCuentas implements inCuentas{
 	}
 	
 	@Override
-    public int contarCuentasCreadasEnRango(Date desde, Date hasta) {
+	public int contarCuentasCreadasEnRango(Date desde, Date hasta) {
         int cantidad = 0;
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -437,8 +437,8 @@ public class daoCuentas implements inCuentas{
             conn = Conexion.getConexion().getSQLConnection();
             String sql = "SELECT COUNT(*) AS totalCuentas FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(desde.getTime()));
-            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); // CAMBIO CLAVE
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); // CAMBIO CLAVE
             rs = stmt.executeQuery();
             if (rs.next()) {
                 cantidad = rs.getInt("totalCuentas");
@@ -467,12 +467,12 @@ public class daoCuentas implements inCuentas{
             conn = Conexion.getConexion().getSQLConnection();
             String sql = "SELECT AVG(Saldo) AS promedioSaldo FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(desde.getTime()));
-            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); 
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); 
             rs = stmt.executeQuery();
             if (rs.next()) {
                 promedio = rs.getBigDecimal("promedioSaldo");
-                if (promedio == null) promedio = BigDecimal.ZERO; // Manejar caso de null si no hay cuentas
+                if (promedio == null) promedio = BigDecimal.ZERO; 
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -497,23 +497,30 @@ public class daoCuentas implements inCuentas{
         try {
             conn = Conexion.getConexion().getSQLConnection();
             String sql = """
-                SELECT tc.Descripcion AS TipoCuenta, COUNT(c.IdTipoCuenta) AS Cantidad
-                FROM Cuentas c
-                INNER JOIN TiposCuentas tc ON c.IdTipoCuenta = tc.IdTipoCuenta
-                WHERE c.FechaCreacion BETWEEN ? AND ?
-                GROUP BY tc.Descripcion
-                ORDER BY Cantidad DESC
-                LIMIT 1
-                """; // LIMIT 1 para obtener solo el de mayor cantidad
+                    SELECT tc.Descripcion AS TipoCuenta, COUNT(c.IdTipoCuenta) AS Cantidad
+                    FROM Cuentas c
+                    INNER JOIN tipocuenta tc ON c.IdTipoCuenta = tc.IdTipoCuenta  -- Corregido el nombre de la tabla
+                    WHERE c.FechaCreacion BETWEEN ? AND ?
+                    GROUP BY tc.Descripcion
+                    ORDER BY Cantidad DESC
+                    LIMIT 1
+                    """; 
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(desde.getTime()));
-            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); 
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); 
+
+            System.out.println("DEBUG DAO: Ejecutando consulta para tipo de cuenta más creado. Fechas: " + desde + " a " + hasta);
+            
             rs = stmt.executeQuery();
             if (rs.next()) {
                 tipoMasCreado = rs.getString("TipoCuenta");
+                System.out.println("DEBUG DAO: Tipo de cuenta más creado encontrado: " + tipoMasCreado);
+            } else {
+                System.out.println("DEBUG DAO: No se encontró tipo de cuenta más creado en el rango especificado.");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("ERROR DAO: Error al obtener el tipo de cuenta más creado: " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -537,23 +544,29 @@ public class daoCuentas implements inCuentas{
             String sql = """
                 SELECT c.*, tc.Descripcion AS TipoCuentaDesc, u.IdUsuario, p.Dni, p.Nombre, p.Apellido
                 FROM Cuentas c
-                INNER JOIN TiposCuentas tc ON c.IdTipoCuenta = tc.IdTipoCuenta
-                INNER JOIN Usuarios u ON c.IdUsuario = u.IdUsuario
-                INNER JOIN Persona p ON u.Dni = p.Dni
+                INNER JOIN tipocuenta tc ON c.IdTipoCuenta = tc.IdTipoCuenta
+                INNER JOIN usuarios u ON c.IdUsuario = u.IdUsuario
+                INNER JOIN persona p ON u.Dni = p.Dni
                 WHERE c.FechaCreacion BETWEEN ? AND ?
                 ORDER BY c.FechaCreacion DESC
-                """;
+                """; 
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(desde.getTime()));
-            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime()));
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime()));
+
+            System.out.println("DEBUG DAO: Ejecutando obtenerCuentasCreadasEnRango. SQL: " + sql);
+            System.out.println("DEBUG DAO: Fechas para obtenerCuentasCreadasEnRango: " + desde + " a " + hasta);
+
             rs = stmt.executeQuery();
+            int count = 0;
             while (rs.next()) {
+                count++;
                 Cuenta c = new Cuenta();
                 c.setNroCuenta(rs.getInt("NroCuenta"));
                 c.setCbu(rs.getString("Cbu"));
-                c.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate()); // Usar toLocalDate()
+                c.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate()); 
                 c.setSaldo(rs.getBigDecimal("Saldo"));
-                c.setEstado(rs.getString("Estado")); // Asumo que Estado es un boolean
+                c.setEstado(rs.getString("Estado")); 
 
                 TipoCuenta tc = new TipoCuenta();
                 tc.setIdTipoCuenta(rs.getInt("IdTipoCuenta"));
@@ -571,8 +584,13 @@ public class daoCuentas implements inCuentas{
 
                 lista.add(c);
             }
+            System.out.println("DEBUG DAO: Cantidad de cuentas encontradas en obtenerCuentasCreadasEnRango: " + count);
+        } catch (SQLException e) { 
+            e.printStackTrace();
+            System.err.println("ERROR DAO: SQL Exception en obtenerCuentasCreadasEnRango: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("ERROR DAO: Excepción general en obtenerCuentasCreadasEnRango: " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();

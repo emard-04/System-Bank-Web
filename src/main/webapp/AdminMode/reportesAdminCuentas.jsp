@@ -102,7 +102,7 @@
                         if ("cuentas".equals(currentActiveReportType)) {
                             out.print("Reporte de Cuentas Creadas");
                         } else {
-                            out.print("Reporte de Préstamos"); // Por defecto o si es "prestamos"
+                            out.print("Reporte de Préstamos"); 
                         }
                     %>
                 </h2>
@@ -145,7 +145,6 @@
 
                 <%-- Resultados del Reporte de Préstamos --%>
                 <%
-                    // Si tu clase se llama 'Prestamos', cambia 'Entidades.Prestamo' a 'Entidades.Prestamos' aquí y en el import.
                     List<Entidades.Prestamos> listaPrestamos = (List<Entidades.Prestamos>) request.getAttribute("listaPrestamos");
                     BigDecimal cantidadPrestamos = (BigDecimal) request.getAttribute("cantidadPrestamosOtorgados");
                     BigDecimal montoTotalPrestamos = (BigDecimal) request.getAttribute("montoTotalPrestamos");

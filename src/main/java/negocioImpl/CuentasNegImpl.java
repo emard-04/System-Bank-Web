@@ -113,7 +113,12 @@ public class CuentasNegImpl implements CuentasNeg{
 
     @Override
     public String obtenerTipoCuentaMasCreadaEnRango(Date desde, Date hasta) {
+    	
+    	System.out.println("DEBUG Negocio: Entrando a obtenerCuentasCreadasEnRango en CuentasNegImpl.");
+        System.out.println("DEBUG Negocio: Llamando a daoCuentas.obtenerCuentasCreadasEnRango con fechas: " + desde + " a " + hasta);
+        
         return dao.obtenerTipoCuentaMasCreadaEnRango(desde, hasta);
+
     }
 
     @Override
