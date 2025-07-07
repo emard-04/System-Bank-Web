@@ -108,6 +108,9 @@ function confirmarLogout(e) {
     	 nroCBU=(String)request.getAttribute("nroCBU");
     }
     %>
+    <%
+    java.time.LocalDate hoy = java.time.LocalDate.now();
+%>
 					<form action="/BancoParcial/ServletAgregarCuentas" method="post"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
 						<div>
@@ -127,13 +130,16 @@ function confirmarLogout(e) {
 								required>
 						</div>
 						<div>
-							<label for="fecha_creacion"
-								class="block text-gray-700 text-lg font-semibold mb-2">Fec
-								Creacion</label> <input type="date" id="fecha_creacion"
-								name="fecha_creacion"
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-								required>
-						</div>
+    <label for="fecha_creacion" class="block text-gray-700 text-lg font-semibold mb-2">Fec Creacion</label>
+    <input 
+        type="date" 
+        id="fecha_creacion" 
+        name="fecha_creacion" 
+        value="<%= hoy %>"
+        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
+        required
+    >
+</div>
 
 						<div class="col-span-1 md:col-span-1 flex flex-col justify-end">
 							<label class="block text-gray-700 text-lg font-semibold mb-2">TIPO</label>

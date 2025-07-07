@@ -67,9 +67,9 @@
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
                    <li><a
-						href="<%=request.getContextPath()%>/ClientMode/homeClient.jsp"
-						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
-							Home </a></li>
+						href="<%=request.getContextPath()%>/AdminMode/HomeAdmin.jsp"
+						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Home</a>
+					</li>
                     <li><a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
                     <li><a href="<%=request.getContextPath()%>/ServletListarCuentas?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
                     <li><a href="<%=request.getContextPath()%>/ServletPrestamosAdmi" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
