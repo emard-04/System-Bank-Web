@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.*;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import negocio.*;
 import negocioImpl.*;
 import javax.servlet.RequestDispatcher;
@@ -23,6 +25,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 	private final PrestamosNeg prestamosNeg = new PrestamosNegImpl();
 	private final CuentasNeg cuentaNeg = new CuentasNegImpl();
 	private final CuotasNeg cuotaNeg = new CuotasNegImpl();
+	private final MovimientoNeg movNeg = new MovimientoNegImpl();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -86,14 +89,13 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-
         try {
             int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
             int nroCuenta = Integer.parseInt(request.getParameter("cuenta")); // ✅ CAMBIO
 
            // System.out.println("ID cuota seleccionada: " + idCuota);
             //System.out.println("Nro cuenta seleccionada: " + nroCuenta);
-
+            agregarMovimiento(request, idCuota);
             boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
             //System.out.println("Resultado del pago de cuota: " + exito);
 
@@ -128,5 +130,28 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=excepcion");
         }
+    }
+    public void agregarMovimiento(HttpServletRequest request,int idCuota)throws ServletException, IOException {
+    	Cuenta cuenta = new Cuenta();
+    	Cuota cuota = new Cuota();
+    	Usuario usuario= new Usuario();
+    	cuota= cuotaNeg.obtenerCuotaPorId(idCuota);
+    	cuenta=cuentaNeg.BuscarPorNro(Integer.parseInt(request.getParameter("cuenta")));
+    	Movimiento mov= new Movimiento();
+    	mov.setCuentaEmisor(cuenta);
+    	cuenta.getUsuario().setNombreUsuario("Banco");
+    	mov.setDetalle("Pagar cuota");
+    	mov.setFecha(LocalDate.now());
+    	mov.setImporte(cuota.getImporte());
+    	mov.setCuentaReceptor(cuenta);
+    	mov.setUsuario(cuenta.getUsuario());
+    	TipoMovimiento tm= new TipoMovimiento();
+    	tm.setIdTipoMovimiento(1);
+    	mov.setTipoMovimiento(tm);
+    	movNeg.movimientoPagarCuota(mov);
+    		
+    		
+    	
+    	
     }
 }

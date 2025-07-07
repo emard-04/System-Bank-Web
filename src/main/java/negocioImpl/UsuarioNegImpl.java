@@ -73,4 +73,7 @@ public class UsuarioNegImpl implements UsuarioNeg {
         }
         return daoUsuario.filtrar(condicionesExtras.toString(), parametrosExtras);
     }
+    public Usuario buscarId(int id) {
+    	return daoUsuario.BuscarIdusuario(id);
+    }
 }

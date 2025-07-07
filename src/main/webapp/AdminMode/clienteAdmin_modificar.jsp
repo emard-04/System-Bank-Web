@@ -363,7 +363,13 @@ function confirmarLogout(e) {
                 localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
             }
         });
-
+        $(document).ready(function() {
+            $('#seleccionar_cliente_dni').select2({
+              placeholder: "Seleccione un DNI",
+              allowClear: true,
+              width: '50%' // Se adapta al ancho del contenedor
+            });
+          });
         // Cuando se selecciona un cliente por DNI
         document.getElementById("seleccionar_cliente_dni").addEventListener("change", function () {
             const dniCliente = this.value;

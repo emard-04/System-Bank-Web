@@ -19,7 +19,8 @@ public class CuentasNegImpl implements CuentasNeg{
     public boolean Agregar(Cuenta cuenta) {
     	PersonaNegImpl negPersona= new PersonaNegImpl();
     	//Perosna no existe dni return false
-    	if(!negPersona.existe(cuenta.getUsuario().getPersona().getDni()))return false;
+    	
+    	if(!negPersona.existe(cuenta.getUsuario().getPersona().getDni())) return false;
     	//Usuario Administrador return false
     	if(nUsuario.BuscarDni(cuenta.getUsuario().getPersona().getDni()).isTipoUsuario())return false;
     	//persona tiene 3 cuentas return false

@@ -162,7 +162,6 @@ public class daoCuotas implements inCuotas{
 	        for (int r : resultados) {
 	            if (r <= 0) return false;  // Si alguna cuota no se insertó
 	        }
-	        System.out.println("✅ Cuotas listas para guardar en DB");
 	        conn.commit();  // Muy importante si estás trabajando con transacciones
 	        return true;
 
@@ -193,11 +192,9 @@ public class daoCuotas implements inCuotas{
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
 	        
 	        ps.setInt(1, nroCuenta);
-	        System.out.println("Ejecutando SQL con nroCuenta: " + nroCuenta);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
 	            	Cuota cuota = new Cuota();
-	            	System.out.println("Cuota encontrada - ID: " + rs.getInt("IdCuota"));
 	                cuota.setIdCuota(rs.getInt("IdCuota"));
 	                cuota.setNroCuota(rs.getInt("NroCuota"));
 	                cuota.setImporte(rs.getBigDecimal("Importe"));
@@ -213,13 +210,11 @@ public class daoCuotas implements inCuotas{
 	                lista.add(cuota);
 	            }
 	        }
-	        System.out.println("No se encontraron cuotas pendientes para la cuenta: " + nroCuenta);
 	    }
 	    return lista;
 	}
 	@Override
 	public Cuota obtenerCuotaPorId(int idCuota) {
-		System.out.println("obtenerCuotaPorId llamado con idCuota=" + idCuota);
 	    Cuota cuota = null;
 	    String query = "SELECT * FROM Cuotas WHERE IdCuota = ?";
 
@@ -246,7 +241,6 @@ public class daoCuotas implements inCuotas{
 	            }
 
 	            cuota.setIdPrestamo(rs.getInt("IdPrestamo"));
-	            System.out.println("Cuota encontrada: ID=" + cuota.getIdCuota() + ", Importe=" + cuota.getImporte());
 	        }
 
 	    } catch (Exception e) {

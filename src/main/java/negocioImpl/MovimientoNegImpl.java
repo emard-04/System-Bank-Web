@@ -66,4 +66,8 @@ public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operad
 	    return dao.Filtrar(mov.getUsuario().getIdUsuario(),mov.getCuentaEmisor().getNroCuenta(),nombre,condicionesExtras.toString(),parametrosExtras
 	    );
 }
+
+public boolean movimientoPagarCuota(Movimiento mov) {
+    return dMov.Agregar(mov);
+}
 }

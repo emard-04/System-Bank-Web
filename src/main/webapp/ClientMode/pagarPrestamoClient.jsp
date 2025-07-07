@@ -191,7 +191,7 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
     
     <!-- Botones -->
     <div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
-        <button type="submit"
+        <button type="submit" name="Pagar"
             class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 text-base">
             PAGAR
         </button>

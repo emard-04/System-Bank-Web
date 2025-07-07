@@ -1,8 +1,8 @@
 package Entidades;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-public class Cuenta {
+import java.io.Serializable;
+public class Cuenta implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int nroCuenta;
     private Usuario usuario;

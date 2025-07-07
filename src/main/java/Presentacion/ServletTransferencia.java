@@ -43,6 +43,7 @@ public class ServletTransferencia extends HttpServlet {
 				 HttpSession sesion = request.getSession();
 				    // Leer número de cuenta desde sesión
 				    int cuentaSeleccionada = Integer.parseInt(request.getParameter("cuentaSeleccionada"));
+				    System.out.println("get");
 				    if (cuentaSeleccionada > 0) {
 				    	Cuenta cuenta=nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
 					    request.setAttribute("nroCuenta", cuenta.getNroCuenta());
@@ -56,6 +57,7 @@ public class ServletTransferencia extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		  System.out.println("post");
 		Movimiento movEmisor= new Movimiento();
 		movEmisor.setDetalle(request.getParameter("referencia"));
 		TipoMovimiento tm= new TipoMovimiento();
@@ -64,7 +66,8 @@ public class ServletTransferencia extends HttpServlet {
 		movEmisor.setFecha(LocalDate.now());
 		movEmisor.setCuentaEmisor((Cuenta)request.getSession().getAttribute("cuenta"));
 		Cuenta c=nCuenta.cuentaxCbu(request.getParameter("alias_cbu"));
-		if(c==null)return;
+		System.out.println(request.getParameter("alias_cbu"));
+		if(c==null) {System.out.println("null");return;}
 		movEmisor.setCuentaReceptor(c);
 		BigDecimal monto = new BigDecimal(request.getParameter("monto"));
 		movEmisor.setImporte(monto);
@@ -88,7 +91,6 @@ public class ServletTransferencia extends HttpServlet {
 		request.setAttribute("mensaje", "❌ Error al realizar la transferencia.");
 		RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
 		rd.forward(request, response);
-		doGet(request, response);
 	}
 
 }

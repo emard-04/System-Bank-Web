@@ -10,4 +10,5 @@ public interface UsuarioNeg {
 	     boolean Eliminar(String nombreUsuario);
 	     boolean Modificar(Usuario usuario);
 	    ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad);
+	    Usuario buscarId(int id);
 }
