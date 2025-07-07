@@ -8,16 +8,25 @@
 	<script src="https://cdn.tailwindcss.com"></script>
  	<style>
         body {
-            font-family: 'Inter', sans-serif; /* Puedes importar Google Fonts si quieres algo más específico */
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+	<%
+	String mensaje = (String) session.getAttribute("mensaje");
+	if (mensaje != null) {
+	%>
+	<script>alert("<%=mensaje%>")</script>
 
+	<%
+	session.removeAttribute("mensaje");
+	}
+	%>
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
         <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Iniciar Sesión</h2>
 
-        <form action="/BancoParcial/ServletLogin" method="post"> <%-- La acción del formulario sigue apuntando a tu Servlet --%>
+        <form action="/BancoParcial/ServletLogin" method="post">
             <div class="mb-6">
                 <label for="username" class="block text-gray-700 text-sm font-medium mb-2">
                     Usuario
@@ -52,8 +61,7 @@
                 Entrar
             </button>
 
-
-            <%-- Mostrar mensajes de error (esto sigue siendo JSP, no HTML/CSS puro) --%>
+            <%-- Mostrar mensajes de error (esto sigue siendo JSP, no HTML/CSS puro) 
             <%
                 String errorMessage = (String) request.getAttribute("errorMessage");
                 if (errorMessage != null) {
@@ -64,6 +72,7 @@
             <%
                 }
             %>
+            --%>
         </form>
     </div>
 

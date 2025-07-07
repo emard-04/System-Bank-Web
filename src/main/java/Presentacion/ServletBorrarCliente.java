@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.*;
 import exceptions.ErrorAlEliminarException;
 
+//Borrar usuario / cliente
 @WebServlet("/ServletBorrarCliente")
 public class ServletBorrarCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,14 +26,13 @@ public class ServletBorrarCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		List<Usuario> users = negUsuario.listarTodo();
-		
+
 		request.setAttribute("users", users);
-		
+
 		request.getRequestDispatcher("/AdminMode/clientesAdmin_borrar.jsp").forward(request, response);
-		
-		
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -40,8 +40,8 @@ public class ServletBorrarCliente extends HttpServlet {
 		String nroDniStr = request.getParameter("dni_eliminar");
 
 		if (nroDniStr == null || nroDniStr.isEmpty()) {
-			response.sendRedirect(
-					request.getContextPath() + "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó Ningun cliente");
+			response.sendRedirect(request.getContextPath()
+					+ "/AdminMode/clientesAdmin_borrar.jsp?error=No seleccionó Ningun cliente");
 			return;
 		}
 
@@ -50,8 +50,8 @@ public class ServletBorrarCliente extends HttpServlet {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
 			}
-			
-		}  catch (NumberFormatException e) {
+
+		} catch (NumberFormatException e) {
 			// En caso de que el nroCuenta no es válido
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=NroCuenta inválido");
 		} catch (ErrorAlEliminarException e) {
@@ -92,7 +92,7 @@ public class ServletBorrarCliente extends HttpServlet {
 //			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
 //		}
 	}
-	
+
 	public static boolean exitoAlEliminarCliente(String Dni) throws ErrorAlEliminarException {
 		UsuarioNegImpl negUs = new UsuarioNegImpl();
 		if (negUs.Eliminar(Dni)) {
