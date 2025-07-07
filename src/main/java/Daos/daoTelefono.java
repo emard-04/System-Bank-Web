@@ -14,6 +14,7 @@ public class daoTelefono implements inTelefono{
 	private String editar="update telefonoxpersonas set telefono=? where telefono=? and dni=?";
 	private String Agregar="insert into telefonoxpersonas (dni, telefono) values(?,?)";
 	private String Eliminar="Delete From telefonoxpersonas where telefono=? and dni=?";
+	private String existe="Select * from telefonoxpersonas where telefono?;";
 	public boolean Agregar(TelefonoxPersona telefono) {
 		Connection cn = null;
         PreparedStatement cs = null;
@@ -78,37 +79,7 @@ public class daoTelefono implements inTelefono{
         }
         return -1;
     }	
-	@Override
-	public TelefonoxPersona buscarXTelefono(String telefono) {
-		TelefonoxPersona telPersona = null;
-        Connection cn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(buscarxTelefono);
-            ps.setString(1, telefono);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                telPersona = new TelefonoxPersona();
-                Persona persona = new Persona();
-                persona.setDni(rs.getString("Dni"));  
-
-                telPersona.setDni(persona);
-                telPersona.setTelefono(telefono);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { if (rs != null) rs.close(); } catch (Exception e) {}
-            try { if (ps != null) ps.close(); } catch (Exception e) {}
-            try { if (cn != null) cn.close(); } catch (Exception e) {}
-        }
-
-        return telPersona;
-    }
+	
 	public ArrayList<TelefonoxPersona> listarTelefonos(String dni) {
 		TelefonoxPersona telPersona = null;
         Connection cn = null;
@@ -160,14 +131,14 @@ public class daoTelefono implements inTelefono{
         }
         return false;
     }
-	public boolean existe(TelefonoxPersona telefono) {
+	public boolean existe(String telefono) {
 		Connection cn=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
 		try {
 			cn=Conexion.getConexion().getSQLConnection();
 			ps= cn.prepareStatement(buscarxTelefono);
-			ps.setString(1, telefono.getTelefono());
+			ps.setString(1, telefono);
 			rs = ps.executeQuery();
             return rs.next();
 		}catch (Exception e) {

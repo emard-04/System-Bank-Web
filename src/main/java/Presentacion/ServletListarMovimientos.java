@@ -17,8 +17,11 @@ import Entidades.TelefonoxPersona;
 import Entidades.Usuario;
 import negocio.CuentasNeg;
 import negocio.MovimientoNeg;
+import negocio.TipoMovimientoNeg;
 import negocioImpl.CuentasNegImpl;
 import negocioImpl.MovimientoNegImpl;
+import negocioImpl.TipoCuentaNegImpl;
+import negocioImpl.TipoMovimientoNegImpl;
 
 /**
  * Servlet implementation class ServletListarMovimientos
@@ -28,6 +31,7 @@ public class ServletListarMovimientos extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        private final MovimientoNeg nMov=new MovimientoNegImpl();
        private final CuentasNeg nCue= new CuentasNegImpl();
+       private final TipoMovimientoNeg nTipMov= new TipoMovimientoNegImpl();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -46,6 +50,7 @@ public class ServletListarMovimientos extends HttpServlet {
 		if(request.getParameter("Filtrar")!=null) {
 		String nombre = request.getParameter("busqueda");
 		String operador = request.getParameter("tipoOperacion");
+		int tipoMovimiento= Integer.parseInt(request.getParameter("tipoMovimiento"));
 		String desdeStr = request.getParameter("fechaDesde");
 		String hastaStr = request.getParameter("fechaHasta");
 		Cuenta cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
@@ -58,7 +63,8 @@ public class ServletListarMovimientos extends HttpServlet {
 		LocalDate hasta = (hastaStr != null && !hastaStr.isEmpty()) ? LocalDate.parse(hastaStr) : null;
 
 		// Llamás a la capa de negocio
-		request.setAttribute("ListaFiltra",nMov.filtrar(mov, nombre, operador, desde, hasta));
+		request.setAttribute("ListaFiltra",nMov.filtrar(mov, nombre, operador, desde, hasta,tipoMovimiento));
+		request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
 		RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movientosClient.jsp");
 		rd.forward(request, response);
 		}
@@ -75,7 +81,6 @@ private void windowDefault(HttpServletRequest request, HttpServletResponse respo
 	if(request.getParameter("cuentaSeleccionada")!=null) {
 	cuenta.setNroCuenta((Integer.parseInt(request.getParameter("cuentaSeleccionada"))));}
 	else{
-		System.out.println("else");
 		cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
 	}
 	Usuario usuario=(Usuario)(request.getSession().getAttribute("usuarioLogueado"));
@@ -89,6 +94,7 @@ if(cuenta!=null) {
 	mov.setUsuario(usuario);
 	request.setAttribute("Lista",nMov.Listarxcuentas(mov));
 }
+request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
 	RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movientosClient.jsp");
 	rd.forward(request, response);
 }

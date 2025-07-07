@@ -95,13 +95,12 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
 
            // System.out.println("ID cuota seleccionada: " + idCuota);
             //System.out.println("Nro cuenta seleccionada: " + nroCuenta);
-            agregarMovimiento(request, idCuota);
             boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
             //System.out.println("Resultado del pago de cuota: " + exito);
 
             if (exito) {
                 request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
-
+                agregarMovimiento(request, idCuota);
                 // 🔥 Obtener la cuota pagada para saber a qué préstamo pertenece
                 Cuota cuotaPagada = cuotaNeg.obtenerCuotaPorId(idCuota);
                 int idPrestamo = cuotaPagada.getIdPrestamo();
@@ -134,24 +133,18 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
     public void agregarMovimiento(HttpServletRequest request,int idCuota)throws ServletException, IOException {
     	Cuenta cuenta = new Cuenta();
     	Cuota cuota = new Cuota();
-    	Usuario usuario= new Usuario();
     	cuota= cuotaNeg.obtenerCuotaPorId(idCuota);
     	cuenta=cuentaNeg.BuscarPorNro(Integer.parseInt(request.getParameter("cuenta")));
     	Movimiento mov= new Movimiento();
     	mov.setCuentaEmisor(cuenta);
-    	cuenta.getUsuario().setNombreUsuario("Banco");
     	mov.setDetalle("Pagar cuota");
     	mov.setFecha(LocalDate.now());
-    	mov.setImporte(cuota.getImporte());
-    	mov.setCuentaReceptor(cuenta);
-    	mov.setUsuario(cuenta.getUsuario());
+    	mov.setImporte(cuota.getImporte().negate());
+    	mov.setCuentaReceptor(cuentaNeg.BuscarPorNro(22));
+    	mov.setUsuario(mov.getCuentaReceptor().getUsuario());
     	TipoMovimiento tm= new TipoMovimiento();
     	tm.setIdTipoMovimiento(1);
     	mov.setTipoMovimiento(tm);
-    	movNeg.movimientoPagarCuota(mov);
-    		
-    		
-    	
-    	
+    	movNeg.movimiento(mov);
     }
 }

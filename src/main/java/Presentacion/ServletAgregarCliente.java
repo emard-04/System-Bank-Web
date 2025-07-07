@@ -155,10 +155,17 @@ public class ServletAgregarCliente extends HttpServlet {
 	        persona.setCorreoElectronico(correo);
 	        persona.setSexo(sexo);
 	        persona.setEstado(true);
-
 	        // 3. Insertar persona
-	        boolean personaCreada = negPersona.Agregar(persona);
-
+		List<TelefonoxPersona> telefonosLista=new ArrayList<TelefonoxPersona>();
+		for(String numero: telefonos) {
+	        TelefonoxPersona telPersona = new TelefonoxPersona();
+	        if(!numero.isEmpty()) {
+	        telPersona.setDni(persona);
+	        telPersona.setTelefono(numero.trim());
+	        telefonosLista.add(telPersona);
+	        }else break;
+	        }
+		
 	        // 4. Crear e insertar usuario
 	        Usuario usuario = new Usuario();
 	        usuario.setNombreUsuario(nombreUsuario);
@@ -166,20 +173,10 @@ public class ServletAgregarCliente extends HttpServlet {
 	        usuario.setPersona(persona);
 	        usuario.setTipoUsuario(false); // asumimos que es cliente
 
-	        boolean usuarioCreado = negUsuario.AgregarUsuario(usuario);
-	        boolean telefonoGuardado=true;
+	        boolean usuarioCreado = negUsuario.AgregarUsuario(usuario, persona, telefonosLista);
 	        // 5. Insertar teléfono
-	        for(String numero: telefonos) {
-	        TelefonoxPersona telPersona = new TelefonoxPersona();
-	        if(!numero.isEmpty()) {
-	        telPersona.setDni(persona);
-	        telPersona.setTelefono(numero.trim());
-	        telefonoGuardado = negTelefono.Agregar(telPersona);
-	        }
-	        break;
-	        }
-	        System.out.println(personaCreada+" "+usuarioCreado+ " "+telefonoGuardado);
-	        if (personaCreada && usuarioCreado && telefonoGuardado) {
+	        
+	        if ( usuarioCreado) {
 	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");
 	            windowDefault(request, response, "AdminMode/clientesAdmin_agregar.jsp");
 	        } else {

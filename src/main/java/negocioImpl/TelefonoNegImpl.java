@@ -16,7 +16,7 @@ private daoTelefono dTelefono=new daoTelefono();
 
 	@Override
 	public boolean Agregar(TelefonoxPersona telefono) {
-		if(dTelefono.existe(telefono)) return false;
+		if(dTelefono.existe(telefono.getTelefono())) return false;
 		if(dTelefono.maximoTelefonos(telefono)>2)return false;
 		if(dTelefono.Agregar(telefono))return true;
 		return false;
@@ -32,6 +32,9 @@ private daoTelefono dTelefono=new daoTelefono();
 
     public TelefonoxPersona buscarPorDni(String dni) {
         return dTelefono.buscarPorDni(dni);
+    }
+    public boolean existe(String telefono) {
+    	return dTelefono.existe(telefono);
     }
 
 }

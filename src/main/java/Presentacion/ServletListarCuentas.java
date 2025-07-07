@@ -34,7 +34,7 @@ public class ServletListarCuentas extends HttpServlet {
     	windowDefault(request, response);
     	}
     	if(request.getParameter("Filtrar")!=null) {
-    		String dni=request.getParameter("Busqueda");
+    		String dni=request.getParameter("busqueda");
     		int TipoCuenta=0;
     		String Orden="DESC";// orden descendente por defecto
     		if(request.getParameter("TipoCuenta")!=null&&!request.getParameter("TipoCuenta").isEmpty())TipoCuenta=Integer.parseInt( request.getParameter("TipoCuenta"));

@@ -3,6 +3,7 @@ import negocio.*;
 import Interfaces.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Daos.*;
 import Entidades.*;
@@ -10,18 +11,28 @@ public class UsuarioNegImpl implements UsuarioNeg {
 
     private InUsuario daoUsuario = new daoUsuario();
     private PersonaNegImpl negPersona = new PersonaNegImpl();
-
+    private TelefonoNeg negTelefono = new TelefonoNegImpl();
     @Override
-    public boolean AgregarUsuario(Usuario usuario) {
-        Persona persona = usuario.getPersona();
-        if (!negPersona.existe(persona.getDni()))return false;
+    public boolean AgregarUsuario(Usuario usuario, Persona persona, List<TelefonoxPersona> listaTelefonos) {
+        //Validaciones de persona
+        if(negPersona.verificarMail(persona.getCorreoElectronico()))return false;
+        if(negPersona.existe(persona.getDni()))return false;
+        //Validacion usuario
         if(daoUsuario.existe(usuario.getNombreUsuario())) return false;
-        boolean exitoUsuario=daoUsuario.Agregar(usuario);
-        if(!exitoUsuario) {
-        	return false;
+        //Validacion telefono
+        for(TelefonoxPersona telefono: listaTelefonos) {
+        	if(negTelefono.existe(telefono.getTelefono())) {
+        		return false;
+        	}
         }
-        return true;
-    }
+        	if(!negPersona.Agregar(persona))return false;
+        	if(!daoUsuario.Agregar(usuario))return false;
+for(TelefonoxPersona telefonos: listaTelefonos) {
+	if(!negTelefono.Agregar(telefonos))return false;
+}
+return true;
+        }
+
     public boolean Existe(String nombreUsuaario) {
     	return daoUsuario.existe(nombreUsuaario);
     }
@@ -50,10 +61,13 @@ public class UsuarioNegImpl implements UsuarioNeg {
     public boolean Eliminar(String nombreUsuario) {
         return daoUsuario.Eliminar(nombreUsuario);
     }
-    public ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad) {
+    public ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad, int idPais) {
         StringBuilder condicionesExtras = new StringBuilder();
         ArrayList<Object> parametrosExtras = new ArrayList<>();
-
+        if(idPais>0) {
+        	condicionesExtras.append(" and pais.idPais = ? ");
+        	parametrosExtras.add(idPais);
+        }
         // Agregar condición por provincia
         if (idProvincia > 0) {
             condicionesExtras.append(" AND provincia.idProvincia = ? ");

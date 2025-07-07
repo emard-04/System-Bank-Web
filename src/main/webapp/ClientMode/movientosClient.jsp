@@ -182,7 +182,16 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 								name="cuentaSelect"> 
 								<input type="hidden" 
 								name="Filtrar" value="1"> 
-					<select name="tipoOperacion"
+								<select name="tipoMovimiento"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="0">Tipo Movimiento</option>
+						<%if(request.getAttribute("ListaTipoMov")!=null){ 
+						ArrayList<TipoMovimiento> Lista=(ArrayList<TipoMovimiento>)request.getAttribute("ListaTipoMov");
+						for(TipoMovimiento tipomov: Lista){%>
+						<option value=<%=tipomov.getIdTipoMovimiento() %>><%=tipomov.getDescripcion()%></option>
+						<%}} %>
+					</select>
+					<select name="tipoOperacion" 
 						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
 						<option value="">Operación</option>
 						<option value=">">Entrada</option>
@@ -238,7 +247,11 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 							<tr>
 								<td
 									class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%=mov.getCuentaEmisor().getNroCuenta()%></td>
+									<%if(mov.getTipoMovimiento().getDescripcion().equals("Transferencia")){%>
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%=mov.getCuentaReceptor().getUsuario().getNombreUsuario()%></td>
+								<%}else{ %>
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Banco</td>
+								<%} %>
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">$<%=mov.getImporte()%></td>
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%=mov.getDetalle()%></td>
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%=mov.getFecha()%></td>

@@ -1,6 +1,5 @@
 <%@page import="Entidades.Provincia"%>
-<%@ page import="Entidades.Usuario" %>
-<%@ page import="Entidades.Persona" %>
+<%@ page import="Entidades.*" %>
 <%@page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -36,7 +35,7 @@ function confirmarLogout(e) {
     }
 }
 </script>
-<body class="bg-gray-100 h-screen overflow-hidden">
+<body class="bg-gray-100 h-screen overflow-hidden" data-context-path="<%=request.getContextPath()%>">
 	<div class="flex h-full">
 
 		<aside
@@ -92,9 +91,9 @@ function confirmarLogout(e) {
 					</li>
 				</ul>
 			</nav>
-			<%ArrayList<Provincia> listaProvincias=null;
-			if(request.getAttribute("listaProvincias")!=null){
-				listaProvincias=(ArrayList<Provincia>)request.getAttribute("listaProvincias");}%>
+			<%ArrayList<Pais> listaPais=null;
+			if(request.getAttribute("listaPais")!=null){
+				listaPais=(ArrayList<Pais>)request.getAttribute("listaPais");}%>
 			
 			
 			<div
@@ -105,12 +104,16 @@ function confirmarLogout(e) {
 						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-48">
 								<input type="hidden" 
 								name="Filtrar" value="1"> 
+								<select name="pais" id="pais"
+						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
+						<option value="" >Seleccionar Pais</option>
+						<% for(Pais pais: listaPais){%>
+						<option value="<%=pais.getIdPais()%>"><%=pais.getNombre()%></option>
+						<%} %>
+						</select>
 					<select name="provincias" id="provincias"
 						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
 						<option value="" >Seleccionar provincia</option>
-						<% for(Provincia provincia: listaProvincias){%>
-						<option value="<%=provincia.getIdProvincia()%>"><%=provincia.getNombre()%></option>
-						<%} %>
 						</select>
 					<select name="Localidad" id="localidad"
 						class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-40">
@@ -223,33 +226,72 @@ function confirmarLogout(e) {
 	</div>
 </body>
 <script>
-document.getElementById('provincias').addEventListener('change', function () {
-    var provinciaId = this.value;
-    cargarLocalidades(provinciaId);
-});
-function cargarLocalidades(provinciaId, localidadIdSeleccionada = null) {
-    const localidadSelect = document.getElementById('localidad');
-    localidadSelect.innerHTML = '<option value="">Cargando...</option>';
+function cargarProvincias(idPais) {
+    const provinciaSelect = document.getElementById("provincias");
+    const localidadSelect = document.getElementById("localidad");
+    const contextPath = document.body.getAttribute("data-context-path");
 
-    if (!provinciaId) {
-        localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-        return;
-    }
-
-    const contextPath = "<%= request.getContextPath() %>";
-    const url = contextPath + "/ServletListarClientes?listarLocalidades=1&provinciaId=" + provinciaId;
-
-    fetch(url)
+    return fetch(contextPath + "/ServletListarClientes?listarProvincias=1&idPais=" + idPais)
         .then(response => response.json())
-        .then(localidades => {
-            localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
-            localidades.forEach(localidad => {
-                const option = document.createElement('option');
-                option.value = localidad.idLocalidad;
-                option.textContent = localidad.nombre;
+        .then(data => {
+            provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+            localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+            data.forEach(p => {
+                const option = document.createElement("option");
+                option.value = p.idProvincia;
+                option.textContent = p.nombre;
+                provinciaSelect.appendChild(option);
+            });
+        })
+        .catch(err => console.error("Error cargando provincias:", err));
+}
+
+function cargarLocalidades(idProvincia) {
+    const localidadSelect = document.getElementById("localidad");
+    const contextPath = document.body.getAttribute("data-context-path");
+    console.log("contextPathFun:", contextPath);
+
+    return fetch(contextPath + "/ServletListarClientes?listarLocalidades=1&idProvincia=" + idProvincia)
+        .then(response => response.json())
+        .then(data => {
+            localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+            data.forEach(l => {
+                const option = document.createElement("option");
+                option.value = l.idLocalidad;
+                option.textContent = l.nombre;
                 localidadSelect.appendChild(option);
             });
         })
+        .catch(err => console.error("Error cargando localidades:", err));
 }
+
+// ✅ TODO el bloque dentro de DOMContentLoaded
+document.addEventListener("DOMContentLoaded", function () {
+    const nacionalidad = document.getElementById("pais");
+    const provinciaSelect = document.getElementById("provincias");
+    const localidadSelect = document.getElementById("localidad");
+    const contextPath = document.body.getAttribute("data-context-path");
+
+    console.log("contextPath:", contextPath); // ✅ Ahora SÍ está definida
+
+    nacionalidad.addEventListener("change", function () {
+        const idPais = nacionalidad.value;
+        if (idPais) {
+            cargarProvincias(idPais);
+        } else {
+            provinciaSelect.innerHTML = '<option value="">Seleccione provincia</option>';
+            localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+        }
+    });
+
+    provinciaSelect.addEventListener("change", function () {
+        const idProvincia = provinciaSelect.value;
+        if (idProvincia) {
+            cargarLocalidades(idProvincia);
+        } else {
+            localidadSelect.innerHTML = '<option value="">Seleccione localidad</option>';
+        }
+    });
+});
 </script>
 </html>

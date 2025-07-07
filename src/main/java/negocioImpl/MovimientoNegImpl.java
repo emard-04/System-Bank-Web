@@ -46,10 +46,13 @@ return false;
 public ArrayList<Movimiento> Listarxcuentas(Movimiento mov){
 	return dMov.Listarxcuentas(mov);
 }
-public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operador, LocalDate desde, LocalDate hasta){
+public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operador, LocalDate desde, LocalDate hasta,int tipoMovimiento){
 	    StringBuilder condicionesExtras = new StringBuilder();
 	    ArrayList<Object> parametrosExtras = new ArrayList<>();
-
+	    if(tipoMovimiento!=0) {
+	    	condicionesExtras.append("and idtipomovimiento=?");
+	    	parametrosExtras.add(tipoMovimiento);
+	    }
 	    if (desde != null && hasta != null) {
 	        condicionesExtras.append(" AND fecha BETWEEN ? AND ? ");
 	        parametrosExtras.add(desde);
@@ -67,7 +70,7 @@ public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operad
 	    );
 }
 
-public boolean movimientoPagarCuota(Movimiento mov) {
+public boolean movimiento(Movimiento mov) {
     return dMov.Agregar(mov);
 }
 }

@@ -2,6 +2,8 @@ package Presentacion;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +22,8 @@ public class ServletPrestamosAdmi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 private PrestamosNeg prestamoNeg = new PrestamosNegImpl();
 	 private final CuotasNeg cuotaNeg = new CuotasNegImpl();
-  
+	 private final CuentasNeg cuentaNeg = new CuentasNegImpl();
+	 private final MovimientoNeg movimientoNeg = new MovimientoNegImpl();
     public ServletPrestamosAdmi() {
         super();
         // TODO Auto-generated constructor stub
@@ -89,9 +92,10 @@ public class ServletPrestamosAdmi extends HttpServlet {
 
             if (accion.equalsIgnoreCase("aceptar")) {
                 if (prestamoNeg.aprobarPrestamo(idPrestamo)) {
-                    // ✅ El préstamo fue aprobado, ahora generamos las cuotas
+                    // ✅ El préstamo fue aprobado, ahora generamos las cuotas y generamos el movimiento
                     Prestamos prestamo = prestamoNeg.buscarPorId(idPrestamo); // Necesitás este método en tu capa negocio
-
+                    
+                    agregarMovimiento(prestamo);
                     if (prestamo != null) {
                         BigDecimal montoCuota = prestamo.getMontoCuotasxMes();
                         int cantidadCuotas = Integer.parseInt(prestamo.getPlazoDePago().split(" ")[0]); // Extraer número de cuotas
@@ -115,4 +119,17 @@ public class ServletPrestamosAdmi extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/ServletPrestamosAdmi?mensaje=" + mensaje);
 
 	}
+    private void agregarMovimiento(Prestamos prestamo) {
+    	Movimiento movimiento=new Movimiento();
+		TipoMovimiento tm= new TipoMovimiento();
+		movimiento.setCuentaEmisor(prestamo.getCuenta());
+		movimiento.setDetalle("Aprobacion de Prestamo");
+		movimiento.setCuentaReceptor(cuentaNeg.BuscarPorNro(22));
+		tm.setIdTipoMovimiento(2);
+		movimiento.setTipoMovimiento(tm);
+		movimiento.setImporte(prestamo.getImportePedido());
+		movimiento.setFecha(LocalDate.now());
+		movimiento.setUsuario(prestamo.getUsuario());
+		movimientoNeg.movimiento(movimiento);
+    }
 }

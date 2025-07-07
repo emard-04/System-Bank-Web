@@ -371,17 +371,18 @@ function confirmarLogout(e) {
             });
           });
         // Cuando se selecciona un cliente por DNI
-        document.getElementById("seleccionar_cliente_dni").addEventListener("change", function () {
-            const dniCliente = this.value;
-            if (!dniCliente) {
-                limpiarCampos();
-                return;
-            }
+        $('#seleccionar_cliente_dni').on('change', function ()  {
+        var dniCliente = this.value;
+        if (!dniCliente) {
+            // limpiar campos si se deselecciona
+            limpiarCampos();
+            return;
+        }
 
-            fetch("/BancoParcial/ServletModificarCliente?dniCliente=" + dniCliente)
-                .then(response => {
-                    if (!response.ok) throw new Error('Usuario no encontrado');
-                    return response.json();
+        fetch('/BancoParcial/ServletModificarCliente?dniCliente=' + dniCliente)
+            .then(response => {
+                if (!response.ok) throw new Error('Usuario no encontrado');
+                return response.json();
                 })
                 .then(data => {
                     document.getElementById('dni_mod').value = data.dni;
@@ -406,12 +407,65 @@ function confirmarLogout(e) {
                     document.getElementById('sexo_mod').value = data.sexo;
                     document.getElementById('usuario_mod').value = data.usuario;
                     document.getElementById('contrasena_mod').value = data.contrasena;
+                    let selectTelefonos = document.getElementById('telefono_select');
+                    selectTelefonos.innerHTML = '<option value="">-- Seleccione un teléfono --</option>';
+
+                    data.telefonos.forEach(tel => {
+                        let option = document.createElement('option');
+                        option.value = tel.numero;
+                        option.textContent = tel.numero;
+                        selectTelefonos.appendChild(option);
+                    });
                 })
                 .catch(error => {
                     alert(error.message);
                     limpiarCampos();
                 });
         });
+        document.getElementById('btnCancelar').addEventListener('click', function () {
+            location.reload();
+        });
+        document.getElementById('telefono_select').addEventListener('change', function() {
+        	var telefono=this.value;
+        	document.getElementById('telefono_input').value=telefono;
+        	document.getElementById('oldTelefono').value=telefono;
+        	document.getElementById('telefono_select').disabled=true;
+        });
+        document.getElementById('btnAgregarTelefono').addEventListener('click', function () {
+        	document.getElementById('telefono_select').value = '';
+        	  document.getElementById('telefono_select').disabled = true;
+        	  document.getElementById('telefono_select').style.backgroundColor= 'silver';
+        	  document.getElementById('telefono_select').disabled = true;
+        	  document.getElementById('telefono_input').value = '';
+        	  document.getElementById('telefono_input').required = true;
+        	  document.getElementById('telefono_input').readOnly = false;
+        	  document.getElementById('telefono_input').style.backgroundColor = 'white';
+        	  document.getElementById('Accion').value = 'Agregar';
+        	});
+
+        	document.getElementById('btnEditarTelefono').addEventListener('click', function () {
+        	document.getElementById('telefono_select').value = '';
+        	  document.getElementById('telefono_select').disabled = false;
+        	  document.getElementById('telefono_select').style.backgroundColor= 'white';
+        	  document.getElementById('telefono_select').required = true;
+        	  document.getElementById('telefono_input').required = true;
+        	  document.getElementById('telefono_input').value = '';
+        	  document.getElementById('telefono_input').readOnly = false;
+        	  document.getElementById('telefono_input').style.backgroundColor = 'white';
+        	  document.getElementById('Accion').value = 'Editar';
+        	});
+
+        	document.getElementById('btnEliminarTelefono').addEventListener('click', function () {
+        		document.getElementById('telefono_select').value = '';
+        	  document.getElementById('telefono_select').disabled = false;
+        	  document.getElementById('telefono_select').style.backgroundColor= 'white';
+        	  document.getElementById('telefono_select').required = true;
+        	  document.getElementById('telefono_input').value = '';
+        	  document.getElementById('telefono_input').required = true;
+        	  document.getElementById('telefono_input').style.backgroundColor = 'white';
+        	  document.getElementById('telefono_input').readOnly = true;
+        	  document.getElementById('Accion').value = 'Eliminar';
+        	});
 
         function limpiarCampos() {
             document.getElementById('dni_mod').value = '';

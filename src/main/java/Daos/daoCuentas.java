@@ -28,7 +28,7 @@ public class daoCuentas implements inCuentas{
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas  WHERE Estado = 'Activa';";
-    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and IdUsuario=?;";
+    private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and idUsuario=?;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE NroCuenta=?;";
@@ -102,7 +102,7 @@ public class daoCuentas implements inCuentas{
             query.append("SELECT * ");
             query.append("FROM cuentas ");
             query.append("INNER JOIN usuarios ON cuentas.IdUsuario = usuarios.IdUsuario ");
-            query.append("WHERE cuentas.Estado = 'Activa' ");
+            query.append("WHERE (cuentas.Estado = 'Activa' or cuentas.Estado='Activo')");
             query.append(condicionesExtras);
             query.append(orden);  // ← lo agregás acá
 

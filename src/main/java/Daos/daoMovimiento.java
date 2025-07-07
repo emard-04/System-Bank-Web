@@ -43,7 +43,7 @@ import Interfaces.inPersona;
 	            ps.setString(paramIndex++, "%" + nombreUsuario + "%");
 
 	            for (Object param : parametrosExtras) {
-	                if (param instanceof LocalDate) {
+	            	 if (param instanceof LocalDate) {
 	                    ps.setDate(paramIndex++, java.sql.Date.valueOf((LocalDate) param));
 	                } else if (param instanceof Integer) {
 	                    ps.setInt(paramIndex++, (Integer) param);

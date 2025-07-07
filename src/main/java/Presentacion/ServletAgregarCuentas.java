@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Entidades.*;
+import negocio.MovimientoNeg;
 import negocio.TipoCuentaNeg;
 import negocio.UsuarioNeg;
 import negocioImpl.CuentasNegImpl;
+import negocioImpl.MovimientoNegImpl;
 import negocioImpl.TipoCuentaNegImpl;
 import negocioImpl.UsuarioNegImpl;
 
@@ -23,8 +25,10 @@ import negocioImpl.UsuarioNegImpl;
 @WebServlet("/ServletAgregarCuentas")
 public class ServletAgregarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final UsuarioNeg negUsuario= new UsuarioNegImpl(); 
 	private static final CuentasNegImpl negCuenta= new CuentasNegImpl(); 
 	private static final TipoCuentaNeg negTipoCuenta= new TipoCuentaNegImpl(); 
+	private static final MovimientoNeg negMovimiento= new MovimientoNegImpl(); 
     public ServletAgregarCuentas() {
         super();
         // TODO Auto-generated constructor stub
@@ -75,6 +79,7 @@ public class ServletAgregarCuentas extends HttpServlet {
 
         // 6. Redirigir según resultado
         if (exito) {
+        	agregarMovimiento(cuenta);
         	 String ventana="/AdminMode/cuentaAdmin_agregar.jsp";
             windowDefault(request, response, ventana);
         } else {
@@ -88,6 +93,18 @@ public class ServletAgregarCuentas extends HttpServlet {
 		 RequestDispatcher rd= request.getRequestDispatcher(jsp);
 		 rd.forward(request, response);
 	}
-	
+	private void agregarMovimiento(Cuenta cuenta) {
+		Movimiento movimiento=new Movimiento();
+		TipoMovimiento tm= new TipoMovimiento();
+		movimiento.setCuentaEmisor(cuenta);
+		movimiento.setDetalle("Creacion de cuenta");
+		movimiento.setCuentaReceptor(negCuenta.BuscarPorNro(22));
+		tm.setIdTipoMovimiento(4);
+		movimiento.setTipoMovimiento(tm);
+		movimiento.setImporte(cuenta.getSaldo());
+		movimiento.setFecha(LocalDate.now());
+		movimiento.setUsuario(cuenta.getUsuario());
+		negMovimiento.movimiento(movimiento);
+	}
 
 }

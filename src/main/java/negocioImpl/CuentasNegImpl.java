@@ -80,8 +80,9 @@ public class CuentasNegImpl implements CuentasNeg{
 		StringBuilder condicionesExtras = new StringBuilder();
 		StringBuilder orden = new StringBuilder();
 		ArrayList<Object> parametrosExtras = new ArrayList<>();
-
+		System.out.println("dni= "+ dniParcial);
 		if (dniParcial != null && !dniParcial.isEmpty()) {
+			System.out.println("dni= "+ dniParcial);
 		    condicionesExtras.append(" AND usuarios.dni LIKE ? ");
 		    parametrosExtras.add("%" + dniParcial + "%");
 		}

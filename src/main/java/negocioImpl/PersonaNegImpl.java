@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class PersonaNegImpl implements ClientesNeg{
 
     private inPersona daoP = new daoPersonas();
-
+    private TelefonoNeg telefonoNeg= new TelefonoNegImpl();
     @Override
     public boolean Agregar(Persona persona) {
         // Primero verificamos si ya existe el DNI
