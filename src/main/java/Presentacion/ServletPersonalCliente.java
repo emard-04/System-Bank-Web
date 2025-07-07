@@ -57,8 +57,9 @@ public class ServletPersonalCliente extends HttpServlet {
         }
 
         // Obtener teléfono
-        TelefonoxPersona telefono = telefonoNeg.buscarPorDni(usuario.getPersona().getDni());
-        String telefonoUsuario = telefono != null ? telefono.getTelefono() : "";
+        //TelefonoxPersona telefono = telefonoNeg.buscarPorDni(usuario.getPersona().getDni());
+        ArrayList<TelefonoxPersona> telefonosUsuario = telefonoNeg.listarTelefonos(usuario.getPersona().getDni());
+        //String telefonoUsuario = telefono != null ? telefono.getTelefono() : "";
      // Obtener Provincia
         Provincia pro = proNeg.buscarPorId(usuario.getPersona().getProvincia().getIdProvincia());
         String proUsu = pro != null ? pro.getNombre() : "";
@@ -71,7 +72,8 @@ public class ServletPersonalCliente extends HttpServlet {
 
         // Pasar datos al JSP
         request.setAttribute("usuario", usuario);
-        request.setAttribute("telefonoUsuario", telefonoUsuario);
+       // request.setAttribute("telefonoUsuario", telefonoUsuario);
+        request.setAttribute("telefonosUsuario", telefonosUsuario);
         
         String nombreProvincia = pro != null ? pro.getNombre() : "";
         String nombreLocalidad = loc != null ? loc.getNombre() : "";

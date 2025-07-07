@@ -13,6 +13,10 @@ List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
 Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Borrar Cliente Admin - Tu Banco</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -90,7 +94,7 @@ function confirmarLogout(e) {
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Listado</a>
 						<a href="/BancoParcial/ServletAgregarCuentas?openAgregar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Agregar</a>
-						<a href="/BancoParcial/AdminMode/cuentaAdmin_modificar.jsp"
+						<a href="/BancoParcial/ServletModificarCuentas?openModificar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Modificar</a>
 						<a href="<%=request.getContextPath()%>/ServletBorrarCuenta"
 						class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Borrar</a>
@@ -110,7 +114,7 @@ function confirmarLogout(e) {
 
 						<div class="mb-6">
 							<label for="dni_eliminar" class="sr-only">Seleccione Nro
-								Cuenta</label> <select id="dni_eliminar" name="dni_eliminar"
+								Cuenta</label> <select id="seleccionar_cuenta_dni" name="dni_eliminar"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
 								<option value="" required>Seleccione el numero de
@@ -159,4 +163,13 @@ function confirmarLogout(e) {
 	</div>
 
 </body>
+<script>
+$(document).ready(function () {
+    $('#seleccionar_cuenta_dni').select2({
+        placeholder: "Seleccione o escriba Nº de Cuenta",
+        allowClear: true,
+        width: 'resolve'
+    });
+});
+</script>
 </html>

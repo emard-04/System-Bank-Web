@@ -12,6 +12,9 @@
 Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Borrar Cliente Admin - Tu Banco</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -116,7 +119,7 @@ function confirmarLogout(e) {
 
 						<div class="mb-6">
 							<label for="dni_eliminar" class="sr-only">Seleccione DNI</label>
-							<select id="dni_eliminar" name="dni_eliminar"
+							<select id="seleccionar_cliente_dni" name="dni_eliminar"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
 								required>
 								<option value="" required>Seleccione DNI</option>
@@ -164,4 +167,13 @@ function confirmarLogout(e) {
 	</div>
 
 </body>
+<script>
+$(document).ready(function () {
+    $('#seleccionar_cliente_dni').select2({
+        placeholder: "Seleccione o escriba Nº de Cuenta",
+        allowClear: true,
+        width: 'resolve'
+    });
+});
+</script>
 </html>

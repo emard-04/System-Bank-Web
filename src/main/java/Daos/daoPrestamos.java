@@ -471,10 +471,14 @@ public class daoPrestamos implements InPrestamos {
 	@Override
 	public List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina) {
 		int offset = (pagina - 1) * prestamosPorPagina;
-		String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni " + "FROM Prestamos p "
-				+ "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario " + "INNER JOIN Personas pe ON u.dni = pe.Dni "
-				+ "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? " + "ORDER BY p.Fecha DESC "
-				+ "LIMIT ? OFFSET ?";
+		
+		String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni "
+		           + "FROM Prestamos p "
+		           + "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario "
+		           + "INNER JOIN Persona pe ON u.dni = pe.Dni "
+		           + "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? "
+		           + "ORDER BY p.Fecha DESC "
+		           + "LIMIT ? OFFSET ?";
 
 		List<Prestamos> lista = new ArrayList<>();
 

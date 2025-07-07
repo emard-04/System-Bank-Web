@@ -15,6 +15,9 @@
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 	 <meta charset="UTF-8">
+	 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Cuenta Admin - Tu Banco</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -99,22 +102,23 @@ function confirmarLogout(e) {
                     <div class="mb-8 pb-4 border-b border-gray-200 flex items-center justify-center">
                         <label for="seleccionar_cuenta_dni" class="block text-gray-700 text-lg font-semibold mr-4">Seleccionar Nº de Cuenta:</label>
                       
-                        <select
-                            id="seleccionar_cuenta_dni"
-                            name="seleccionar_cuenta_dni"
-                            class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white w-64"
-                            >
-                             <option value="">-- Seleccione un Nº de Cuenta --</option>
-                               <% if(request.getAttribute("ListaCuenta")!=null){
-                        	ArrayList<Cuenta> cuentas=(ArrayList<Cuenta>)request.getAttribute("ListaCuenta");
-                        
-                        
-    for (Cuenta c : cuentas) { %>
+                        <select id="seleccionar_cuenta_dni"
+        name="seleccionar_cuenta_dni"
+        class="select2-cuenta p-2 border border-gray-300 rounded-md text-base bg-white w-full">
+    <option value="">-- Seleccione un Nº de Cuenta --</option>
+    <% 
+        if (request.getAttribute("ListaCuenta") != null) {
+            ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("ListaCuenta");
+            for (Cuenta c : cuentas) {
+    %>
         <option value="<%= c.getNroCuenta() %>">
-            <%= c.getNroCuenta() %> (Cliente: <%= c.getUsuario().getPersona().getDni() %>)
+            <%= c.getNroCuenta() %> - <%= c.getUsuario().getPersona().getNombre() %> <%= c.getUsuario().getPersona().getApellido() %> (DNI: <%= c.getUsuario().getPersona().getDni() %>)
         </option>
-    <% }}%>
-                        </select>
+    <% 
+            }
+        } 
+    %>
+</select>
                     </div>
 
                     <form action="/BancoParcial/ServletModificarCuentas" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
@@ -261,5 +265,13 @@ function confirmarLogout(e) {
         document.getElementById('cbu_mod').value = '';
         document.getElementById('saldo_mod').value = '';
     }
+    
+    $(document).ready(function () {
+        $('#seleccionar_cuenta_dni').select2({
+            placeholder: "Seleccione o escriba Nº de Cuenta",
+            allowClear: true,
+            width: 'resolve'
+        });
+    });
 </script>
 </html>

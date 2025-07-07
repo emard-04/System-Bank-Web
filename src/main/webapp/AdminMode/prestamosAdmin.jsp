@@ -12,6 +12,9 @@
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 	<meta charset="UTF-8">
+	  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Préstamos Admin - Tu Banco</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -71,9 +74,13 @@ function confirmarLogout(e) {
                 <h1 class="text-xl font-semibold text-gray-800">PRÉSTAMOS</h1>
                 <div class="text-gray-700 font-bold">LOGO / NAME DEL BANCO</div>
             </header>
-
+            
             <nav class="bg-gray-50 border-b border-gray-200 p-4">
                 <ul class="flex space-x-10 justify-center">
+                <li><a
+						href="<%=request.getContextPath()%>/ClientMode/homeClient.jsp"
+						class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+							Home </a></li>
                     <li><a href="<%=request.getContextPath()%>/ServletListarClientes?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Clientes</a></li>
                     <li><a href="<%=request.getContextPath()%>/ServletListarCuentas?openListar=1&pagina=1" class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Cuentas</a></li>
                     <li><a href="${pageContext.request.contextPath}/ServletPrestamosAdmi"class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Préstamos</a></li>
@@ -104,20 +111,29 @@ function confirmarLogout(e) {
              
                 <form method="get" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="flex items-center space-x-4">
     <label for="prestamos_autorizar" class="block text-gray-700 text-lg font-semibold whitespace-nowrap">Préstamos a Autorizar:</label>
-    <select id="prestamos_autorizar" name="dni" class="p-2 border border-gray-300 rounded-md bg-white">
-        <option value="">Todos</option>
-        <% 
-        List<Prestamos> listaPrestamos = (List<Prestamos>) request.getAttribute("prestamosPendientes");
-        if (listaPrestamos != null) {
-            for (Prestamos p : listaPrestamos) {
-                String dni = p.getUsuario().getPersona().getDni();
-        %>
-        <option value="<%= dni %>" <%= dni.equals(request.getParameter("dni")) ? "selected" : "" %>><%= dni %></option>
-        <% } } %>
-    </select>
+    <% String filtroDni = (String) request.getAttribute("filtroDni"); %>
+<select id="prestamos_autorizar" name="dni" class="select-dni p-2 border border-gray-300 rounded-md bg-white">
+    <option value="">Todos</option>
+    <% 
+    List<Prestamos> listaPrestamos = (List<Prestamos>) request.getAttribute("prestamosPendientes");
+    if (listaPrestamos != null) {
+        // Usamos un Set para evitar DNIs duplicados
+        java.util.Set<String> dniUnicos = new java.util.HashSet<>();
+        for (Prestamos p : listaPrestamos) {
+            String dni = p.getUsuario().getPersona().getDni();
+            if (!dniUnicos.contains(dni)) {
+                dniUnicos.add(dni);
+    %>
+    <option value="<%= dni %>" <%= dni.equals(filtroDni) ? "selected" : "" %>><%= dni %></option>
+    <%
+            }
+        }
+    }
+    %>
+</select>
     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Filtrar</button>
 </form>
-<% String filtroDni = (String) request.getAttribute("filtroDni"); %>
+
 <% if (filtroDni != null && !filtroDni.isEmpty()) { %>
     <a href="${pageContext.request.contextPath}/ServletPrestamosAdmi" class="ml-4 text-red-600 font-semibold hover:underline">Quitar filtro</a>
 <% } %>
@@ -153,11 +169,13 @@ function confirmarLogout(e) {
        <form method="post" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" style="display:inline;">
         <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
         <input type="hidden" name="accion" value="aceptar" />
+            <input type="hidden" name="dni" value="<%= filtroDni != null ? filtroDni : "" %>" />
         <button class="icon-button bg-green-500 hover:bg-green-600 text-white" type="submit">&#10003;</button>
     </form>
     <form method="post" action="${pageContext.request.contextPath}/ServletPrestamosAdmi" style="display:inline;">
         <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
         <input type="hidden" name="accion" value="rechazar" />
+            <input type="hidden" name="dni" value="<%= filtroDni != null ? filtroDni : "" %>" />
         <button class="icon-button bg-red-500 hover:bg-red-600 text-white" type="submit">&#10006;</button>
     </form>
     </td>
@@ -206,6 +224,14 @@ function confirmarLogout(e) {
         </main>
 
     </div>
-
+<script>
+    $(document).ready(function() {
+        $('.select-dni').select2({
+            placeholder: "Seleccione un DNI",
+            allowClear: true,
+            width: 'resolve'// o 'resolve' si querés que se adapte al contenedor
+        });
+    });
+</script>
     </body>
 </html>

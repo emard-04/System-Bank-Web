@@ -217,8 +217,22 @@ for (Cuenta c : listaCuenta) {
                         </div>
 
                         <div>
-    <label class="block text-gray-700 text-lg font-semibold mb-2">Teléfono</label>
-    <input type="text" value="<%= telefono != null ? telefono : "" %>" class="p-3 border rounded-md w-full text-lg read-only-input" readonly />
+    
+    <label class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos</label>
+    <%
+        ArrayList<TelefonoxPersona> telefonos = (ArrayList<TelefonoxPersona>) request.getAttribute("telefonosUsuario");
+        if (telefonos != null && !telefonos.isEmpty()) {
+            for (TelefonoxPersona tel : telefonos) {
+    %>
+                <input type="text" value="<%= tel.getTelefono() %>" class="p-3 border rounded-md w-full text-lg read-only-input mb-2" readonly />
+    <%
+            }
+        } else {
+    %>
+        <input type="text" value="Sin teléfonos registrados" class="p-3 border rounded-md w-full text-lg read-only-input" readonly />
+    <%
+        }
+    %>
 </div>
                         <div>
                             <label class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
