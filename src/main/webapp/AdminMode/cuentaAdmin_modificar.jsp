@@ -224,7 +224,26 @@ function confirmarLogout(e) {
     </div>
 </body>
 <script>
-    document.getElementById('seleccionar_cuenta_dni').addEventListener('change', function() {
+   
+
+    function limpiarCampos() {
+        document.getElementById('nro_cuenta_mod').value = '';
+        document.getElementById('dni_cliente_mod').value = '';
+        document.getElementById('fecha_creacion_mod').value = '';
+        document.getElementById('cuenta_corriente_mod').checked = false;
+        document.getElementById('caja_ahorro_mod').checked = false;
+        document.getElementById('cbu_mod').value = '';
+        document.getElementById('saldo_mod').value = '';
+    }
+    
+    $(document).ready(function () {
+        $('#seleccionar_cuenta_dni').select2({
+            placeholder: "Seleccione o escriba Nº de Cuenta",
+            allowClear: true,
+            width: 'resolve'
+        });
+    });
+    $('#seleccionar_cuenta_dni').on('change', function() {
         var nroCuenta = this.value;
         if (!nroCuenta) {
             // limpiar campos si se deselecciona
@@ -254,24 +273,6 @@ function confirmarLogout(e) {
                 alert(error.message);
                 limpiarCampos();
             });
-    });
-
-    function limpiarCampos() {
-        document.getElementById('nro_cuenta_mod').value = '';
-        document.getElementById('dni_cliente_mod').value = '';
-        document.getElementById('fecha_creacion_mod').value = '';
-        document.getElementById('cuenta_corriente_mod').checked = false;
-        document.getElementById('caja_ahorro_mod').checked = false;
-        document.getElementById('cbu_mod').value = '';
-        document.getElementById('saldo_mod').value = '';
-    }
-    
-    $(document).ready(function () {
-        $('#seleccionar_cuenta_dni').select2({
-            placeholder: "Seleccione o escriba Nº de Cuenta",
-            allowClear: true,
-            width: 'resolve'
-        });
     });
 </script>
 </html>
