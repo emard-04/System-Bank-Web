@@ -1,7 +1,9 @@
 package negocio;
 
 import java.math.BigDecimal;
+
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,10 @@ public interface CuentasNeg {
         boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
         int obtenerNroCuentaPorIdUsuario(int idUsuario, Connection conn) throws SQLException;
         ArrayList<Cuenta> filtrar(String dniParcial, int idTipoCuenta, String ordenSaldo);
+		List<Cuenta> obtenerCuentasCreadasEnRango(Date desde, Date hasta);
+		String obtenerTipoCuentaMasCreadaEnRango(Date desde, Date hasta);
+		BigDecimal obtenerPromedioSaldoInicialEnRango(Date desde, Date hasta);
+		int contarCuentasCreadasEnRango(Date desde, Date hasta);
         
 
 }

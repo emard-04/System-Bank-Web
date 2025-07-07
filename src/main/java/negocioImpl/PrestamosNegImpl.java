@@ -191,4 +191,11 @@ public class PrestamosNegImpl implements PrestamosNeg{
 		    }
 		    return p;
 		}
+		
+		@Override
+		public List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado) {
+	        // Simplemente delega la llamada al DAO, ya que la lógica de consulta está allí
+	        return prestamoDao.obtenerPrestamosPorFechaYEstado(desde, hasta, estado);
+	    }
+		
 }

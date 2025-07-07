@@ -1,10 +1,15 @@
 package negocioImpl;
 
 import Interfaces.inCuentas;
+
 import negocio.CuentasNeg;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+
+
+import java.util.Date;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +99,27 @@ public class CuentasNegImpl implements CuentasNeg{
 		}
 		return dao.filtrar(condicionesExtras.toString(), orden.toString(), parametrosExtras);
 	}
+	
+	@Override
+    public int contarCuentasCreadasEnRango(Date desde, Date hasta) {
+        return dao.contarCuentasCreadasEnRango(desde, hasta);
+    }
+
+    @Override
+    public BigDecimal obtenerPromedioSaldoInicialEnRango(Date desde, Date hasta) {
+        return dao.obtenerPromedioSaldoInicialEnRango(desde, hasta);
+    }
+
+    @Override
+    public String obtenerTipoCuentaMasCreadaEnRango(Date desde, Date hasta) {
+        return dao.obtenerTipoCuentaMasCreadaEnRango(desde, hasta);
+    }
+
+    @Override
+    public List<Cuenta> obtenerCuentasCreadasEnRango(Date desde, Date hasta) {
+        return dao.obtenerCuentasCreadasEnRango(desde, hasta);
+    }
+	
 		
 }
 

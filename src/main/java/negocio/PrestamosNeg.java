@@ -25,4 +25,7 @@ public interface PrestamosNeg {
     int obtenerIdPrestamoPorCuota(int idCuota);
     int contarCuotasPendientesPorPrestamo(int idPrestamo);
     Prestamos buscarPorId(int idPrestamo);
+    
+    List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
+
 }

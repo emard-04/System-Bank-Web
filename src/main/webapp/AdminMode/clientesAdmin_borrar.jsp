@@ -38,12 +38,16 @@ function confirmarLogout(e) {
 </script>
 <body class="bg-gray-100 h-screen overflow-hidden">
 
-	<% String mensaje = (String) session.getAttribute("mensaje"); 
-	if (mensaje !=null){
+	<%
+	String mensaje = (String) session.getAttribute("mensaje");
+	if (mensaje != null) {
 	%>
 	<script>alert("<%=mensaje%>")</script>
 
-	<% session.removeAttribute("mensaje");} %>
+	<%
+	session.removeAttribute("mensaje");
+	}
+	%>
 
 	<div class="flex h-full">
 

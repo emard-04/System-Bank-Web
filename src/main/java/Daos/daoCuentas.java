@@ -1,6 +1,8 @@
 package Daos;
 
 import java.sql.Connection;
+
+import java.util.Date;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +14,9 @@ import java.math.BigDecimal; // Import for BigDecimal
 
 //import Interfaces.inCuenta; // Assuming you will create this interface
 import Entidades.Cuenta;
+import Entidades.Persona;
 import Entidades.TipoCuenta; // Necesario para el objeto TipoCuenta dentro de Cuenta
+import Entidades.Usuario;
 import Interfaces.Conexion;
 import Interfaces.inCuentas;
 import java.util.List;
@@ -422,4 +426,162 @@ public class daoCuentas implements inCuentas{
 	    System.out.println("No se encontró cuenta activa para usuario " + idUsuario);
 	    return -1;
 	}
+	
+	@Override
+    public int contarCuentasCreadasEnRango(Date desde, Date hasta) {
+        int cantidad = 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConexion().getSQLConnection();
+            String sql = "SELECT COUNT(*) AS totalCuentas FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(desde.getTime()));
+            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                cantidad = rs.getInt("totalCuentas");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cantidad;
+    }
+
+    @Override
+    public BigDecimal obtenerPromedioSaldoInicialEnRango(Date desde, Date hasta) {
+        BigDecimal promedio = BigDecimal.ZERO;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConexion().getSQLConnection();
+            String sql = "SELECT AVG(Saldo) AS promedioSaldo FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(desde.getTime()));
+            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                promedio = rs.getBigDecimal("promedioSaldo");
+                if (promedio == null) promedio = BigDecimal.ZERO; // Manejar caso de null si no hay cuentas
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return promedio;
+    }
+
+    @Override
+    public String obtenerTipoCuentaMasCreadaEnRango(Date desde, Date hasta) {
+        String tipoMasCreado = "N/A";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConexion().getSQLConnection();
+            String sql = """
+                SELECT tc.Descripcion AS TipoCuenta, COUNT(c.IdTipoCuenta) AS Cantidad
+                FROM Cuentas c
+                INNER JOIN TiposCuentas tc ON c.IdTipoCuenta = tc.IdTipoCuenta
+                WHERE c.FechaCreacion BETWEEN ? AND ?
+                GROUP BY tc.Descripcion
+                ORDER BY Cantidad DESC
+                LIMIT 1
+                """; // LIMIT 1 para obtener solo el de mayor cantidad
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(desde.getTime()));
+            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                tipoMasCreado = rs.getString("TipoCuenta");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return tipoMasCreado;
+    }
+
+    @Override
+    public List<Cuenta> obtenerCuentasCreadasEnRango(Date desde, Date hasta) {
+        List<Cuenta> lista = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConexion().getSQLConnection();
+            String sql = """
+                SELECT c.*, tc.Descripcion AS TipoCuentaDesc, u.IdUsuario, p.Dni, p.Nombre, p.Apellido
+                FROM Cuentas c
+                INNER JOIN TiposCuentas tc ON c.IdTipoCuenta = tc.IdTipoCuenta
+                INNER JOIN Usuarios u ON c.IdUsuario = u.IdUsuario
+                INNER JOIN Persona p ON u.Dni = p.Dni
+                WHERE c.FechaCreacion BETWEEN ? AND ?
+                ORDER BY c.FechaCreacion DESC
+                """;
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(desde.getTime()));
+            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Cuenta c = new Cuenta();
+                c.setNroCuenta(rs.getInt("NroCuenta"));
+                c.setCbu(rs.getString("Cbu"));
+                c.setFechaCreacion(rs.getDate("FechaCreacion").toLocalDate()); // Usar toLocalDate()
+                c.setSaldo(rs.getBigDecimal("Saldo"));
+                c.setEstado(rs.getString("Estado")); // Asumo que Estado es un boolean
+
+                TipoCuenta tc = new TipoCuenta();
+                tc.setIdTipoCuenta(rs.getInt("IdTipoCuenta"));
+                tc.setDescripcion(rs.getString("TipoCuentaDesc"));
+                c.setTipoCuenta(tc);
+
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("IdUsuario"));
+                Persona p = new Persona();
+                p.setDni(rs.getString("Dni"));
+                p.setNombre(rs.getString("Nombre"));
+                p.setApellido(rs.getString("Apellido"));
+                u.setPersona(p);
+                c.setUsuario(u);
+
+                lista.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return lista;
+    }
 }
