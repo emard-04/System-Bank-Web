@@ -119,22 +119,32 @@ function confirmarLogout(e) {
 								required>
 								<option value="" required>Seleccione el numero de
 									cuenta</option>
-								<%
-								if (cuentas != null) {
-									for (Cuenta c : cuentas) {
-								%>
-								<option value="<%=c.getNroCuenta()%>">
-									<%=c.getNroCuenta()%> - Cliente DNI:
-									<%=c.getUsuario().getPersona().getDni()%>
-								</option>
-								<%
-								}
-								} else {
-								%>
-								<option disabled>No se pudo cargar la lista de cuentas.</option>
-								<%
-								}
-								%>
+						<%
+if (cuentas != null) {
+    for (Cuenta c : cuentas) {
+        Usuario u = c.getUsuario();
+        Persona p = (u != null) ? u.getPersona() : null;
+
+        if (u != null && p != null) {
+%>
+        <option value="<%= c.getNroCuenta() %>">
+            <%= c.getNroCuenta() %> - Cliente DNI: <%= p.getDni() %>
+        </option>
+<%
+        } else {
+%>
+        <option value="<%= c.getNroCuenta() %>">
+            <%= c.getNroCuenta() %> - ⚠ Usuario o Persona no definidos
+        </option>
+<%
+        }
+    }
+} else {
+%>
+    <option disabled>No se pudo cargar la lista de cuentas.</option>
+<%
+}
+%>
 							</select>
 						</div>
 

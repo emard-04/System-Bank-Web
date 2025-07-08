@@ -107,17 +107,28 @@ function confirmarLogout(e) {
         class="select2-cuenta p-2 border border-gray-300 rounded-md text-base bg-white w-full">
     <option value="">-- Seleccione un Nº de Cuenta --</option>
     <% 
-        if (request.getAttribute("ListaCuenta") != null) {
-            ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("ListaCuenta");
-            for (Cuenta c : cuentas) {
-    %>
-        <option value="<%= c.getNroCuenta() %>">
-            <%= c.getNroCuenta() %> - <%= c.getUsuario().getPersona().getNombre() %> <%= c.getUsuario().getPersona().getApellido() %> (DNI: <%= c.getUsuario().getPersona().getDni() %>)
-        </option>
-    <% 
-            }
-        } 
-    %>
+if (request.getAttribute("ListaCuenta") != null) {
+    ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("ListaCuenta");
+    for (Cuenta c : cuentas) {
+        Usuario u = c.getUsuario();
+        Persona p = (u != null) ? u.getPersona() : null;
+
+        if (u != null && p != null) {
+%>
+    <option value="<%= c.getNroCuenta() %>">
+        <%= c.getNroCuenta() %> - <%= p.getNombre() %> <%= p.getApellido() %> (DNI: <%= p.getDni() %>)
+    </option>
+<%
+        } else {
+%>
+    <option value="<%= c.getNroCuenta() %>">
+        <%= c.getNroCuenta() %> - ⚠ Usuario sin datos
+    </option>
+<%
+        }
+    }
+}
+%>
 </select>
                     </div>
 
