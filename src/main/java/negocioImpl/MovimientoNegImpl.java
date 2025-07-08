@@ -73,4 +73,7 @@ public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operad
 public boolean movimiento(Movimiento mov) {
     return dMov.Agregar(mov);
 }
+public boolean EliminarMovimientos(int idUsuario) {
+	return dMov.EliminarMovimientos(idUsuario);
+}
 }

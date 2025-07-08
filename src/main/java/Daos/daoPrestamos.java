@@ -19,6 +19,7 @@ public class daoPrestamos implements InPrestamos {
 
 	}
 	
+
 	@Override
 	public boolean agregar(Prestamos p) {
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
@@ -44,37 +45,26 @@ public class daoPrestamos implements InPrestamos {
 		}
 		return false;
 	}
-	
-	@Override
-	public boolean eliminar(int idUsuario) {
-		Connection cn = null;
-		PreparedStatement ps = null;
-		try {
-			cn = Conexion.getConexion().getSQLConnection();
-			ps = cn.prepareStatement(Eliminar);
-			ps.setInt(1, idUsuario);
-			if (ps.executeUpdate() > 0) {
-				cn.commit();
-				return true;
-			}
-		} catch (Exception e) {
-			System.out.println(" No se pudo eliminar el prestamo. ");
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-			} catch (Exception e) {
-			}
-			try {
-				if (cn != null)
-					cn.close();
-			} catch (Exception e) {
-			}
-		}
-		return false;
-	}
 
+	public boolean EliminarxUsuario(int id) {
+	        Connection cn = null;
+	        PreparedStatement ps = null;
+	        try {
+	            cn = Conexion.getConexion().getSQLConnection();
+	            ps = cn.prepareStatement(Eliminar);
+	            ps.setInt(1,id);
+	            if (ps.executeUpdate() > 0) {
+	                cn.commit();
+	                return true;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try { if (ps != null) ps.close(); } catch (Exception e) {}
+	            try { if (cn != null) cn.close(); } catch (Exception e) {}
+	        }
+	        return false;
+	    }
 	@Override
 	public List<Prestamos> obtenerTodos() {
 	    List<Prestamos> lista = new ArrayList<>();

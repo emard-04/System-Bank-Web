@@ -11,4 +11,5 @@ public interface TelefonoNeg {
 	public ArrayList<TelefonoxPersona> listarTelefonos(String dni);
 	public TelefonoxPersona buscarPorDni(String dni);
 	public boolean existe(String telefono);
+	boolean EliminarxDni(String dni);
 }

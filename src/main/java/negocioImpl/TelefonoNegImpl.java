@@ -36,5 +36,8 @@ private daoTelefono dTelefono=new daoTelefono();
     public boolean existe(String telefono) {
     	return dTelefono.existe(telefono);
     }
+    public boolean EliminarxDni(String dni) {
+    	return dTelefono.EliminarxDni(dni);
+    }
 
 }

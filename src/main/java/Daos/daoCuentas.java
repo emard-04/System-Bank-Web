@@ -26,6 +26,7 @@ public class daoCuentas implements inCuentas{
     private final String Agregar = "INSERT INTO Cuentas(IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado) VALUES(?,?,?,?,?,?);";
     private final String obtenerIdCuenta="Select AUTO_INCREMENT from information_schema.TABLES where TABLE_SCHEMA='bancoparcial' and TABLE_NAME='cuentas';";//IdCuentas
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
+    private final String EliminarTodasCuentas = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE idUsuario = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
     private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas  WHERE Estado = 'Activa';";
     private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and idUsuario=?;";
@@ -153,7 +154,6 @@ public class daoCuentas implements inCuentas{
     	PreparedStatement ps = null;
     	ResultSet rs = null;
     	Cuenta cuenta=null;
-    	System.out.println("Cbudao "+cbu);
     	try {
             cn = Conexion.getConexion().getSQLConnection();
             System.out.println("try");
@@ -296,7 +296,27 @@ public class daoCuentas implements inCuentas{
 	    }
 	    return false;
 	}
-
+	public boolean EliminarCuentas(int idUsuario) {
+    	Connection cn = null;
+    	PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(EliminarTodasCuentas);
+            ps.setInt(1, idUsuario);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("No se pudo elimianr la cuenta.");
+        }
+        finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
     public boolean Modificar(Cuenta cuenta) {
     	Connection cn = null;
     	PreparedStatement ps = null;

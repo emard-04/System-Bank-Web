@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.util.List; 
 public interface InPrestamos {
 	boolean agregar(Prestamos p);
-	public boolean eliminar(int idUsuario);
     List<Prestamos> obtenerTodos(); // para el admin
     List<Prestamos> obtenerPorUsuario(int idUsuario); // si querés mostrar historial al cliente
     boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago);
@@ -23,7 +22,7 @@ public interface InPrestamos {
      Prestamos obtenerPorId(int idPrestamo, Connection conn);
      int contarCuotasPendientesPorPrestamo(int idPrestamo);
      int obtenerIdPrestamoPorCuota(int idCuota);
-     
+     boolean EliminarxUsuario(int id);
      List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
 
 }
