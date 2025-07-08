@@ -145,18 +145,29 @@ if(request.getAttribute("listaTipoCuenta")!=null){
 						</thead>
 						<tbody class="bg-white divide-y divide-gray-200">
 <% if (cuentas != null) {
-     for (Cuenta c : cuentas) { %>
+     for (Cuenta c : cuentas) {
+        Usuario u = c.getUsuario();
+        Persona p = (u != null) ? u.getPersona() : null;
+
+        if (u != null && p != null) {
+%>
     <tr>
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= c.getNroCuenta() %></td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getUsuario().getPersona().getDni() %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= p.getDni() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getFechaCreacion() %></td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-            <%=c.getTipoCuenta().getDescripcion() %>
-        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getTipoCuenta().getDescripcion() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getCbu() %></td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= c.getSaldo() %></td>
     </tr>
-<%  }
+<%
+        } else {
+%>
+    <tr class="bg-yellow-100">
+        
+    </tr>
+<%
+        }
+    }
 } %>
 </tbody>
 					</table>

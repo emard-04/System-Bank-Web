@@ -25,10 +25,9 @@ function confirmarLogout(e) {
 
     if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
         // Si el usuario confirma, redirige al servlet de logout
-        window.location.href = "<%=request.getContextPath()%>
-	/ServletLogout";
-		}
-	}
+        window.location.href = "<%=request.getContextPath()%>/ServletLogout";
+    }
+}
 </script>
 </head>
 <%
