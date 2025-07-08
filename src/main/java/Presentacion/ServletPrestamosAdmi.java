@@ -124,7 +124,7 @@ public class ServletPrestamosAdmi extends HttpServlet {
 		TipoMovimiento tm= new TipoMovimiento();
 		movimiento.setCuentaEmisor(prestamo.getCuenta());
 		movimiento.setDetalle("Aprobacion de Prestamo");
-		movimiento.setCuentaReceptor(cuentaNeg.BuscarPorNro(22));
+		movimiento.setCuentaReceptor(cuentaNeg.BuscarPorNro(1));
 		tm.setIdTipoMovimiento(2);
 		movimiento.setTipoMovimiento(tm);
 		movimiento.setImporte(prestamo.getImportePedido());

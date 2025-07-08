@@ -173,7 +173,7 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
     	mov.setDetalle("Pagar cuota");
     	mov.setFecha(LocalDate.now());
     	mov.setImporte(cuota.getImporte().negate());
-    	mov.setCuentaReceptor(cuentaNeg.BuscarPorNro(22));
+    	mov.setCuentaReceptor(cuentaNeg.BuscarPorNro(1));
     	mov.setUsuario(mov.getCuentaEmisor().getUsuario());
     	TipoMovimiento tm= new TipoMovimiento();
     	tm.setIdTipoMovimiento(1);

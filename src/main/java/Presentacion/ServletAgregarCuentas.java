@@ -106,7 +106,7 @@ public class ServletAgregarCuentas extends HttpServlet {
 		TipoMovimiento tm= new TipoMovimiento();
 		movimiento.setCuentaEmisor(cuenta);
 		movimiento.setDetalle("Creacion de cuenta");
-		movimiento.setCuentaReceptor(negCuenta.BuscarPorNro(22));
+		movimiento.setCuentaReceptor(negCuenta.BuscarPorNro(1));
 		tm.setIdTipoMovimiento(4);
 		movimiento.setTipoMovimiento(tm);
 		movimiento.setImporte(cuenta.getSaldo());
