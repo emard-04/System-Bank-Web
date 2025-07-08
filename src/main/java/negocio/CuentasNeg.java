@@ -28,7 +28,6 @@ public interface CuentasNeg {
 		String obtenerTipoCuentaMasCreadaEnRango(Date desde, Date hasta);
 		BigDecimal obtenerPromedioSaldoInicialEnRango(Date desde, Date hasta);
 		int contarCuentasCreadasEnRango(Date desde, Date hasta);
-        
 
 }
 

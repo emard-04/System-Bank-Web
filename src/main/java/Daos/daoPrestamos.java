@@ -13,8 +13,9 @@ import java.sql.ResultSet;
 
 public class daoPrestamos implements InPrestamos {
 	private static final String INSERT = "INSERT INTO Prestamos (IdUsuario, Fecha, ImporteAPagar, ImportePedido, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago, IdCuenta) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
-	private static final String Eliminar = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdUsuario = ?";
-	
+	private static final String EliminarxUsuario = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdUsuario = ?";
+	private static final String EliminarxCuenta = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdCuenta = ? and EstadoPago='En curso'";
+	private static final String BuscarxCuenta="select * from prestamos where IdCuenta=? and EstadoSolicitud='Aprobado'";
 	public daoPrestamos() {
 
 	}
@@ -45,13 +46,52 @@ public class daoPrestamos implements InPrestamos {
 		}
 		return false;
 	}
-
+	public int BuscarxCuenta(int nrocuenta) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs=null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(BuscarxCuenta);
+            ps.setInt(1,nrocuenta);
+             rs=ps.executeQuery();
+            if (rs.next() ) {
+                return rs.getInt("IdPrestamo");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return -1;
+    }
+	public boolean EliminarxCuenta(int nrocuenta) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(EliminarxCuenta);
+            ps.setInt(1,nrocuenta);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
 	public boolean EliminarxUsuario(int id) {
 	        Connection cn = null;
 	        PreparedStatement ps = null;
 	        try {
 	            cn = Conexion.getConexion().getSQLConnection();
-	            ps = cn.prepareStatement(Eliminar);
+	            ps = cn.prepareStatement(EliminarxUsuario);
 	            ps.setInt(1,id);
 	            if (ps.executeUpdate() > 0) {
 	                cn.commit();

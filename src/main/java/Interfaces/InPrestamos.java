@@ -25,5 +25,6 @@ public interface InPrestamos {
      int obtenerIdPrestamoPorCuota(int idCuota);
      boolean EliminarxUsuario(int id);
      List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
-
+     boolean EliminarxCuenta(int nrocuenta);
+     int BuscarxCuenta(int nrocuenta);
 }

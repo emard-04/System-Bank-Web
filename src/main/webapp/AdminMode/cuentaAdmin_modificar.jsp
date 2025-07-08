@@ -121,9 +121,7 @@ if (request.getAttribute("ListaCuenta") != null) {
 <%
         } else {
 %>
-    <option value="<%= c.getNroCuenta() %>">
-        <%= c.getNroCuenta() %> - ⚠ Usuario sin datos
-    </option>
+
 <%
         }
     }

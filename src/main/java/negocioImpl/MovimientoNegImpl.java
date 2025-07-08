@@ -76,4 +76,7 @@ public boolean movimiento(Movimiento mov) {
 public boolean EliminarMovimientos(int idUsuario) {
 	return dMov.EliminarMovimientos(idUsuario);
 }
+public boolean EliminarxCuenta(int idCuenta) {
+	return dMov.EliminarxCuenta(idCuenta);
+}
 }

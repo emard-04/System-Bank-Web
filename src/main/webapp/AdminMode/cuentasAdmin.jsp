@@ -164,6 +164,7 @@ if(request.getAttribute("listaTipoCuenta")!=null){
 %>
     <tr class="bg-yellow-100">
         
+
     </tr>
 <%
         }

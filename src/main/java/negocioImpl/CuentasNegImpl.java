@@ -2,8 +2,6 @@ package negocioImpl;
 
 import Interfaces.inCuentas;
 
-import negocio.CuentasNeg;
-
 import java.math.BigDecimal;
 import java.sql.Connection;
 
@@ -16,10 +14,13 @@ import java.util.List;
 import negocio.*;
 import Daos.*;
 import Entidades.Cuenta;
+import Entidades.Usuario;
 
 public class CuentasNegImpl implements CuentasNeg{
 	private inCuentas dao = new daoCuentas();
 	private UsuarioNeg nUsuario;
+	private MovimientoNeg negMovimiento;
+	private PrestamosNeg negPrestamos;
     @Override
     public boolean Agregar(Cuenta cuenta) {
     	PersonaNegImpl negPersona= new PersonaNegImpl();
@@ -42,7 +43,12 @@ public class CuentasNegImpl implements CuentasNeg{
 
     @Override
     public boolean Eliminar(int nroCuenta) {
-        return dao.Eliminar(nroCuenta);
+    	negPrestamos= new PrestamosNegImpl();
+		negMovimiento=new MovimientoNegImpl();
+		
+		if(!negPrestamos.EliminarxCuenta(nroCuenta)) return false;
+		if(!negMovimiento.EliminarMovimientos(nroCuenta))return false;
+		return dao.Eliminar(nroCuenta);
     }
 
     @Override

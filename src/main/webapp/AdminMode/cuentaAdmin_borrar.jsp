@@ -132,9 +132,6 @@ if (cuentas != null) {
 <%
         } else {
 %>
-        <option value="<%= c.getNroCuenta() %>">
-            <%= c.getNroCuenta() %> - ⚠ Usuario o Persona no definidos
-        </option>
 <%
         }
     }

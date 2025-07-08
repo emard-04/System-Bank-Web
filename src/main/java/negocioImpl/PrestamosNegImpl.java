@@ -35,6 +35,14 @@ public boolean EliminarxUsuario(int id) {
 	}
 	return prestamoDao.EliminarxUsuario(id);
 }
+
+public boolean EliminarxCuenta(int nrocuenta) {
+	negCuota=new CuotasNegImpl();
+	System.out.println("NroCuenta "+nrocuenta);
+	System.out.println("NroPRestamo= "+prestamoDao.BuscarxCuenta(nrocuenta));
+	negCuota.EliminarxUsuario(prestamoDao.BuscarxCuenta(nrocuenta));
+	return prestamoDao.EliminarxCuenta(nrocuenta);
+}
 	    @Override
 	    public boolean aprobarPrestamo(int idPrestamo) {
 	    	Connection conn = null;

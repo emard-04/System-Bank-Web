@@ -29,7 +29,7 @@ public interface PrestamosNeg {
 
     boolean marcarPrestamoPagado(int idPrestamo, Connection conn);
     boolean marcarPrestamoEnIncumplimiento(int idPrestamo, Connection conn);
-
+    boolean EliminarxCuenta(int nrocuenta);
     boolean EliminarxUsuario(int id);
     List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
 

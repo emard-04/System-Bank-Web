@@ -121,12 +121,13 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             // Parsear parámetros
             int idCuota = Integer.parseInt(paramCuota);
             int nroCuenta = Integer.parseInt(paramCuenta);
-
+            System.out.println("NumeroCuenta= "+nroCuenta);
             boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
 
             if (exito) {
+            	
                 request.getSession().setAttribute("mensaje", "✅ Cuota pagada correctamente.");
-                agregarMovimiento(request, idCuota);
+                agregarMovimiento(request, idCuota, nroCuenta);
 
                 Cuota cuotaPagada = cuotaNeg.obtenerCuotaPorId(idCuota);
                 int idPrestamo = cuotaPagada.getIdPrestamo();
@@ -162,18 +163,18 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=excepcion");
         }
     }
-    public void agregarMovimiento(HttpServletRequest request,int idCuota)throws ServletException, IOException {
+    public void agregarMovimiento(HttpServletRequest request,int idCuota,int nroCuenta)throws ServletException, IOException {
     	Cuenta cuenta = new Cuenta();
     	Cuota cuota = new Cuota();
     	cuota= cuotaNeg.obtenerCuotaPorId(idCuota);
-    	cuenta=cuentaNeg.BuscarPorNro(Integer.parseInt(request.getParameter("cuenta")));
+    	cuenta=cuentaNeg.BuscarPorNro(nroCuenta);
     	Movimiento mov= new Movimiento();
     	mov.setCuentaEmisor(cuenta);
     	mov.setDetalle("Pagar cuota");
     	mov.setFecha(LocalDate.now());
     	mov.setImporte(cuota.getImporte().negate());
     	mov.setCuentaReceptor(cuentaNeg.BuscarPorNro(22));
-    	mov.setUsuario(mov.getCuentaReceptor().getUsuario());
+    	mov.setUsuario(mov.getCuentaEmisor().getUsuario());
     	TipoMovimiento tm= new TipoMovimiento();
     	tm.setIdTipoMovimiento(1);
     	mov.setTipoMovimiento(tm);

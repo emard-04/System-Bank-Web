@@ -34,12 +34,7 @@ public class daoCuentas implements inCuentas{
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
     private final String BuscarPorNro = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE NroCuenta=?;";
     private final String maximoCuentas="Select count(IdUsuario) as Cantidad from cuentas where idUsuario=? and Estado=?";
-    private final String eliminarCuotas = 
-    	    "DELETE FROM Cuotas WHERE IdPrestamo IN (SELECT IdPrestamo FROM Prestamos WHERE IdCuenta = ?)";
-    private final String eliminarPrestamos = 
-    	    "DELETE FROM Prestamos WHERE IdCuenta = ?";
-    private final String eliminarMovimientos = 
-    	    "DELETE FROM Movimientos WHERE CuentaEmisor = ? OR CuentaReceptor = ?";
+ 
 
    
     public  daoCuentas() {
@@ -239,63 +234,28 @@ public class daoCuentas implements inCuentas{
        
         return cuenta;
     }
-
-	
-	public boolean Eliminar(int nroCuenta) {
-	    Connection cn = null;
-	    PreparedStatement psCuotas = null;
-	    PreparedStatement psPrestamos = null;
-	    PreparedStatement psMovimientos = null;
-	    PreparedStatement psCuenta = null;
-
-	    try {
-	        cn = Conexion.getConexion().getSQLConnection();
-	        cn.setAutoCommit(false);
-
-	        // 1. Eliminar Cuotas
-	        psCuotas = cn.prepareStatement(eliminarCuotas);
-	        psCuotas.setInt(1, nroCuenta);
-	        psCuotas.executeUpdate();
-
-	        // 2. Eliminar Préstamos
-	        psPrestamos = cn.prepareStatement(eliminarPrestamos);
-	        psPrestamos.setInt(1, nroCuenta);
-	        psPrestamos.executeUpdate();
-
-	        // 3. Eliminar Movimientos
-	        psMovimientos = cn.prepareStatement(eliminarMovimientos);
-	        psMovimientos.setInt(1, nroCuenta);
-	        psMovimientos.executeUpdate();
-
-	        // 4. Baja lógica de la cuenta
-	        psCuenta = cn.prepareStatement(Eliminar);
-	        psCuenta.setInt(1, nroCuenta);
-	        int filas = psCuenta.executeUpdate();
-
-	        if (filas > 0) {
-	            cn.commit();
-	            return true;
-	        } else {
-	            cn.rollback(); // Por si no se afectó ninguna cuenta
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        System.out.println("❌ Error al eliminar registros relacionados de la cuenta.");
-	        try {
-	            if (cn != null) cn.rollback();
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
-	        }
-	    } finally {
-	        try { if (psCuotas != null) psCuotas.close(); } catch (Exception e) {}
-	        try { if (psPrestamos != null) psPrestamos.close(); } catch (Exception e) {}
-	        try { if (psMovimientos != null) psMovimientos.close(); } catch (Exception e) {}
-	        try { if (psCuenta != null) psCuenta.close(); } catch (Exception e) {}
-	        try { if (cn != null) cn.close(); } catch (Exception e) {}
-	    }
-	    return false;
-	}
+    public boolean Eliminar(int nroCuenta) {
+    	Connection cn = null;
+    	PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(Eliminar);
+            ps.setInt(1, nroCuenta);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("No se pudo elimianr la cuenta.");
+        }
+        finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    
+    }
 	public boolean EliminarCuentas(int idUsuario) {
     	Connection cn = null;
     	PreparedStatement ps = null;

@@ -25,7 +25,7 @@ public class daoPersonas implements inPersona {
     		+ "JOIN Provincia prov ON p.IdProvincia = prov.IdProvincia"
     		+ "WHERE p.Estado = 'Activo';";*/
     private final String ListarTodo = "SELECT * from persona where estado='activo'";
-    private final String Existe = "Select * from Persona where dni=?;";
+    private final String Existe = "Select * from Persona where dni=? and estado='activo';";
     private final String ExisteMail = "Select * from Persona where CorreoElectronico=?;";
 
     public boolean Agregar(Persona persona) {
