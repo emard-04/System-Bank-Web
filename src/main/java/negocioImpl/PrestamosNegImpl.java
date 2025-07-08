@@ -100,11 +100,13 @@ public class PrestamosNegImpl implements PrestamosNeg{
 
 	        return exito;
 	    }
-	    public boolean marcarPrestamoPagado(int idPrestamo) {
-	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Pagado");
+	    @Override
+	    public boolean marcarPrestamoPagado(int idPrestamo, Connection conn) {
+	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Pagado", conn);
 	    }
-	    public boolean marcarPrestamoEnIncumplimiento(int idPrestamo) {
-	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Incumplido");
+	    @Override
+	    public boolean marcarPrestamoEnIncumplimiento(int idPrestamo, Connection conn) {
+	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Incumplido", conn);
 	    }
 	    @Override
 	    public Prestamos obtenerPrestamoPendientePorUsuario(int idUsuario) {
@@ -164,6 +166,11 @@ public class PrestamosNegImpl implements PrestamosNeg{
 			return prestamoDao.obtenerPorId(idPrestamo, conn);
 		}
 
+		@Override
+		public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago, Connection conn) {
+			// TODO Auto-generated method stub
+			return prestamoDao.cambiarEstadoPago(idPrestamo, nuevoEstadoPago,conn);
+		}
 		@Override
 		public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago) {
 			// TODO Auto-generated method stub

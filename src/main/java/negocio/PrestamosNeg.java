@@ -21,10 +21,13 @@ public interface PrestamosNeg {
     List<Prestamos> obtenerPrestamosPendientesPaginado(int pagina, int prestamosPorPagina);
     List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina);
     Prestamos obtenerPorId(int idPrestamo, Connection conn);
+    boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago, Connection conn);
     boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago);
     int obtenerIdPrestamoPorCuota(int idCuota);
     int contarCuotasPendientesPorPrestamo(int idPrestamo);
     Prestamos buscarPorId(int idPrestamo);
+    boolean marcarPrestamoPagado(int idPrestamo, Connection conn);
+    boolean marcarPrestamoEnIncumplimiento(int idPrestamo, Connection conn);
     
     List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
 

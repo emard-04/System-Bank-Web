@@ -174,25 +174,31 @@ public class daoPrestamos implements InPrestamos {
 	}
 
 	@Override
+	public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago, Connection conn) {
+	    String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, nuevoEstadoPago);
+	        ps.setInt(2, idPrestamo);
+	        int rows = ps.executeUpdate();
+	        return rows > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	@Override
 	public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago) {
-		String query = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
-
-		try (Connection conn = Conexion.getConexion().getSQLConnection();
-				PreparedStatement stmt = conn.prepareStatement(query)) {
-
-			stmt.setString(1, nuevoEstadoPago);
-			stmt.setInt(2, idPrestamo);
-
-			if (stmt.executeUpdate() > 0) {
-				conn.commit();
-				return true;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return false;
+	    String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
+	    try (Connection conn = Conexion.getConexion().getSQLConnection();
+	    		PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, nuevoEstadoPago);
+	        ps.setInt(2, idPrestamo);
+	        int rows = ps.executeUpdate();
+	        return rows > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	public boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstado, Connection conn) {
@@ -566,6 +572,7 @@ public class daoPrestamos implements InPrestamos {
 	}
 
 	public int contarCuotasPendientesPorPrestamo(int idPrestamo) {
+		System.out.println("DEBUG: contarCuotasPendientesPorPrestamo llamado con idPrestamo = " + idPrestamo);
 		String sql = "SELECT COUNT(*) FROM Cuotas WHERE IdPrestamo = ? AND FechaPago IS NULL";
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -62,12 +62,23 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
             
 
             <h3 class="text-xl font-bold text-gray-800 text-center mb-1">
-                <%= usuario.getPersona().getNombre() %> <%= usuario.getPersona().getApellido() %>
-            </h3>
+    <%= usuario.getPersona().getNombre() %> <%= usuario.getPersona().getApellido() %>
+</h3>
 
-            <p class="text-md text-gray-600 text-center mb-6">
-                Saldo: $<span id="saldoActual">---</span>
-            </p>
+	<% Cuenta cuenta = null;
+			if(request.getSession().getAttribute("cuenta")!=null){
+			    cuenta =  (Cuenta)session.getAttribute("cuenta");
+			}
+			%>
+		<% if (cuenta != null) { %>
+    <p class="text-md text-gray-600 text-center mb-6">
+        <% if(cuenta.getSaldo() != null) { %>
+            Saldo: $<span id="saldoActual"><%=cuenta.getSaldo()%></span>
+        <% } else { %>
+            Saldo: $<span id="saldoActual">---</span>
+        <% } %>
+    </p>
+<% } %>
             
             <a href="#"
                onclick="confirmarLogout(event)"
@@ -134,30 +145,31 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
 
             <div class="p-6 flex-1 flex flex-col justify-center items-center">
                 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl text-center">
-                    <% if (request.getAttribute("mensaje") != null) { %>
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
-                            <%= request.getAttribute("mensaje") %>
-                        </div>
-                    <% } %>
+                 <% if (session.getAttribute("mensaje") != null) { %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
+        <%= session.getAttribute("mensaje") %>
+    </div>
+    <% session.removeAttribute("mensaje"); %>
+<% } %>
                    <form method="get" action="<%= request.getContextPath() %>/ServletPagarPrestamoCliente" class="mb-4">
     <label for="cuenta" class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar Cuenta</label>
-    <select id="cuenta" name="cuenta" required
-        class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white"
-        onchange="this.form.submit()">
-        <option value="" disabled <%= (request.getParameter("cuenta") == null ? "selected" : "") %>>Seleccione una cuenta</option>
-        <%
-            ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
-            String cuentaSeleccionada = request.getParameter("cuenta");
-            for (Cuenta c : listaCuenta) {
-                boolean isSelected = (cuentaSeleccionada != null && cuentaSeleccionada.equals(String.valueOf(c.getNroCuenta())));
-        %>
-            <option value="<%= c.getNroCuenta() %>" data-saldo="<%= c.getSaldo() %>" <%= isSelected ? "selected" : "" %>>
-                Cuenta CBU: <%= c.getCbu() %>
-            </option>
-        <%
-            }
-        %>
-    </select>
+    <select id="cuenta" name="cuenta" onchange="this.form.submit()">
+    <% if (cuenta != null) { %>
+        <option value="<%=cuenta.getNroCuenta()%>" selected data-saldo="<%=cuenta.getSaldo()%>">
+            CBU: <%=cuenta.getCbu()%>
+        </option>
+    <% } %>
+
+    <%
+    ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+    for (Cuenta c : listaCuenta) {
+        if (cuenta == null || cuenta.getNroCuenta() != c.getNroCuenta()) {
+    %>
+        <option value="<%=c.getNroCuenta()%>" data-saldo="<%=c.getSaldo()%>">
+            CBU: <%=c.getCbu()%>
+        </option>
+    <% }} %>
+</select>
 </form>
 
 <!-- FORMULARIO POST para pagar la cuota -->
@@ -165,7 +177,7 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
     class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-end">
 
     <!-- Pasar la cuenta seleccionada también en POST -->
-    <input type="hidden" name="cuenta" value="<%= request.getParameter("cuenta") != null ? request.getParameter("cuenta") : "" %>" />
+    <input type="hidden" name="cuenta" value="<%= (session.getAttribute("cuenta") != null) ? ((Cuenta)session.getAttribute("cuenta")).getNroCuenta() : "" %>" />
 
     <!-- Selector de cuota -->
     <div class="col-span-1 md:col-start-2 md:col-span-1 mb-4 flex flex-col items-center">
@@ -244,6 +256,20 @@ if (request.getAttribute("cuentasUsuario") == null || request.getAttribute("cuot
             actualizarImporte(); // <--- esto faltaba
         });
     </script>
+    <script>
+document.getElementById("cuenta").addEventListener("change", function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const saldo = selectedOption.getAttribute("data-saldo");
+    document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
+});
+
+window.addEventListener("DOMContentLoaded", function() {
+    const select = document.getElementById("cuenta");
+    const selectedOption = select.options[select.selectedIndex];
+    const saldo = selectedOption.getAttribute("data-saldo");
+    document.getElementById("saldoActual").textContent = saldo !== null ? saldo : "---";
+});
+</script>
 
 </body>
 </html>

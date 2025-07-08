@@ -110,10 +110,22 @@ public class daoCuotas implements inCuotas{
             
          // 5. Verificar si fue la última cuota
             int idPrestamo = prestamosNeg.obtenerIdPrestamoPorCuota(idCuota);
+            System.out.println("si entro aca");
             int cuotasPendientes = prestamosNeg.contarCuotasPendientesPorPrestamo(idPrestamo);
+            System.out.println("Quedan " + cuotasPendientes + " cuotas sin pagar.");
+            System.out.println("DEBUG: Cuotas pendientes para préstamo " + idPrestamo + " = " + cuotasPendientes);
+            System.out.println("si entro aca tambien");
 
-            if (cuotasPendientes == 0) {
-                prestamosNeg.cambiarEstadoPago(idPrestamo, "Pagado");
+            if (cuotasPendientes == 1) {
+                System.out.println("✅ Última cuota pagada. Actualizando EstadoPago a 'Pagado' usando cambiarEstadoPago");
+
+                boolean actualizado = prestamosNeg.cambiarEstadoPago(idPrestamo, "Pagado", conn);
+
+                if (!actualizado) {
+                    System.out.println("❌ Error al actualizar EstadoPago del préstamo.");
+                    conn.rollback(); // revertir todo si falla
+                    return false;
+                }
             }
 
             // Si querés, acá podrías insertar un registro en tabla movimientos bancarios.

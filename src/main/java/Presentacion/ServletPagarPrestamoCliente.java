@@ -40,32 +40,47 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
    
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-        if (usuario == null) {
-            response.sendRedirect("login.jsp");
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
         try {
-            String paramCuenta = request.getParameter("cuenta");
-            Cuenta cuentaSeleccionada = null;
-            if (paramCuenta != null && !paramCuenta.isEmpty()) {
-                int nroCuenta = Integer.parseInt(paramCuenta);
-                cuentaSeleccionada = cuentaNeg.BuscarPorNro(nroCuenta);
-                request.getSession().setAttribute("cuenta", cuentaSeleccionada); // ✅ BIEN
-            }
-            
+        	String cuentaParam = request.getParameter("cuenta");
+        	Cuenta cuentaSeleccionada = null;
+
+        	if (cuentaParam != null && !cuentaParam.isEmpty()) {
+        	    int nroCuenta = Integer.parseInt(cuentaParam);
+        	    cuentaSeleccionada = cuentaNeg.BuscarPorNro(nroCuenta);
+        	    if (cuentaSeleccionada != null) {
+        	        session.setAttribute("cuenta", cuentaSeleccionada);
+        	    }
+        	}
+
+        	if (session.getAttribute("cuenta") == null) {
+        	    @SuppressWarnings("unchecked")
+        	    ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+        	    if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
+        	        session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
+        	        cuentaSeleccionada = cuentasUsuario.get(0);
+        	    }
+        	} else {
+        	    cuentaSeleccionada = (Cuenta) session.getAttribute("cuenta");
+        	}
 
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
             List<Cuota> cuotasPendientes;
 
             if (cuentaSeleccionada != null) {
-                // Filtrar cuotas solo para la cuenta seleccionada
                 cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(cuentaSeleccionada.getNroCuenta());
             } else {
-                // Si no hay cuenta seleccionada, podés mostrar todas o ninguna
                 cuotasPendientes = new ArrayList<>();
             }
+
             if (cuentaSeleccionada != null && request.getParameter("cuotaSeleccionada") != null) {
                 int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
                 Cuota cuotaElegida = cuotaNeg.obtenerCuotaPorId(idCuota);
@@ -89,42 +104,59 @@ public class ServletPagarPrestamoCliente extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        try {
-            int idCuota = Integer.parseInt(request.getParameter("cuotaSeleccionada"));
-            int nroCuenta = Integer.parseInt(request.getParameter("cuenta")); // ✅ CAMBIO
 
-           // System.out.println("ID cuota seleccionada: " + idCuota);
-            //System.out.println("Nro cuenta seleccionada: " + nroCuenta);
+        try {
+            // Obtener parámetros y validar que no estén vacíos
+            String paramCuota = request.getParameter("cuotaSeleccionada");
+            String paramCuenta = request.getParameter("cuenta");
+
+            if (paramCuota == null || paramCuota.trim().isEmpty() ||
+                paramCuenta == null || paramCuenta.trim().isEmpty()) {
+
+                request.getSession().setAttribute("mensaje", "❌ Debe seleccionar una cuenta y una cuota válidas.");
+                response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente");
+                return;
+            }
+
+            // Parsear parámetros
+            int idCuota = Integer.parseInt(paramCuota);
+            int nroCuenta = Integer.parseInt(paramCuenta);
+
             boolean exito = cuotaNeg.pagarCuota(idCuota, nroCuenta);
-            //System.out.println("Resultado del pago de cuota: " + exito);
 
             if (exito) {
-                request.setAttribute("mensaje", "✅ Cuota pagada correctamente.");
+                request.getSession().setAttribute("mensaje", "✅ Cuota pagada correctamente.");
                 agregarMovimiento(request, idCuota);
-                // 🔥 Obtener la cuota pagada para saber a qué préstamo pertenece
+
                 Cuota cuotaPagada = cuotaNeg.obtenerCuotaPorId(idCuota);
                 int idPrestamo = cuotaPagada.getIdPrestamo();
 
-                // 🔍 Verificar si quedan cuotas pendientes de ese préstamo
                 boolean quedanCuotasPendientes = cuotaNeg.existenCuotasPendientesPorPrestamo(idPrestamo);
 
                 if (!quedanCuotasPendientes) {
                     prestamosNeg.cambiarEstadoPago(idPrestamo, "Pagado");
                     System.out.println("✔ Estado del préstamo " + idPrestamo + " cambiado a Pagado");
-                } 
-            }else {
-                request.setAttribute("mensaje", "❌ Error al pagar cuota.");
+                }
+            } else {
+                request.getSession().setAttribute("mensaje", "❌ Error al pagar la cuota.");
             }
 
+            // Recargar datos actualizados
             List<Cuota> cuotasPendientes = cuotaNeg.obtenerCuotasPendientesPorCuenta(nroCuenta);
-            System.out.println("Cuotas pendientes encontradas: " + cuotasPendientes.size());
             List<Cuenta> cuentas = cuentaNeg.ListarxUsuario(usuario.getIdUsuario());
-            request.getSession().setAttribute("cuentasUsuario", cuentas); 
+            Cuenta cuentaActualizada = cuentaNeg.BuscarPorNro(nroCuenta);
 
+            request.getSession().setAttribute("cuentasUsuario", cuentas);
+            request.getSession().setAttribute("cuenta", cuentaActualizada);
             request.setAttribute("cuotasPendientes", cuotasPendientes);
             request.setAttribute("cuentasUsuario", cuentas);
 
             request.getRequestDispatcher("/ClientMode/pagarPrestamoClient.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            System.out.println("⚠️ Error de formato numérico: " + e.getMessage());
+            request.getSession().setAttribute("mensaje", "❌ Error: datos inválidos. Asegúrese de seleccionar una cuenta y una cuota.");
+            response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/ServletPagarPrestamoCliente?error=excepcion");

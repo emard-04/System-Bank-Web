@@ -30,7 +30,7 @@ function confirmarLogout(e) {
 }
 </script>
 <%Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado"); %>
-
+</head>
 <body class="bg-gray-100 h-screen overflow-hidden">
 	<div class="flex h-full">
 
@@ -61,9 +61,20 @@ function confirmarLogout(e) {
 				<%= usuario.getPersona().getApellido() %>
 			</h3>
 
-			<p class="text-md text-gray-600 text-center mb-6">
-				Saldo: $<span id="saldoActual">---</span>
-			</p>
+			<% Cuenta cuenta = null;
+			if(request.getSession().getAttribute("cuenta")!=null){
+			    cuenta =  (Cuenta)session.getAttribute("cuenta");
+			}
+			%>
+		<% if (cuenta != null) { %>
+    <p class="text-md text-gray-600 text-center mb-6">
+        <% if(cuenta.getSaldo() != null) { %>
+            Saldo: $<span id="saldoActual"><%=cuenta.getSaldo()%></span>
+        <% } else { %>
+            Saldo: $<span id="saldoActual">---</span>
+        <% } %>
+    </p>
+<% } %>
 
 
 
@@ -141,24 +152,25 @@ function confirmarLogout(e) {
 						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
 						method="post" class="space-y-6">
 
-						<div class="flex-1 mb-4">
-							<label for="cuenta"
-								class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar
-								Cuenta</label> <select id="cuenta" name="cuenta" required
-								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg bg-white">
-								<option value="" disabled selected>Seleccione una
-									cuenta</option>
-								<% 
-        ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario"); 
-        for (Cuenta c : listaCuenta) {
+						<label for="cuenta" class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar Cuenta</label>
+    <select id="cuenta" name="cuenta" onchange="this.form.submit()">
+    <% if (cuenta != null) { %>
+        <option value="<%=cuenta.getNroCuenta()%>" selected data-saldo="<%=cuenta.getSaldo()%>">
+            CBU: <%=cuenta.getCbu()%>
+        </option>
+    <% } %>
+
+    <%
+    ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+    for (Cuenta c : listaCuenta) {
+        if (cuenta == null || cuenta.getNroCuenta() != c.getNroCuenta()) {
     %>
-								<option value="<%= c.getNroCuenta() %>"
-									data-saldo="<%= c.getSaldo() %>">Cuenta CBU:
-									<%= c.getCbu() %>
-								</option>
-								<% } %>
-							</select>
-						</div>
+        <option value="<%=c.getNroCuenta()%>" data-saldo="<%=c.getSaldo()%>">
+            CBU: <%=c.getCbu()%>
+        </option>
+    <% }} %>
+</select>
+	
 
 						<div
 							class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
