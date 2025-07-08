@@ -17,6 +17,8 @@ import Interfaces.inPersona;
 
 	public class daoMovimiento implements inMovimiento {
 	    private final String Agregar = "insert into Movimientos(IdUsuario, IdTipoMovimiento, CuentaEmisor,CuentaReceptor, Detalle, Importe, Fecha) values(?,?,?,?,?,?,?);";
+	    private final String Eliminar = "UPDATE Movimientos SET Estado = 'Inactivo' WHERE idUsuario = ? and cuentaEmisor=? ";//EliminarxCuenta
+	    private final String EliminarxUsuario = "UPDATE Movimientos SET Estado = 'Inactivo' WHERE idUsuario = ?";//EliminarxUsuario
 	    private final String ListarxCuenta="select * from movimientos where idUsuario=? and cuentaEmisor=?;";
 	    public ArrayList<Movimiento> Filtrar(int idUsuario, int cuentaEmisor, String nombreUsuario, String condicionesExtras, ArrayList<Object> parametrosExtras) {
 	        Connection cn = null;
@@ -89,6 +91,27 @@ import Interfaces.inPersona;
 	            System.out.println("No se pudo conectar");
 	        } finally {
 	            try { if (cs != null) cs.close(); } catch (Exception e) {}
+	            try { if (cn != null) cn.close(); } catch (Exception e) {}
+	        }
+	        return false;
+	    }
+	    public boolean EliminarMovimientos(int idUsuario) {
+	    	Connection cn = null;
+	    	PreparedStatement ps = null;
+	        try {
+	            cn = Conexion.getConexion().getSQLConnection();
+	            ps = cn.prepareStatement(EliminarxUsuario);
+	            ps.setInt(1, idUsuario);
+	            if (ps.executeUpdate() > 0) {
+	                cn.commit();
+	                return true;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            System.out.println("No se pudo elimianr movimiento.");
+	        }
+	        finally {
+	            try { if (ps != null) ps.close(); } catch (Exception e) {}
 	            try { if (cn != null) cn.close(); } catch (Exception e) {}
 	        }
 	        return false;

@@ -19,6 +19,9 @@ public class CuotasNegImpl implements CuotasNeg{
 	public boolean pagarCuota(int idCuota, int nroCuenta) throws SQLException {
 		return dao.pagarCuota(idCuota, nroCuenta);
 	}
+	public boolean EliminarxUsuario(int id) {
+		return dao.EliminarxUsuario(id);
+	}
 
 	@Override
 	public boolean generarCuotasParaPrestamo(int idPrestamo, BigDecimal importeCuota, int cantidadCuotas) {

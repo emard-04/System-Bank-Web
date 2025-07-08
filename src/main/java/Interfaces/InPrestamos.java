@@ -23,7 +23,7 @@ public interface InPrestamos {
      Prestamos obtenerPorId(int idPrestamo, Connection conn);
      int contarCuotasPendientesPorPrestamo(int idPrestamo);
      int obtenerIdPrestamoPorCuota(int idCuota);
-     
+     boolean EliminarxUsuario(int id);
      List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
 
 }

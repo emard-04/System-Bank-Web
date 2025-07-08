@@ -14,7 +14,7 @@ import Interfaces.*;
 public class PrestamosNegImpl implements PrestamosNeg{
 	 private final InPrestamos prestamoDao = new daoPrestamos();
 	 private final inCuentas cuentaDao = new daoCuentas();
-
+private  CuotasNeg negCuota;
 	    
 
 	    @Override
@@ -26,7 +26,15 @@ public class PrestamosNegImpl implements PrestamosNeg{
 	    public List<Prestamos> listarTodos() {
 	        return prestamoDao.obtenerTodos();
 	    }
-
+public boolean EliminarxUsuario(int id) {
+	negCuota=new CuotasNegImpl();
+	for(Prestamos prestamo: listarPrestamosCliente(id)) {
+		if(!negCuota.EliminarxUsuario(prestamo.getIdPrestamo())) {
+			return false;
+		}
+	}
+	return prestamoDao.EliminarxUsuario(id);
+}
 	    @Override
 	    public boolean aprobarPrestamo(int idPrestamo) {
 	    	Connection conn = null;
@@ -118,18 +126,22 @@ public class PrestamosNegImpl implements PrestamosNeg{
 			System.out.println("Llamando a obtenerPrestamosPendientes en PrestamosNegImpl");
 			return  prestamoDao.obtenerPrestamosPendientes();
 		}
+
 		@Override
 		public List<Prestamos> obtenerPrestamosPendientesPorDni(String dni) {
-		    return prestamoDao.obtenerPrestamosPendientesPorDni(dni);
+			return prestamoDao.obtenerPrestamosPendientesPorDni(dni);
 		}
+
 		@Override
 		public boolean puedePedirPrestamo(int idCuenta) {
-		    return prestamoDao.cantidadPrestamosActivosPorCuenta(idCuenta) == 0;
+			return prestamoDao.cantidadPrestamosActivosPorCuenta(idCuenta) == 0;
 		}
+
 		@Override
 		public int agregarPrestamo(Prestamos prestamo) {
-		    return prestamoDao.insertarYObtenerId(prestamo); 
+			return prestamoDao.insertarYObtenerId(prestamo);
 		}
+		
 
 		@Override
 		public int insertarYObtenerId(Prestamos p) {

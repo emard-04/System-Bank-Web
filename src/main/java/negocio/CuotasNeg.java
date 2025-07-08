@@ -13,4 +13,5 @@ public interface CuotasNeg {
      List<Cuota> obtenerCuotasPendientesPorCuenta(int nroCuenta) throws SQLException;
      Cuota obtenerCuotaPorId(int idCuota);
      boolean existenCuotasPendientesPorPrestamo(int idPrestamo) throws SQLException;
+     public boolean EliminarxUsuario(int id);
 }

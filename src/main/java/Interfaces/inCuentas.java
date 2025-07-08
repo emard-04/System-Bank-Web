@@ -32,6 +32,7 @@ public interface inCuentas {
 	Cuenta cuentaxCbu(String cbu);
 
 	ArrayList<Cuenta> ListarxUsuario(int Id);
+	 boolean EliminarCuentas(int idUsuario);
 
 	boolean actualizarSaldo(int nroCuenta, BigDecimal monto, Connection conn);
 

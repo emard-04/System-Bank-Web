@@ -172,19 +172,15 @@ public class ServletModificarCliente extends HttpServlet {
 		if(!negCliente.Modificar(persona)) {
 			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
 			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error persona";
-			RequestDispatcher rd = request.getRequestDispatcher(ventana);
-			rd.forward(request, response);
-			//windowdefault(request, response, ventana);
+			windowdefault(request, response, ventana);
 			return;
 		}
 		String accion=request.getParameter("Accion");
 		if(!accion.trim().isEmpty()) {
 		if(!actualizarTelefonos(request, response, persona)) {
-			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
+			request.setAttribute("mensaje", "❌ Error al modificar telefono.");
 			String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error telefono";
-			RequestDispatcher rd = request.getRequestDispatcher(ventana);
-			rd.forward(request, response);
-			//windowdefault(request, response, ventana);
+			windowdefault(request, response, ventana);
 			return;
 		}}
 		usuario.setPersona(persona);
@@ -193,20 +189,13 @@ public class ServletModificarCliente extends HttpServlet {
 		if(!negUsuario.Modificar(usuario)) {
 			request.setAttribute("mensaje", "❌ Error al modificar cliente.");
 		String ventana="AdminMode/clienteAdmin_modificar.jsp?mensaje=Error usuario";
-		RequestDispatcher rd = request.getRequestDispatcher(ventana);
-		rd.forward(request, response);
-		//windowdefault(request, response, ventana);
+		windowdefault(request, response, ventana);
 		return;
 		}
 		request.setAttribute("mensaje", "✅ Cliente modificado correctamente.");
-		System.out.println("todo ok");
 		String ventana="AdminMode/clienteAdmin_modificar.jsp";
-		request.setAttribute("listaPais", nPais.listarTodo());
 		//request.setAttribute("listaProvincias", ProvinciaNeg.listarProvinciasxPais(/* algún idPais por defecto o null */));
-		request.setAttribute("ListaUsuario", negUsuario.listarTodo());
-		RequestDispatcher rd = request.getRequestDispatcher(ventana);
-		rd.forward(request, response);
-		//windowdefault(request,response, ventana);
+		windowdefault(request,response, ventana);
 		//doGet(request, response);
 	}
 	private void windowdefault(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException {

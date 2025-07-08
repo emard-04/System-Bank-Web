@@ -13,6 +13,12 @@ import java.sql.ResultSet;
 
 public class daoPrestamos implements InPrestamos {
 	private static final String INSERT = "INSERT INTO Prestamos (IdUsuario, Fecha, ImporteAPagar, ImportePedido, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago, IdCuenta) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
+	private static final String Eliminar = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdUsuario = ?";
+	
+	public daoPrestamos() {
+
+	}
+	
 
 	@Override
 	public boolean agregar(Prestamos p) {
@@ -40,6 +46,25 @@ public class daoPrestamos implements InPrestamos {
 		return false;
 	}
 
+	public boolean EliminarxUsuario(int id) {
+	        Connection cn = null;
+	        PreparedStatement ps = null;
+	        try {
+	            cn = Conexion.getConexion().getSQLConnection();
+	            ps = cn.prepareStatement(Eliminar);
+	            ps.setInt(1,id);
+	            if (ps.executeUpdate() > 0) {
+	                cn.commit();
+	                return true;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try { if (ps != null) ps.close(); } catch (Exception e) {}
+	            try { if (cn != null) cn.close(); } catch (Exception e) {}
+	        }
+	        return false;
+	    }
 	@Override
 	public List<Prestamos> obtenerTodos() {
 	    List<Prestamos> lista = new ArrayList<>();
@@ -268,17 +293,19 @@ public class daoPrestamos implements InPrestamos {
 		p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
 		p.setEstadoPago(rs.getString("EstadoPago"));
 
-		// Mapear Usuario
+		// Se usa para mapear Usuario
 		Usuario u = new Usuario();
 		u.setIdUsuario(rs.getInt("IdUsuario"));
 		u.setNombreUsuario(rs.getString("NombreUsuario"));
 
-		// Mapear Persona
+		// Se usa para mapear Persona
 		Persona per = new Persona();
 		per.setDni(rs.getString("Dni"));
 		per.setNombre(rs.getString("Nombre"));
 		per.setApellido(rs.getString("Apellido"));
+		
 		// Si tu clase Persona tiene más campos, completalos aquí.
+		// XD
 
 		u.setPersona(per);
 		p.setUsuario(u);
@@ -679,7 +706,6 @@ public class daoPrestamos implements InPrestamos {
         return lista;
     }
     
-    // ... (Mantén tus otros métodos aquí) ...
 }
 
 

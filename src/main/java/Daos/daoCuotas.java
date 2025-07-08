@@ -17,6 +17,7 @@ import java.time.LocalDate;
 
 public class daoCuotas implements inCuotas{
 	private final InPrestamos prestamosNeg = new daoPrestamos(); 
+	private final String eliminarXUsuario="UPDATE cuotas SET Estado = 'Inactiva' WHERE idPrestamo =? ;";
 	@Override
     public List<Cuota> obtenerCuotasPendientesPorUsuario(int idUsuario) throws SQLException {
         List<Cuota> cuotasPendientes = new ArrayList<>();
@@ -47,7 +48,25 @@ public class daoCuotas implements inCuotas{
         }
         return cuotasPendientes;
     }
-
+	public boolean EliminarxUsuario(int id) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(eliminarXUsuario);
+            ps.setInt(1,id);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
 	@Override
     public boolean pagarCuota(int idCuota, int nroCuenta) throws SQLException {
         Connection conn = null;

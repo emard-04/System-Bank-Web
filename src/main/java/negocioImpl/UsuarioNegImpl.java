@@ -12,11 +12,14 @@ import Entidades.*;
 public class UsuarioNegImpl implements UsuarioNeg {
 
 	private InUsuario daoUsuario = new daoUsuario();
-	private PersonaNegImpl negPersona = new PersonaNegImpl();
-	private TelefonoNeg negTelefono = new TelefonoNegImpl();
-
+	private PersonaNegImpl negPersona;
+	private TelefonoNeg negTelefono;
+	private CuentasNeg negCuenta;
+private MovimientoNeg negMovimiento;
+private PrestamosNeg negPrestamos;
 	@Override
 	public boolean AgregarUsuario(Usuario usuario, Persona persona, List<TelefonoxPersona> listaTelefonos) {
+		negPersona=new PersonaNegImpl();
 		// Validaciones de persona
 		if (negPersona.verificarMail(persona.getCorreoElectronico()))
 			return false;
@@ -73,8 +76,19 @@ public class UsuarioNegImpl implements UsuarioNeg {
 	}
 
 	@Override
-	public boolean Eliminar(String nombreUsuario) {
-		return daoUsuario.Eliminar(nombreUsuario);
+	public boolean Eliminar(String dni) {
+		negPersona=new PersonaNegImpl();
+		negCuenta=new CuentasNegImpl();
+		negTelefono=new TelefonoNegImpl();
+		negPrestamos= new PrestamosNegImpl();
+		negMovimiento=new MovimientoNegImpl();
+		Usuario us=BuscarDni(dni);
+		if(!negPrestamos.EliminarxUsuario(us.getIdUsuario())) return false;
+		if(!negPersona.Eliminar(dni)) return false;
+		if(!negCuenta.EliminarCuentas(us.getIdUsuario())) return false;
+		if(!negMovimiento.EliminarMovimientos(us.getIdUsuario()))return false;
+		if(!negTelefono.EliminarxDni(dni)) return false;
+		return daoUsuario.Eliminar(dni);
 	}
 
 	public ArrayList<Usuario> filtrar(String dniParcial, int idProvincia, int idLocalidad, int idPais) {

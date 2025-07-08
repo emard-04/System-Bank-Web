@@ -12,4 +12,5 @@ public interface inTelefono {
 	public boolean existe(String telefono);
 	public ArrayList<TelefonoxPersona> listarTelefonos(String dni);
 	public TelefonoxPersona buscarPorDni(String dni);
+	boolean EliminarxDni(String dni);
 }

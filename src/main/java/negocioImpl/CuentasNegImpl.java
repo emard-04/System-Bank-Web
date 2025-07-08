@@ -19,12 +19,12 @@ import Entidades.Cuenta;
 
 public class CuentasNegImpl implements CuentasNeg{
 	private inCuentas dao = new daoCuentas();
-	private UsuarioNeg nUsuario= new UsuarioNegImpl();
+	private UsuarioNeg nUsuario;
     @Override
     public boolean Agregar(Cuenta cuenta) {
     	PersonaNegImpl negPersona= new PersonaNegImpl();
+    	nUsuario=new UsuarioNegImpl();
     	//Perosna no existe dni return false
-    	
     	if(!negPersona.existe(cuenta.getUsuario().getPersona().getDni())) return false;
     	//Usuario Administrador return false
     	if(nUsuario.BuscarDni(cuenta.getUsuario().getPersona().getDni()).isTipoUsuario())return false;
@@ -48,6 +48,9 @@ public class CuentasNegImpl implements CuentasNeg{
     @Override
     public ArrayList<Cuenta> ListarTodo() {
         return dao.ListarTodo();
+    }
+    public boolean  EliminarCuentas(int idUsuario) {
+    	return dao.EliminarCuentas(idUsuario);
     }
 
     @Override

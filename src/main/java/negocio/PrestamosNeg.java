@@ -26,9 +26,11 @@ public interface PrestamosNeg {
     int obtenerIdPrestamoPorCuota(int idCuota);
     int contarCuotasPendientesPorPrestamo(int idPrestamo);
     Prestamos buscarPorId(int idPrestamo);
+
     boolean marcarPrestamoPagado(int idPrestamo, Connection conn);
     boolean marcarPrestamoEnIncumplimiento(int idPrestamo, Connection conn);
-    
+
+    boolean EliminarxUsuario(int id);
     List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado);
 
 }

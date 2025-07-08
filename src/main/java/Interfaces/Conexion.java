@@ -25,7 +25,7 @@ public class Conexion {
     public Connection getSQLConnection() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancoparcial?useSSL=false", "root", "root");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancoparcial?useSSL=false", "root", "0606");
             conn.setAutoCommit(false);
         } catch (Exception e) {
             e.printStackTrace();

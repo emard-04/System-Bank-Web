@@ -9,11 +9,12 @@ import Interfaces.*;
 import Entidades.*;
 
 public class daoTelefono implements inTelefono{
-	private String buscarxTelefono="Select * from telefonoxpersonas where Telefono=?";
-	private String buscarxDni="Select * from telefonoxpersonas where dni=?";
+	private String buscarxTelefono="Select * from telefonoxpersonas where Telefono=? and Estado='Activo'";
+	private String buscarxDni="Select * from telefonoxpersonas where dni=? and Estado='Activo'";
 	private String editar="update telefonoxpersonas set telefono=? where telefono=? and dni=?";
 	private String Agregar="insert into telefonoxpersonas (dni, telefono) values(?,?)";
-	private String Eliminar="Delete From telefonoxpersonas where telefono=? and dni=?";
+	private String EliminarxTelefono="update telefonoxpersonas set Estado=? where telefono=? and dni=?";
+	private String EliminarxDni="update telefonoxpersonas set Estado=? where dni=?";
 	private String existe="Select * from telefonoxpersonas where telefono?;";
 	public boolean Agregar(TelefonoxPersona telefono) {
 		Connection cn = null;
@@ -41,9 +42,10 @@ public class daoTelefono implements inTelefono{
         PreparedStatement ps = null;
         try {
             cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(Eliminar);
-            ps.setString(1, telefono.getTelefono());
-            ps.setString(2, telefono.getDni().getDni());
+            ps = cn.prepareStatement(EliminarxTelefono);
+            ps.setString(1, "Inactivo");
+            ps.setString(2, telefono.getTelefono());
+            ps.setString(3, telefono.getDni().getDni());
             if (ps.executeUpdate() > 0) {
                 cn.commit();
                 return true;
@@ -55,7 +57,27 @@ public class daoTelefono implements inTelefono{
             try { if (cn != null) cn.close(); } catch (Exception e) {}
         }
         return false;
-    }	
+    }
+	public boolean EliminarxDni(String dni) {
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion().getSQLConnection();
+            ps = cn.prepareStatement(EliminarxDni);
+            ps.setString(1, "Inactivo");
+            ps.setString(2,dni);
+            if (ps.executeUpdate() > 0) {
+                cn.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (cn != null) cn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
 	public int maximoTelefonos(TelefonoxPersona telefono) {
         Connection cn = null;
         PreparedStatement ps = null;

@@ -65,7 +65,7 @@ public class ServletListarMovimientos extends HttpServlet {
 		// Llamás a la capa de negocio
 		request.setAttribute("ListaFiltra",nMov.filtrar(mov, nombre, operador, desde, hasta,tipoMovimiento));
 		request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
-		RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movientosClient.jsp");
+		RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
 		rd.forward(request, response);
 		}
 	}
@@ -95,7 +95,7 @@ if(cuenta!=null) {
 	request.setAttribute("Lista",nMov.Listarxcuentas(mov));
 }
 request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
-	RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movientosClient.jsp");
+	RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
 	rd.forward(request, response);
 }
 }

@@ -120,7 +120,7 @@ for (Cuenta c : listaCuenta) {
 				<ul class="flex space-x-8 justify-center">
 					<li><a href="TransferenciaClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Transferencia</a></li>
-					<li><a href="movientosClient.jsp"
+					<li><a href="/BancoParcial/ServletListarMovimientos?Actualizar=1"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Movimientos</a></li>
 					<li><a href="PrestamosClient.jsp"
 						class="hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-200 ease-in-out">Prestamos</a></li>
