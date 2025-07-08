@@ -15,6 +15,7 @@ public interface PrestamosNeg {
      List<Prestamos> obtenerPrestamosPendientesPorDni(String dni);
      boolean puedePedirPrestamo(int idCuenta);
     int agregarPrestamo(Prestamos prestamo);
+    boolean eliminarPrestamo(int idUsuario);
     int insertarYObtenerId(Prestamos p);
     int contarPrestamosPendientes();
     int contarPrestamosPendientesPorDni(String dni);
