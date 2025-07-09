@@ -82,8 +82,10 @@ public class ServletModificarCuentas extends HttpServlet {
             cuenta.setSaldo(saldo);
             boolean exito = cuentaNeg.Modificar(cuenta);
             if (exito) {
+            	request.setAttribute("ListaCuenta", cuentaNeg.ListarTodo());
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp");
             } else {
+            	request.setAttribute("ListaCuenta", cuentaNeg.ListarTodo());
                 response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Error al modificar la cuenta");
             }
         } catch (Exception e) {
@@ -99,38 +101,4 @@ public class ServletModificarCuentas extends HttpServlet {
 	}
 
 }
-	/*private Cuenta setAtributosCuenta(HttpServletRequest request)throws ServletException, IOException { 
-	int nroCuenta = Integer.parseInt(request.getParameter("nro_cuenta_mod"));
-    String dniCliente = request.getParameter("dni_cliente_mod");
-    LocalDate fechaCreacion = LocalDate.parse(request.getParameter("fecha_creacion_mod"));
-    String tipoCuentaTexto = request.getParameter("tipo_cuenta_mod");
-    String cbu = request.getParameter("cbu_mod");
-    BigDecimal saldo = new BigDecimal(request.getParameter("saldo_mod"));
-
-    // 2. Obtener idTipoCuenta según texto
-    int idTipoCuenta = tipoCuentaTexto.equalsIgnoreCase("Corriente") ? 1 : 2;
-
-    // 3. Buscar usuario por DNI (asumiendo que tienes daoUsuario y método BuscarDni)
-    daoUsuario daoU = new daoUsuario();
-    Usuario usuario = daoU.BuscarDni(dniCliente);
-    if (usuario == null) {
-        // Si no existe el usuario, redirigir con error
-        response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Usuario no encontrado");
-        return;
-    }
-
-    // 4. Armar objeto Cuenta con los datos actualizados
-    Cuenta cuenta = new Cuenta();
-    cuenta.setNroCuenta(Integer.parseInt(request.getParameter("nro_cuenta_mod")));
-    cuenta.setUsuario(daoU.BuscarDni(r("dni_cliente_mod")));
-    cuenta.setFechaCreacion(LocalDate.parse(request.getParameter("fecha_creacion_mod")));
-
-    TipoCuenta tipoCuenta = new TipoCuenta();
-    tipoCuenta.setIdTipoCuenta( tipoCuentaTexto.equalsIgnoreCase("Corriente") ? 1 : 2);
-    cuenta.setTipoCuenta(tipoCuenta);
-
-    cuenta.setCbu(request.getParameter("cbu_mod"));
-    double saldoD= Double.parseDouble(request.getParameter("saldo_mod"));
-    cuenta.setSaldo(BigDecimal.valueOf(saldoD));
-	}
-}*/
+	
