@@ -397,11 +397,11 @@ public class daoPrestamos implements InPrestamos {
 
 	public int insertarYObtenerId(Prestamos p) {
 		String sql = "INSERT INTO Prestamos (IdUsuario, IdCuenta, Fecha, ImportePedido, ImporteApagar, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		daoCuentas dc = new daoCuentas();
+		
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-			// Si usás transacciones, desactivá autocommit para controlar commit y rollback
+			
 			conn.setAutoCommit(false);
 
 			stmt.setInt(1, p.getUsuario().getIdUsuario());
@@ -422,7 +422,7 @@ public class daoPrestamos implements InPrestamos {
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
 				if (rs.next()) {
 					int idGenerado = rs.getInt(1);
-					conn.commit(); // Confirmar cambios
+					conn.commit(); 
 					return idGenerado;
 				} else {
 					throw new SQLException("No se pudo obtener el ID generado.");
@@ -431,9 +431,7 @@ public class daoPrestamos implements InPrestamos {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Si querés rollback en caso de error
-			// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-			// abierta antes.
+			
 		}
 		return -1;
 	}
@@ -451,9 +449,7 @@ public class daoPrestamos implements InPrestamos {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Si querés rollback en caso de error
-			// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-			// abierta antes.
+			
 		}
 
 		return total;
@@ -476,15 +472,11 @@ public class daoPrestamos implements InPrestamos {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-				// Si querés rollback en caso de error
-				// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-				// abierta antes.
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Si querés rollback en caso de error
-			// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-			// abierta antes.
+			
 		}
 
 		return total;
@@ -498,7 +490,7 @@ public class daoPrestamos implements InPrestamos {
 				+ "			                 INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario"
 				+ "			                 INNER JOIN Persona pe ON u.dni = pe.Dni "
 				+ "			                 WHERE p.EstadoSolicitud = 'Pendiente' "
-				+ "			                 ORDER BY p.Fecha DESC" + "			                 LIMIT ? OFFSET ?";
+				+ "			               	 LIMIT ? OFFSET ?";
 
 		List<Prestamos> lista = new ArrayList<>();
 
@@ -550,7 +542,6 @@ public class daoPrestamos implements InPrestamos {
 		           + "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario "
 		           + "INNER JOIN Persona pe ON u.dni = pe.Dni "
 		           + "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? "
-		           + "ORDER BY p.Fecha DESC "
 		           + "LIMIT ? OFFSET ?";
 
 		List<Prestamos> lista = new ArrayList<>();

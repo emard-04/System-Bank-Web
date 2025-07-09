@@ -13,7 +13,6 @@ import negocioImpl.*;
 import negocio.*;
 import java.util.List;
 import Entidades.*;
-import javax.servlet.RequestDispatcher;
 /**
  * Servlet implementation class ServletPrestamosAdmi
  */
@@ -32,8 +31,6 @@ public class ServletPrestamosAdmi extends HttpServlet {
             throws ServletException, IOException {
 
         String dniFiltro = request.getParameter("dni");
-
-        // Página actual, por defecto 1 si no se pasa o es inválida
         int paginaActual = 1;
         String paginaParam = request.getParameter("pagina");
         if (paginaParam != null) {
@@ -45,9 +42,7 @@ public class ServletPrestamosAdmi extends HttpServlet {
             }
         }
 
-        final int prestamosPorPagina = 10; // 10 préstamos por página
-
-        // Obtén el total de préstamos para el filtro dado (método que debes implementar)
+        final int prestamosPorPagina = 10; 
         int totalPrestamos;
         if (dniFiltro != null && !dniFiltro.isEmpty()) {
             totalPrestamos = prestamoNeg.contarPrestamosPendientesPorDni(dniFiltro);
@@ -55,21 +50,21 @@ public class ServletPrestamosAdmi extends HttpServlet {
             totalPrestamos = prestamoNeg.contarPrestamosPendientes();
         }
 
-        // Calcula el total de páginas
+        
         int totalPaginas = (int) Math.ceil((double) totalPrestamos / prestamosPorPagina);
 
-        // Ajustar la página actual para que no supere el total de páginas
+       
         if (paginaActual > totalPaginas && totalPaginas > 0) {
             paginaActual = totalPaginas;
         }
 
         List<Prestamos> prestamosPendientes;
         if (dniFiltro != null && !dniFiltro.isEmpty()) {
-            // Obtiene la página de préstamos filtrados por DNI
+            
             prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPorDniPaginado(dniFiltro, paginaActual, prestamosPorPagina);
             request.setAttribute("filtroDni", dniFiltro);
         } else {
-            // Obtiene la página de préstamos sin filtro
+           
             prestamosPendientes = prestamoNeg.obtenerPrestamosPendientesPaginado(paginaActual, prestamosPorPagina);
         }
 
@@ -85,15 +80,15 @@ public class ServletPrestamosAdmi extends HttpServlet {
     	String accion = request.getParameter("accion");
         String idPrestamoStr = request.getParameter("idPrestamo");
 
-        String mensaje = "error"; // mensaje por defecto
+        String mensaje = "error"; 
 
         if (accion != null && idPrestamoStr != null) {
             int idPrestamo = Integer.parseInt(idPrestamoStr);
 
             if (accion.equalsIgnoreCase("aceptar")) {
                 if (prestamoNeg.aprobarPrestamo(idPrestamo)) {
-                    // ✅ El préstamo fue aprobado, ahora generamos las cuotas y generamos el movimiento
-                    Prestamos prestamo = prestamoNeg.buscarPorId(idPrestamo); // Necesitás este método en tu capa negocio
+                    
+                    Prestamos prestamo = prestamoNeg.buscarPorId(idPrestamo); 
                     
                     agregarMovimiento(prestamo);
                     if (prestamo != null) {
@@ -115,7 +110,7 @@ public class ServletPrestamosAdmi extends HttpServlet {
             }
         }
 
-        // Redirige con mensaje en la URL
+       
         response.sendRedirect(request.getContextPath() + "/ServletPrestamosAdmi?mensaje=" + mensaje);
 
 	}

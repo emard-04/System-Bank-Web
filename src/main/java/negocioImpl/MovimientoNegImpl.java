@@ -3,6 +3,7 @@ package negocioImpl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import Daos.daoMovimiento;
 import Daos.daoUsuario;
@@ -78,5 +79,13 @@ public boolean EliminarMovimientos(int idUsuario) {
 }
 public boolean EliminarxCuenta(int idCuenta) {
 	return dMov.EliminarxCuenta(idCuenta);
+}
+@Override
+public int contarMovimientos(Movimiento mov) {
+	return dMov.contarMovimientos(mov);
+}
+@Override
+public List<Movimiento> ListarxcuentasPaginado(Movimiento mov, int offset, int limite) {
+	return dMov.ListarxcuentasPaginado(mov, offset, limite);
 }
 }

@@ -49,30 +49,23 @@ public boolean EliminarxCuenta(int nrocuenta) {
 	        boolean exito = false;
 
 	        try {
-	        	  System.out.println("Intentando aprobar préstamo id: " + idPrestamo);
+	        	 
 	            conn = Conexion.getConexion().getSQLConnection();
-	            conn.setAutoCommit(false); // Iniciar transacción
+	            conn.setAutoCommit(false); 
 
-	            // 1. Obtener préstamo con importe y usuario
+	            
 	            Prestamos prestamo = prestamoDao.obtenerPorId(idPrestamo, conn);
-	           // System.out.println("Usuario del préstamo: " + (prestamo.getUsuario() != null ? prestamo.getUsuario().getIdUsuario() : "null"));
-	           // System.out.println("Préstamo encontrado: " + prestamo);
+	          
 	            if (prestamo == null) return false;
 
-	            int idUsuario = prestamo.getUsuario().getIdUsuario();
 	            BigDecimal importe = prestamo.getImportePedido();
-	           // System.out.println("Id Usuario: " + idUsuario + ", Importe: " + importe);
-
-	            // 2. Obtener cuenta del usuario
-	            //System.out.println("Nro Cuenta: " + nroCuenta);
-
-	            // 3. Cambiar estado del préstamo a 'Aceptado'
+	           
 	            boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aprobado", conn);
-	           // System.out.println("Estado actualizado: " + actualizado);
+	           
 
-	            // 4. Acreditar importe a la cuenta del usuario
+	           
 	            boolean saldoActualizado = cuentaDao.actualizarSaldo(prestamo.getCuenta().getNroCuenta(), importe, conn);
-	           // System.out.println("Saldo actualizado: " + saldoActualizado);
+	           
 
 	            exito = actualizado && saldoActualizado;
 

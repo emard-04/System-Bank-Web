@@ -406,7 +406,7 @@ public class daoCuentas implements inCuentas{
 		        ps.setInt(1, nroCuenta);
 		        rs = ps.executeQuery();
 		        if (rs.next()) {
-		            cue = valoresCuenta(rs); // si encuentra, carga la cuenta
+		            cue = valoresCuenta(rs); 
 		        }
 		    } catch (Exception e) {
 		        e.printStackTrace();

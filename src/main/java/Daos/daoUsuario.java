@@ -19,7 +19,7 @@ public class daoUsuario implements InUsuario {
 	private final String Existe = "SELECT * FROM Usuarios WHERE NombreUsuario=? ;";
 	private final String ExisteDni = "SELECT * FROM Usuarios WHERE Dni=?;";
 	private final String BuscarIdUsuario = "SELECT * FROM Usuarios WHERE IdUsuario=? AND Estado = 'Activo';";
-	private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario, Estado FROM Usuarios WHERE NombreUsuario=? AND Contraseña=?;";
+	private final String Login = "SELECT IdUsuario, NombreUsuario, Contraseña, dni, TipoUsuario, Estado FROM Usuarios WHERE BINARY NombreUsuario=? AND BINARY Contraseña=?;";
 
 	private static daoPersonas dp;
 
