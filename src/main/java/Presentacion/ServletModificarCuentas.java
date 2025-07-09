@@ -36,6 +36,7 @@ public class ServletModificarCuentas extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		if(request.getParameter("openModificar")!=null) {
 			windowDefault(request, response);
 		}
@@ -60,6 +61,7 @@ public class ServletModificarCuentas extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+		request.getSession().removeAttribute("mensaje");
         try {
             int nroCuenta = Integer.parseInt(request.getParameter("nro_cuenta_mod"));
             String dniCliente = request.getParameter("dni_cliente_mod");
@@ -83,10 +85,20 @@ public class ServletModificarCuentas extends HttpServlet {
             boolean exito = cuentaNeg.Modificar(cuenta);
             if (exito) {
             	request.setAttribute("ListaCuenta", cuentaNeg.ListarTodo());
-                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp");
+            	request.setAttribute("mensaje", "✅ Cuenta modificada correctamente.");
+           	 String ventana="/AdminMode/cuentaAdmin_modificar.jsp";
+              // windowDefault(request, response, ventana);
+               RequestDispatcher rd = request.getRequestDispatcher(ventana);
+       		rd.forward(request, response);
+                //response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp");
             } else {
             	request.setAttribute("ListaCuenta", cuentaNeg.ListarTodo());
-                response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Error al modificar la cuenta");
+                //response.sendRedirect(request.getContextPath() + "/AdminMode/cuentaAdmin_modificar.jsp?error=Error al modificar la cuenta");
+                request.setAttribute("mensaje", "❌ Error al modificar cuenta.");
+                String ventana="/AdminMode/cuentaAdmin_modificar.jsp?error=Error al modificar la cuenta";
+                //windowDefault(request, response, ventana);
+                RequestDispatcher rd = request.getRequestDispatcher(ventana);
+        		rd.forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
