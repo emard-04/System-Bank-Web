@@ -127,9 +127,9 @@ function confirmarLogout(e) {
 								readonly required>
 						</div>
 						<div>
-							<label for="dni_cliente"
+							<label for="dni_cliente" 
 								class="block text-gray-700 text-lg font-semibold mb-2">DNI
-								del Cliente</label> <input type="number" id="dni_cliente"
+								del Cliente</label> <input type="text" pattern="[0-9]+" title="Solo se permiten números" id="dni_cliente"
 								name="dni_cliente" placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
@@ -169,7 +169,7 @@ function confirmarLogout(e) {
 						<div>
 							<label for="cbu"
 								class="block text-gray-700 text-lg font-semibold mb-2">CBU</label>
-							<input type="number" id="cbu" name="cbu" value=<%=nroCBU%> placeholder=""
+							<input type="text" id="cbu" name="cbu" pattern="[0-9]+" title="Solo se permiten números" value=<%=nroCBU%> placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>

@@ -7,7 +7,7 @@
 <html>
 <head>
 <%
-    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,8 +45,8 @@ function confirmarLogout(e) {
 				class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-6">
-				<%= usuarioLogueado.getPersona().getNombre() %>
-				<%= usuarioLogueado.getPersona().getApellido() %>
+				<%=usuarioLogueado.getPersona().getNombre()%>
+				<%=usuarioLogueado.getPersona().getApellido()%>
 			</h3>
 
 			<a href="#" onclick="confirmarLogout(event)"
@@ -94,12 +94,16 @@ function confirmarLogout(e) {
 
 			<div class="p-6 flex-1 flex flex-col justify-center items-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-					<% if (request.getAttribute("mensaje") != null) { %>
+					<%
+					if (request.getAttribute("mensaje") != null) {
+					%>
 					<div
 						class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
-						<%= request.getAttribute("mensaje") %>
+						<%=request.getAttribute("mensaje")%>
 					</div>
-					<% } %>
+					<%
+					}
+					%>
 					<form action="/BancoParcial/ServletAgregarCliente" method="post"
 						onsubmit="return validarFormulario()"
 						class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
@@ -121,7 +125,8 @@ function confirmarLogout(e) {
 						<div>
 							<label for="dni"
 								class="block text-gray-700 text-lg font-semibold mb-2">DNI</label>
-							<input type="text" id="dni" name="dni" placeholder=""
+							<input type="text" id="dni" name="dni" pattern="[0-9]+"
+								title="Solo se permiten números"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
@@ -130,6 +135,7 @@ function confirmarLogout(e) {
 							<label for="cuil"
 								class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
 							<input type="text" id="cuil" name="cuil" placeholder=""
+								pattern="[0-9\-]+" title="Solo se permiten números"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
@@ -149,15 +155,15 @@ function confirmarLogout(e) {
 								required>
 								<option value="">Seleccionar país</option>
 								<%
-        if (request.getAttribute("ListaPais") != null) {
-            ArrayList<Pais> ListaPais = (ArrayList<Pais>) request.getAttribute("ListaPais");
-            for (Pais p : ListaPais) {
-        %>
-								<option value="<%= p.getIdPais() %>"><%= p.getNombre() %></option>
+								if (request.getAttribute("ListaPais") != null) {
+									ArrayList<Pais> ListaPais = (ArrayList<Pais>) request.getAttribute("ListaPais");
+									for (Pais p : ListaPais) {
+								%>
+								<option value="<%=p.getIdPais()%>"><%=p.getNombre()%></option>
 								<%
-            }
-        }
-        %>
+								}
+								}
+								%>
 							</select>
 						</div>
 
@@ -206,7 +212,8 @@ function confirmarLogout(e) {
 								<div class="flex items-center space-x-2 mb-2"
 									id="telefono_group_1">
 									<input type="text" id="telefono_1" name="telefonos"
-										placeholder="Teléfono 1"
+										placeholder="Teléfono 1" pattern="[0-9]+"
+										title="Solo se permiten números"
 										class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 										oninput="mostrarSiguiente(1)" required>
 								</div>
@@ -248,12 +255,19 @@ function confirmarLogout(e) {
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
+						<div class="col-span-1 md:col-span-3 flex justify-center space-x-6 pt-4">
+  <!-- Botón AGREGAR -->
+  <button type="submit"
+    class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
+    AGREGAR
+  </button>
 
-						<div class="col-span-1 md:col-span-3 flex justify-center pt-4">
-							<button type="submit"
-								class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md focus:outline-none focus:shadow-outline-green focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
-								AGREGAR</button>
-						</div>
+  <!-- Botón CANCELAR -->
+  <button type="reset"
+    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl">
+    CANCELAR
+  </button>
+</div>
 					</form>
 				</div>
 			</div>
@@ -314,6 +328,8 @@ function confirmarLogout(e) {
     		    input.id = 'telefono_' + (n + 1);
     		    input.name = 'telefonos';
     		    input.placeholder = 'Teléfono ' + (n + 1);
+    		    input.pattern='[0-9]+'; 
+    		    input.title="Solo se permiten números";
     		    input.className = 'p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg';
     		    input.oninput = function () {
     		      mostrarSiguiente(n + 1);
@@ -343,7 +359,7 @@ function confirmarLogout(e) {
         const nacionalidad = document.getElementById("nacionalidad");
         const provinciaSelect = document.getElementById("provincia");
         const localidadSelect = document.getElementById("localidad");
-        const contextPath = "<%= request.getContextPath() %>";
+        const contextPath = "<%=request.getContextPath()%>";
 
         nacionalidad.addEventListener("change", function () {
             const idPais = nacionalidad.value;

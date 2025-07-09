@@ -151,6 +151,8 @@ if (request.getAttribute("ListaCuenta") != null) {
                                 id="dni_cliente_mod"
                                 name="dni_cliente_mod"
                                 placeholder=""
+                                pattern="[0-9]+" 
+                                title="Solo se permiten números"
                                 class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                                 required
                             >
@@ -187,6 +189,8 @@ if (request.getAttribute("ListaCuenta") != null) {
                                 id="cbu_mod"
                                 name="cbu_mod"
                                 placeholder=""
+                                pattern="[0-9]+" 
+                                title="Solo se permiten números"
                                 class="p-3 border border-gray-300 rounded-md w-full text-lg"
                                 required
                                 readonly
@@ -201,6 +205,8 @@ if (request.getAttribute("ListaCuenta") != null) {
                                 name="saldo_mod"
                                 placeholder=""
                                 min=0
+                                pattern="[0-9]+" 
+                                title="Solo se permiten números"
                                 class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
                                 required
                                 
@@ -215,7 +221,7 @@ if (request.getAttribute("ListaCuenta") != null) {
                                 Guardar Cambios
                             </button>
                             <button
-                                type="button"
+                                type="reset"
                                 class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline-gray focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105 text-xl"
                             >
                                 Cancelar

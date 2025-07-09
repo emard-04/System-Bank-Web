@@ -135,7 +135,7 @@ function confirmarLogout(e) {
 						<div>
 							<label for="cuil_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
-							<input type="text" id="cuil_mod" name="cuil_mod"
+							<input type="text" id="cuil_mod" name="cuil_mod" pattern="[0-9\-]+" title="Solo se permiten números y guiones"
 								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>
@@ -259,14 +259,14 @@ function confirmarLogout(e) {
 						<div id="telefonosContainer" class="md:col-span-2">
 							<label for="telefono_select"
 								class="block text-gray-700 text-lg font-semibold mb-2">Teléfonos
-								(máx 3)</label> <select id="telefono_select" style="background-color:silver;" name="telefono_select"
+								(máx 3)</label> <select id="telefono_select"  style="background-color:silver;" name="telefono_select"
 								class="p-2 border border-gray-300 rounded-md w-full mb-2 bg-white" disabled="true">
 								<option value="">-- Seleccione un teléfono --</option>
 							</select> 
 							<input type="hidden" id="oldTelefono" name="oldTelefono">
 							<input type="hidden" id="Accion" name="Accion" value="">
 							<div class="flex space-x-2">
-								<input type="text" id="telefono_input" style="background-color:silver;" name="telefono_input" readonly
+								<input type="text" id="telefono_input" pattern="[0-9]+" title="Solo se permiten números" style="background-color:silver;" name="telefono_input" readonly
 									placeholder="Ej: 1123456789"
 									class="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
 
