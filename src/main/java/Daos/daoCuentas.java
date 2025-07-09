@@ -28,7 +28,7 @@ public class daoCuentas implements inCuentas{
     private final String Eliminar = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE NroCuenta = ?;";
     private final String EliminarTodasCuentas = "UPDATE Cuentas SET Estado = 'Inactiva' WHERE idUsuario = ?;";
     private final String Modificar = "UPDATE Cuentas SET FechaCreacion=?, IdtipoCuenta=?, Saldo=? WHERE NroCuenta=?;";
-    private final String ListarTodo = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas  WHERE Estado = 'Activa';";
+    private final String ListarTodo = "SELECT NroCuenta, cuentas.IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, cuentas.Estado FROM Cuentas inner join usuarios on cuentas.idusuario=usuarios.idusuario WHERE cuentas.Estado = 'Activa' and Tipousuario=0;";
     private final String ListarxUsuario = "SELECT NroCuenta, IdUsuario, FechaCreacion, IdtipoCuenta, Cbu, Saldo, Estado FROM Cuentas WHERE (Estado = 'Activa' OR Estado = 'Activo' )and idUsuario=?;";
     private final String existe = "SELECT * FROM Cuentas WHERE NroCuenta=?;";
     private final String existeCBU = "SELECT * FROM Cuentas WHERE Cbu=?;";
