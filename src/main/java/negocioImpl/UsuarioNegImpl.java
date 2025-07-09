@@ -20,6 +20,7 @@ private PrestamosNeg negPrestamos;
 	@Override
 	public boolean AgregarUsuario(Usuario usuario, Persona persona, List<TelefonoxPersona> listaTelefonos) {
 		negPersona=new PersonaNegImpl();
+		negTelefono=new TelefonoNegImpl();
 		// Validaciones de persona
 		if (negPersona.verificarMail(persona.getCorreoElectronico()))
 			return false;
@@ -30,9 +31,12 @@ private PrestamosNeg negPrestamos;
 			return false;
 		// Validacion telefono
 		for (TelefonoxPersona telefono : listaTelefonos) {
+			if(telefono.getTelefono()!=null) {
 			if (negTelefono.existe(telefono.getTelefono())) {
 				return false;
 			}
+			}
+			else break;
 		}
 		if (!negPersona.Agregar(persona))
 			return false;
