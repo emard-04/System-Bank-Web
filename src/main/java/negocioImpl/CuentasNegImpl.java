@@ -41,20 +41,30 @@ public class CuentasNegImpl implements CuentasNeg{
         return dao.Modificar(cuenta);
     }
 
-    @Override
-    public boolean Eliminar(int nroCuenta) {
-    	negPrestamos= new PrestamosNegImpl();
-		negMovimiento=new MovimientoNegImpl();
-		
-		if(!negPrestamos.EliminarxCuenta(nroCuenta)) return false;
-		if(!negMovimiento.EliminarMovimientos(nroCuenta))return false;
+	@Override
+	public boolean Eliminar(int nroCuenta) {
+		negPrestamos = new PrestamosNegImpl();
+		negMovimiento = new MovimientoNegImpl();
+
+		System.out.println("1, prestamo");
+		if (!negPrestamos.EliminarxCuenta(nroCuenta)) {
+			System.out.println("1404 error prestamo");
+			return false;
+		}
+		System.out.println("2, movimiento");
+		if (!negMovimiento.EliminarxCuenta(nroCuenta)) {
+			System.out.println("2404 error movimiento");
+			return false;
+		}
+		System.out.println("3, prestamo");
 		return dao.Eliminar(nroCuenta);
-    }
+	}
 
     @Override
     public ArrayList<Cuenta> ListarTodo() {
         return dao.ListarTodo();
     }
+    
     public boolean  EliminarCuentas(int idUsuario) {
     	return dao.EliminarCuentas(idUsuario);
     }

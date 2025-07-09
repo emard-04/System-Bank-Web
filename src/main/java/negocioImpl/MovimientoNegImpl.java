@@ -74,12 +74,22 @@ public ArrayList<Movimiento> filtrar(Movimiento mov,String nombre, String operad
 public boolean movimiento(Movimiento mov) {
     return dMov.Agregar(mov);
 }
+
 public boolean EliminarMovimientos(int idUsuario) {
 	return dMov.EliminarMovimientos(idUsuario);
 }
+
 public boolean EliminarxCuenta(int idCuenta) {
-	return dMov.EliminarxCuenta(idCuenta);
+
+	if (dMov.BuscarxCuenta(idCuenta) > 0) {
+		return dMov.EliminarxCuenta(idCuenta);
+	} else {
+		System.out.println("No hay movimientos");
+		return true;
+	}
+
 }
+
 @Override
 public int contarMovimientos(Movimiento mov) {
 	return dMov.contarMovimientos(mov);

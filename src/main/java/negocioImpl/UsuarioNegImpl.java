@@ -15,12 +15,13 @@ public class UsuarioNegImpl implements UsuarioNeg {
 	private PersonaNegImpl negPersona;
 	private TelefonoNeg negTelefono;
 	private CuentasNeg negCuenta;
-private MovimientoNeg negMovimiento;
-private PrestamosNeg negPrestamos;
+	private MovimientoNeg negMovimiento;
+	private PrestamosNeg negPrestamos;
+
 	@Override
 	public boolean AgregarUsuario(Usuario usuario, Persona persona, List<TelefonoxPersona> listaTelefonos) {
-		negPersona=new PersonaNegImpl();
-		negTelefono=new TelefonoNegImpl();
+		negPersona = new PersonaNegImpl();
+		negTelefono = new TelefonoNegImpl();
 		// Validaciones de persona
 		if (negPersona.verificarMail(persona.getCorreoElectronico()))
 			return false;
@@ -31,12 +32,12 @@ private PrestamosNeg negPrestamos;
 			return false;
 		// Validacion telefono
 		for (TelefonoxPersona telefono : listaTelefonos) {
-			if(telefono.getTelefono()!=null) {
-			if (negTelefono.existe(telefono.getTelefono())) {
-				return false;
-			}
-			}
-			else break;
+			if (telefono.getTelefono() != null) {
+				if (negTelefono.existe(telefono.getTelefono())) {
+					return false;
+				}
+			} else
+				break;
 		}
 		if (!negPersona.Agregar(persona))
 			return false;
@@ -81,17 +82,34 @@ private PrestamosNeg negPrestamos;
 
 	@Override
 	public boolean Eliminar(String dni) {
-		negPersona=new PersonaNegImpl();
-		negCuenta=new CuentasNegImpl();
-		negTelefono=new TelefonoNegImpl();
-		negPrestamos= new PrestamosNegImpl();
-		negMovimiento=new MovimientoNegImpl();
-		Usuario us=BuscarDni(dni);
-		if(!negPrestamos.EliminarxUsuario(us.getIdUsuario())) return false;
-		if(!negPersona.Eliminar(dni)) return false;
-		if(!negCuenta.EliminarCuentas(us.getIdUsuario())) return false;
-		if(!negMovimiento.EliminarMovimientos(us.getIdUsuario()))return false;
-		if(!negTelefono.EliminarxDni(dni)) return false;
+		negPersona = new PersonaNegImpl();
+		negCuenta = new CuentasNegImpl();
+		negTelefono = new TelefonoNegImpl();
+		negPrestamos = new PrestamosNegImpl();
+		negMovimiento = new MovimientoNegImpl();
+		Usuario us = BuscarDni(dni);
+
+		System.out.println("Eliminar prestamo");
+		if (!negPrestamos.EliminarxUsuario(us.getIdUsuario()))
+			return false;
+
+		System.out.println("Eliminar persona");
+		if (!negPersona.Eliminar(dni))
+			return false;
+
+		System.out.println("Eliminar cuenta");
+		if (!negCuenta.EliminarCuentas(us.getIdUsuario()))
+			return false;
+
+		System.out.println("Eliminar movimientos");
+		if (!negMovimiento.EliminarMovimientos(us.getIdUsuario()))
+			return false;
+
+		System.out.println("Eliminar telefono");
+		if (!negTelefono.EliminarxDni(dni))
+			return false;
+
+		System.out.println("Eliminar usuario");
 		return daoUsuario.Eliminar(dni);
 	}
 

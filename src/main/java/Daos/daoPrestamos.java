@@ -46,6 +46,7 @@ public class daoPrestamos implements InPrestamos {
 		}
 		return false;
 	}
+	
 	public int BuscarxCuenta(int nrocuenta) {
         Connection cn = null;
         PreparedStatement ps = null;
@@ -67,6 +68,7 @@ public class daoPrestamos implements InPrestamos {
         }
         return -1;
     }
+	
 	public boolean EliminarxCuenta(int nrocuenta) {
         Connection cn = null;
         PreparedStatement ps = null;

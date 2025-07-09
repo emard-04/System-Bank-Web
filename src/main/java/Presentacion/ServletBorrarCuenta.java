@@ -23,9 +23,7 @@ public class ServletBorrarCuenta extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// Opcional: redirigir o mostrar error si se accede con GET
-		// response.sendRedirect(request.getContextPath() +
-		// "/AdminMode/cuentaAdmin_borrar.jsp");
+
 		List<Cuenta> cuentas = negCuenta.ListarTodo(); // usa la capa de negocio
 
 		request.setAttribute("cuentas", cuentas);
@@ -34,22 +32,23 @@ public class ServletBorrarCuenta extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException,ErrorAlEliminarException {
+			throws ServletException, IOException, ErrorAlEliminarException {
 
-		String nroCuentaStr = request.getParameter("dni_eliminar"); // ojo con el name en el select
+		String nroCuentaStr = request.getParameter("dni_eliminar");
 
 		if (nroCuentaStr == null || nroCuentaStr.isEmpty()) {
-			// Redirigir con error o mensaje
 			response.sendRedirect(
 					request.getContextPath() + "/AdminMode/cuentaAdmin_borrar.jsp?error=No seleccionó cuenta");
 			return;
 		}
 
 		try {
+			System.out.println("Servlet Borrar cuenta");
 			if (negCuenta.Eliminar((Integer.parseInt(nroCuentaStr)))) {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?msg=CuentaEliminada");
 			} else {
+				System.out.println("3404 error cuenta");
 				throw new ErrorAlEliminarException();
 			}
 

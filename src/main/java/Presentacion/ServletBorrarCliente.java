@@ -46,6 +46,7 @@ public class ServletBorrarCliente extends HttpServlet {
 		}
 
 		try {
+			System.out.println("Borrar cliente");
 			if (negUsuario.Eliminar(nroDniStr)) {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");

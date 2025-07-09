@@ -18,123 +18,191 @@ import Interfaces.inMovimiento;
 	    private final String Eliminar = "UPDATE Movimientos SET Estado = 'Inactivo' WHERE cuentaEmisor=? ";//EliminarxCuenta
 	    private final String EliminarxUsuario = "UPDATE Movimientos SET Estado = 'Inactivo' WHERE idUsuario = ?";//EliminarxUsuario
 	    private final String ListarxCuenta="select * from movimientos where idUsuario=? and cuentaEmisor=?;";
-	    public ArrayList<Movimiento> Filtrar(int idUsuario, int cuentaEmisor, String nombreUsuario, String condicionesExtras, ArrayList<Object> parametrosExtras) {
-	        Connection cn = null;
-	        PreparedStatement ps = null;
-	        ResultSet rs = null;
+	    private final String BuscarxCuenta="select * from movimientos where Estado <> 'Inactivo' and cuentaEmisor=?";
 
-	        try {
-	            cn = Conexion.getConexion().getSQLConnection();
-	            StringBuilder query = new StringBuilder();
-	            query.append("SELECT IdMovimiento, movimientos.IdUsuario, IdTipoMovimiento, CuentaEmisor, CuentaReceptor, Detalle, Importe, Fecha ");
-	            query.append("FROM movimientos ");
-	            query.append("INNER JOIN cuentas ON movimientos.CuentaReceptor = cuentas.NroCuenta ");
-	            query.append("INNER JOIN Usuarios ON usuarios.IdUsuario = cuentas.IdUsuario ");
-	            query.append("WHERE movimientos.idUsuario = ? ");
-	            query.append("AND movimientos.CuentaEmisor = ? ");
-	            query.append("AND Usuarios.nombreusuario LIKE ? ");
-	            query.append(condicionesExtras);  // Aquí se agregan condiciones dinámicas
+		public ArrayList<Movimiento> Filtrar(int idUsuario, int cuentaEmisor, String nombreUsuario,
+				String condicionesExtras, ArrayList<Object> parametrosExtras) {
+			Connection cn = null;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
 
-	            ps = cn.prepareStatement(query.toString());
+			try {
+				cn = Conexion.getConexion().getSQLConnection();
+				StringBuilder query = new StringBuilder();
+				query.append(
+						"SELECT IdMovimiento, movimientos.IdUsuario, IdTipoMovimiento, CuentaEmisor, CuentaReceptor, Detalle, Importe, Fecha ");
+				query.append("FROM movimientos ");
+				query.append("INNER JOIN cuentas ON movimientos.CuentaReceptor = cuentas.NroCuenta ");
+				query.append("INNER JOIN Usuarios ON usuarios.IdUsuario = cuentas.IdUsuario ");
+				query.append("WHERE movimientos.idUsuario = ? ");
+				query.append("AND movimientos.CuentaEmisor = ? ");
+				query.append("AND Usuarios.nombreusuario LIKE ? ");
+				query.append(condicionesExtras); // Aquí se agregan condiciones dinámicas
 
-	            int paramIndex = 1;
-	            ps.setInt(paramIndex++, idUsuario);
-	            ps.setInt(paramIndex++, cuentaEmisor);
-	            ps.setString(paramIndex++, "%" + nombreUsuario + "%");
+				ps = cn.prepareStatement(query.toString());
 
-	            for (Object param : parametrosExtras) {
-	            	 if (param instanceof LocalDate) {
-	                    ps.setDate(paramIndex++, java.sql.Date.valueOf((LocalDate) param));
-	                } else if (param instanceof Integer) {
-	                    ps.setInt(paramIndex++, (Integer) param);
-	                } else if (param instanceof String) {
-	                    ps.setString(paramIndex++, (String) param);
-	                }
-	            }
+				int paramIndex = 1;
+				ps.setInt(paramIndex++, idUsuario);
+				ps.setInt(paramIndex++, cuentaEmisor);
+				ps.setString(paramIndex++, "%" + nombreUsuario + "%");
 
-	            ArrayList<Movimiento> lista = new ArrayList<>();
-	            rs = ps.executeQuery();
-	            while (rs.next()) {
-	                lista.add(valoresMovimiento(rs));
-	            }
+				for (Object param : parametrosExtras) {
+					if (param instanceof LocalDate) {
+						ps.setDate(paramIndex++, java.sql.Date.valueOf((LocalDate) param));
+					} else if (param instanceof Integer) {
+						ps.setInt(paramIndex++, (Integer) param);
+					} else if (param instanceof String) {
+						ps.setString(paramIndex++, (String) param);
+					}
+				}
 
-	            return lista;
+				ArrayList<Movimiento> lista = new ArrayList<>();
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					lista.add(valoresMovimiento(rs));
+				}
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            try {
-	                if (rs != null) rs.close();
-	                if (ps != null) ps.close();
-	                if (cn != null) cn.close();
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
+				return lista;
 
-	        return null;
-	    }
-	    public boolean Agregar(Movimiento mov) {
-	        Connection cn = null;
-	        PreparedStatement cs = null;
-	        try {
-	            cn = Conexion.getConexion().getSQLConnection();
-	            cs = valoresQuery(cn, Agregar, mov);
-	            if (cs.executeUpdate() > 0) {
-	                cn.commit();
-	                return true;
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            System.out.println("No se pudo conectar");
-	        } finally {
-	            try { if (cs != null) cs.close(); } catch (Exception e) {}
-	            try { if (cn != null) cn.close(); } catch (Exception e) {}
-	        }
-	        return false;
-	    }
-	    public boolean EliminarxCuenta(int idCuenta) {
-	    	Connection cn = null;
-	    	PreparedStatement ps = null;
-	        try {
-	            cn = Conexion.getConexion().getSQLConnection();
-	            ps = cn.prepareStatement(Eliminar);
-	            ps.setInt(1, idCuenta);
-	            if (ps.executeUpdate() > 0) {
-	                cn.commit();
-	                return true;
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            System.out.println("No se pudo elimianr movimiento.");
-	        }
-	        finally {
-	            try { if (ps != null) ps.close(); } catch (Exception e) {}
-	            try { if (cn != null) cn.close(); } catch (Exception e) {}
-	        }
-	        return false;
-	    }
-	    public boolean EliminarMovimientos(int idUsuario) {
-	    	Connection cn = null;
-	    	PreparedStatement ps = null;
-	        try {
-	            cn = Conexion.getConexion().getSQLConnection();
-	            ps = cn.prepareStatement(EliminarxUsuario);
-	            ps.setInt(1, idUsuario);
-	            if (ps.executeUpdate() > 0) {
-	                cn.commit();
-	                return true;
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            System.out.println("No se pudo elimianr movimiento.");
-	        }
-	        finally {
-	            try { if (ps != null) ps.close(); } catch (Exception e) {}
-	            try { if (cn != null) cn.close(); } catch (Exception e) {}
-	        }
-	        return false;
-	    }
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (rs != null)
+						rs.close();
+					if (ps != null)
+						ps.close();
+					if (cn != null)
+						cn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			return null;
+		}
+
+		public boolean Agregar(Movimiento mov) {
+			Connection cn = null;
+			PreparedStatement cs = null;
+			try {
+				cn = Conexion.getConexion().getSQLConnection();
+				cs = valoresQuery(cn, Agregar, mov);
+				if (cs.executeUpdate() > 0) {
+					cn.commit();
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("No se pudo conectar");
+			} finally {
+				try {
+					if (cs != null)
+						cs.close();
+				} catch (Exception e) {
+				}
+				try {
+					if (cn != null)
+						cn.close();
+				} catch (Exception e) {
+				}
+			}
+			return false;
+		}
+
+		public int BuscarxCuenta(int nroCuenta) {
+			Connection cn = null;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				cn = Conexion.getConexion().getSQLConnection();
+				ps = cn.prepareStatement(BuscarxCuenta);
+				ps.setInt(1, nroCuenta);
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					return rs.getInt("IdMovimiento");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (rs != null)
+						rs.close();
+				} catch (Exception e) {
+				}
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (Exception e) {
+				}
+				try {
+					if (cn != null)
+						cn.close();
+				} catch (Exception e) {
+				}
+			}
+			return -1;
+		}
+
+		public boolean EliminarxCuenta(int idCuenta) {
+			Connection cn = null;
+			PreparedStatement ps = null;
+			try {
+				cn = Conexion.getConexion().getSQLConnection();
+				ps = cn.prepareStatement(Eliminar);
+				ps.setInt(1, idCuenta);
+				if (ps.executeUpdate() > 0) {
+					cn.commit();
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("No se pudo elimianr movimiento.");
+			} finally {
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (Exception e) {
+				}
+				try {
+					if (cn != null)
+						cn.close();
+				} catch (Exception e) {
+				}
+			}
+			return false;
+		}
+
+		public boolean EliminarMovimientos(int idUsuario) {
+			Connection cn = null;
+			PreparedStatement ps = null;
+			try {
+				System.out.println("Dao movimientos");
+				cn = Conexion.getConexion().getSQLConnection();
+				ps = cn.prepareStatement(EliminarxUsuario);
+				ps.setInt(1, idUsuario);
+				if (ps.executeUpdate() > 0) {
+					cn.commit();
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("No se pudo elimianr movimiento.");
+			} finally {
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (Exception e) {
+				}
+				try {
+					if (cn != null)
+						cn.close();
+				} catch (Exception e) {
+				}
+			}
+			return false;
+		}
+
 	    private PreparedStatement valoresQuery(Connection cn, String query, Movimiento mov) {
 	        PreparedStatement cs = null;
 	        try {

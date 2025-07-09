@@ -1,4 +1,5 @@
 package negocioImpl;
+
 import Daos.*;
 import java.sql.Connection;
 
@@ -6,89 +7,106 @@ import Interfaces.Conexion;
 import Interfaces.InPrestamos;
 import negocio.*;
 import Entidades.*;
-import java.util.List; 
+import java.util.List;
 import java.sql.SQLException;
 import java.math.BigDecimal;
 import Daos.*;
 import Interfaces.*;
-public class PrestamosNegImpl implements PrestamosNeg{
-	 private final InPrestamos prestamoDao = new daoPrestamos();
-	 private final inCuentas cuentaDao = new daoCuentas();
-private  CuotasNeg negCuota;
-	    
 
-	    @Override
-	    public List<Prestamos> listarPrestamosCliente(int idUsuario) {
-	        return prestamoDao.obtenerPorUsuario(idUsuario);
-	    }
+public class PrestamosNegImpl implements PrestamosNeg {
+	private final InPrestamos prestamoDao = new daoPrestamos();
+	private final inCuentas cuentaDao = new daoCuentas();
+	private CuotasNeg negCuota;
 
-	    @Override
-	    public List<Prestamos> listarTodos() {
-	        return prestamoDao.obtenerTodos();
-	    }
-public boolean EliminarxUsuario(int id) {
-	negCuota=new CuotasNegImpl();
-	for(Prestamos prestamo: listarPrestamosCliente(id)) {
-		if(!negCuota.EliminarxUsuario(prestamo.getIdPrestamo())) {
-			return false;
+	@Override
+	public List<Prestamos> listarPrestamosCliente(int idUsuario) {
+		return prestamoDao.obtenerPorUsuario(idUsuario);
+	}
+
+	@Override
+	public List<Prestamos> listarTodos() {
+		return prestamoDao.obtenerTodos();
+	}
+
+	public boolean EliminarxUsuario(int id) {
+		negCuota = new CuotasNegImpl();
+		
+		System.out.println("Elimnar prestamo x usuario");
+
+		for (Prestamos prestamo : listarPrestamosCliente(id)) {
+			System.out.println("For prestamoE x usuario");
+			if (!negCuota.EliminarxUsuario(prestamo.getIdPrestamo())) {
+				System.out.println("neg cuota ADASda");
+				return false;
+			}
+		}
+		
+		System.out.println("Return prestamo bueno");
+		
+		return prestamoDao.EliminarxUsuario(id);
+	}
+
+	public boolean EliminarxCuenta(int nrocuenta) {
+		negCuota = new CuotasNegImpl();
+
+		if (prestamoDao.BuscarxCuenta(nrocuenta) > 0) {
+			System.out.println("Hay prestamos");
+			negCuota.EliminarxUsuario(prestamoDao.BuscarxCuenta(nrocuenta));
+			return prestamoDao.EliminarxCuenta(nrocuenta);
+		} else {
+			System.out.println("No hay prestamos");
+			return true;
 		}
 	}
-	return prestamoDao.EliminarxUsuario(id);
-}
 
-public boolean EliminarxCuenta(int nrocuenta) {
-	negCuota=new CuotasNegImpl();
-	System.out.println("NroCuenta "+nrocuenta);
-	System.out.println("NroPRestamo= "+prestamoDao.BuscarxCuenta(nrocuenta));
-	negCuota.EliminarxUsuario(prestamoDao.BuscarxCuenta(nrocuenta));
-	return prestamoDao.EliminarxCuenta(nrocuenta);
-}
-	    @Override
-	    public boolean aprobarPrestamo(int idPrestamo) {
-	    	Connection conn = null;
-	        boolean exito = false;
+	@Override
+	public boolean aprobarPrestamo(int idPrestamo) {
+		Connection conn = null;
+		boolean exito = false;
 
-	        try {
-	        	 
-	            conn = Conexion.getConexion().getSQLConnection();
-	            conn.setAutoCommit(false); 
+		try {
 
-	            
-	            Prestamos prestamo = prestamoDao.obtenerPorId(idPrestamo, conn);
-	          
-	            if (prestamo == null) return false;
+			conn = Conexion.getConexion().getSQLConnection();
+			conn.setAutoCommit(false);
 
-	            BigDecimal importe = prestamo.getImportePedido();
-	           
-	            boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aprobado", conn);
-	           
+			Prestamos prestamo = prestamoDao.obtenerPorId(idPrestamo, conn);
 
-	           
-	            boolean saldoActualizado = cuentaDao.actualizarSaldo(prestamo.getCuenta().getNroCuenta(), importe, conn);
-	           
+			if (prestamo == null)
+				return false;
 
-	            exito = actualizado && saldoActualizado;
+			BigDecimal importe = prestamo.getImportePedido();
 
-	            if (exito) {
-	                conn.commit();
-	            } else {
-	                conn.rollback();
-	            }
+			boolean actualizado = prestamoDao.cambiarEstadoSolicitado(idPrestamo, "Aprobado", conn);
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            if (conn != null) try { conn.rollback(); } catch (SQLException ignored) {}
-	        } finally {
-	            if (conn != null) {
-	                try {
-	                    conn.setAutoCommit(true);
-	                    conn.close();
-	                } catch (SQLException ignored) {}
-	            }
-	        }
+			boolean saldoActualizado = cuentaDao.actualizarSaldo(prestamo.getCuenta().getNroCuenta(), importe, conn);
 
-	        return exito;
-	    }
+			exito = actualizado && saldoActualizado;
+
+			if (exito) {
+				conn.commit();
+			} else {
+				conn.rollback();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (conn != null)
+				try {
+					conn.rollback();
+				} catch (SQLException ignored) {
+				}
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException ignored) {
+				}
+			}
+		}
+
+		return exito;
+	}
 
 	    @Override
 	    public boolean rechazarPrestamo(int idPrestamo) {
