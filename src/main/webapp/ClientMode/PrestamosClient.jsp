@@ -177,7 +177,7 @@ function confirmarLogout(e) {
 							<div class="flex-1">
 								<label for="monto_solicitar"
 									class="block text-gray-700 text-lg font-semibold mb-2">Monto
-									a solicitar</label> <input type="number" id="monto_solicitar"
+									a solicitar</label> <input type="number" step="any" id="monto_solicitar"
 									name="monto_solicitar" placeholder=""
 									class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 									required>

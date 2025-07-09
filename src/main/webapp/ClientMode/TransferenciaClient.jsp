@@ -177,7 +177,7 @@ else{
 								name="cuentaSeleccionada"> 
 								<label for="monto"
 								class="block text-gray-700 text-lg font-semibold mb-2">Monto
-								a transferir</label> <input type="number" id="monto" name="monto"
+								a transferir</label> <input type="number" step="any" id="monto" name="monto"
 								placeholder=""
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>

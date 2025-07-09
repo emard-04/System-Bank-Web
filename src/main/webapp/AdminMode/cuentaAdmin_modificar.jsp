@@ -205,6 +205,7 @@ if (request.getAttribute("ListaCuenta") != null) {
                                 name="saldo_mod"
                                 placeholder=""
                                 min=0
+                                step="any"
                                 pattern="[0-9]+" 
                                 title="Solo se permiten números"
                                 class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
