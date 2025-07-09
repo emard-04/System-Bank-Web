@@ -8,8 +8,9 @@ import negocio.CuotasNeg;
 import Daos.*;
 import Interfaces.*;
 
-public class CuotasNegImpl implements CuotasNeg{
+public class CuotasNegImpl implements CuotasNeg {
 	private inCuotas dao = new daoCuotas();
+
 	@Override
 	public List<Cuota> obtenerCuotasPendientesPorUsuario(int idUsuario) throws SQLException {
 		return dao.obtenerCuotasPendientesPorUsuario(idUsuario);
@@ -19,19 +20,19 @@ public class CuotasNegImpl implements CuotasNeg{
 	public boolean pagarCuota(int idCuota, int nroCuenta) throws SQLException {
 		return dao.pagarCuota(idCuota, nroCuenta);
 	}
+
 	public boolean EliminarxUsuario(int id) {
+		System.out.println("14 eliminar cuotas");
 		return dao.EliminarxUsuario(id);
 	}
 
 	@Override
 	public boolean generarCuotasParaPrestamo(int idPrestamo, BigDecimal importeCuota, int cantidadCuotas) {
-		
 		return dao.generarCuotasParaPrestamo(idPrestamo, importeCuota, cantidadCuotas);
 	}
 
 	@Override
 	public List<Cuota> obtenerCuotasPendientesPorCuenta(int nroCuenta) throws SQLException {
-		
 		return dao.obtenerCuotasPendientesPorCuenta(nroCuenta);
 	}
 
@@ -46,5 +47,4 @@ public class CuotasNegImpl implements CuotasNeg{
 		// TODO Auto-generated method stub
 		return dao.existenCuotasPendientesPorPrestamo(idPrestamo);
 	}
-
 }

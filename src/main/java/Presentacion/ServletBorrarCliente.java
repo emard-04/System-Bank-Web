@@ -51,6 +51,7 @@ public class ServletBorrarCliente extends HttpServlet {
 				request.getSession().setAttribute("mensaje", "✅ Se ha eliminado correctamente");
 				response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?msg=CuentaEliminada");
 			} else {
+				System.out.println("Error 6404");
 				throw new ErrorAlEliminarException();
 			}
 

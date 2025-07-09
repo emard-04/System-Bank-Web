@@ -15,11 +15,10 @@ public class daoPrestamos implements InPrestamos {
 	private static final String INSERT = "INSERT INTO Prestamos (IdUsuario, Fecha, ImporteAPagar, ImportePedido, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago, IdCuenta) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 	private static final String EliminarxUsuario = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdUsuario = ?";
 	private static final String EliminarxCuenta = "UPDATE prestamos SET EstadoSolicitud = 'Inactivo' WHERE IdCuenta = ? and EstadoPago='En curso'";
-	private static final String BuscarxCuenta="select * from prestamos where IdCuenta=? and EstadoSolicitud='Aprobado'";
-	public daoPrestamos() {
+	private static final String BuscarxCuenta = "select * from prestamos where IdCuenta=? and EstadoSolicitud='Aprobado'";
 
+	public daoPrestamos() {
 	}
-	
 
 	@Override
 	public boolean agregar(Prestamos p) {
@@ -88,6 +87,7 @@ public class daoPrestamos implements InPrestamos {
         }
         return false;
     }
+	
 	public boolean EliminarxUsuario(int id) {
 	        Connection cn = null;
 	        PreparedStatement ps = null;
@@ -107,6 +107,7 @@ public class daoPrestamos implements InPrestamos {
 	        }
 	        return false;
 	    }
+	
 	@Override
 	public List<Prestamos> obtenerTodos() {
 	    List<Prestamos> lista = new ArrayList<>();
@@ -159,6 +160,8 @@ public class daoPrestamos implements InPrestamos {
 		List<Prestamos> lista = new ArrayList<>();
 		String query = "SELECT * FROM Prestamos WHERE IdUsuario = ?";
 
+		System.out.println("12 Obtener prestamos us");
+		
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
 				PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -740,9 +743,3 @@ public class daoPrestamos implements InPrestamos {
     }
     
 }
-
-
-
-
-
-

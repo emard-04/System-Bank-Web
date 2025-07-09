@@ -85,31 +85,26 @@ public class UsuarioNegImpl implements UsuarioNeg {
 		negPersona = new PersonaNegImpl();
 		negCuenta = new CuentasNegImpl();
 		negTelefono = new TelefonoNegImpl();
-		negPrestamos = new PrestamosNegImpl();
-		negMovimiento = new MovimientoNegImpl();
 		Usuario us = BuscarDni(dni);
 
-		System.out.println("Eliminar prestamo");
-		if (!negPrestamos.EliminarxUsuario(us.getIdUsuario()))
-			return false;
+		for (Cuenta c : negCuenta.ListarxUsuario(us.getIdUsuario())) {
+			System.out.println(" Esto se deberia repetir varias veces");	
+			negCuenta.Eliminar(c.getNroCuenta());
+		}
 
-		System.out.println("Eliminar persona");
-		if (!negPersona.Eliminar(dni))
+		System.out.println("4 Eliminar telefono");
+		if (!negTelefono.EliminarxDni(dni)) {
+			System.out.println("4404 error telefono");
 			return false;
-
-		System.out.println("Eliminar cuenta");
-		if (!negCuenta.EliminarCuentas(us.getIdUsuario()))
+		}
+		
+		System.out.println("5 Eliminar persona");
+		if (!negPersona.Eliminar(dni)) {
+			System.out.println("5404 error persona");
 			return false;
+		}
 
-		System.out.println("Eliminar movimientos");
-		if (!negMovimiento.EliminarMovimientos(us.getIdUsuario()))
-			return false;
-
-		System.out.println("Eliminar telefono");
-		if (!negTelefono.EliminarxDni(dni))
-			return false;
-
-		System.out.println("Eliminar usuario");
+		System.out.println("6 Eliminar usuario");
 		return daoUsuario.Eliminar(dni);
 	}
 

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//Borrar cuenta
 @WebServlet("/ServletBorrarCuenta")
 public class ServletBorrarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +23,7 @@ public class ServletBorrarCuenta extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		List<Cuenta> cuentas = negCuenta.ListarTodo(); // usa la capa de negocio
+		List<Cuenta> cuentas = negCuenta.ListarTodo();
 
 		request.setAttribute("cuentas", cuentas);
 
@@ -53,13 +52,11 @@ public class ServletBorrarCuenta extends HttpServlet {
 			}
 
 		} catch (NumberFormatException e) {
-			// En caso de que el nroCuenta no es válido
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=NroCuenta inválido");
 		} catch (ErrorAlEliminarException e) {
 			request.getSession().setAttribute("mensaje", " ❌ Hubo un error al eliminar la cuenta ❌ ");
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=Error al eliminar cuenta");
 		} catch (Exception e) {
-			// En caso de un error por fuera de los exceptions ya marcados
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCuenta?error=Error inesperado");
 		}

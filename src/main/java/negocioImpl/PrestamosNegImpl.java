@@ -30,19 +30,19 @@ public class PrestamosNegImpl implements PrestamosNeg {
 
 	public boolean EliminarxUsuario(int id) {
 		negCuota = new CuotasNegImpl();
-		
-		System.out.println("Elimnar prestamo x usuario");
+
+		System.out.println("11 lista de prestamos prestamo x us");
 
 		for (Prestamos prestamo : listarPrestamosCliente(id)) {
-			System.out.println("For prestamoE x usuario");
+			System.out.println("13 For prestamoE x us");
 			if (!negCuota.EliminarxUsuario(prestamo.getIdPrestamo())) {
-				System.out.println("neg cuota ADASda");
+				System.out.println("1 Fallo eliminar cuotas us");
 				return false;
 			}
 		}
-		
-		System.out.println("Return prestamo bueno");
-		
+
+		System.out.println("1 Elimar prestamo us ");
+
 		return prestamoDao.EliminarxUsuario(id);
 	}
 
@@ -126,11 +126,13 @@ public class PrestamosNegImpl implements PrestamosNeg {
 	        }
 
 	        return exito;
-	    }
-	    @Override
-	    public boolean marcarPrestamoPagado(int idPrestamo, Connection conn) {
-	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Pagado", conn);
-	    }
+		}
+
+		@Override
+		public boolean marcarPrestamoPagado(int idPrestamo, Connection conn) {
+			return prestamoDao.cambiarEstadoPago(idPrestamo, "Pagado", conn);
+		}
+
 	    @Override
 	    public boolean marcarPrestamoEnIncumplimiento(int idPrestamo, Connection conn) {
 	        return prestamoDao.cambiarEstadoPago(idPrestamo, "Incumplido", conn);
