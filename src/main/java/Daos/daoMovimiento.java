@@ -11,7 +11,7 @@ import Entidades.*;
 import Entidades.Movimiento;
 import Interfaces.Conexion;
 import Interfaces.inMovimiento;
-
+import java.sql.SQLException;
 
 	public class daoMovimiento implements inMovimiento {
 	    private final String Agregar = "insert into Movimientos(IdUsuario, IdTipoMovimiento, CuentaEmisor,CuentaReceptor, Detalle, Importe, Fecha) values(?,?,?,?,?,?,?);";
@@ -263,64 +263,47 @@ import Interfaces.inMovimiento;
 	    }
 	    @Override
 	    public int contarMovimientos(Movimiento mov) {
-	        int total = 0;
-	        String sql = "SELECT COUNT(*) FROM movimientos WHERE nroCuentaEmisor = ?";
-	        
-	        try (Connection conn = Conexion.getConexion().getSQLConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
-	            
-	            ps.setInt(1, mov.getCuentaEmisor().getNroCuenta());
+	    	int total = 0;
+	    	
+	        String sql = "SELECT COUNT(*) FROM movimientos WHERE IdCuenta = ?";
 
-	            try (ResultSet rs = ps.executeQuery()) {
-	                if (rs.next()) {
-	                    total = rs.getInt(1);
-	                }
+	        try (Connection con = Conexion.getConexion().getSQLConnection();
+	                PreparedStatement ps = con.prepareStatement(sql)) {
+	               ps.setInt(1, mov.getCuentaEmisor().getNroCuenta());
+	            ResultSet rs = ps.executeQuery();
+	            if (rs.next()) {
+	                total = rs.getInt(1);
 	            }
-
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
 
 	        return total;
 	    }
+	    
 	    @Override
 	    public List<Movimiento> ListarxcuentasPaginado(Movimiento mov, int offset, int limite) {
-	        List<Movimiento> lista = new ArrayList<>();
-	        String sql = "SELECT * FROM movimientos WHERE nroCuentaEmisor = ? ORDER BY fecha DESC LIMIT ? OFFSET ?";
+	    	 List<Movimiento> lista = new ArrayList<>();
+	    	    String sql = "SELECT * FROM movimientos WHERE IdCuenta = ? ORDER BY Fecha DESC LIMIT ? OFFSET ?";
 
-	        try (Connection conn = Conexion.getConexion().getSQLConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	    	    try (Connection con = Conexion.getConexion().getSQLConnection();
+	    	         PreparedStatement ps = con.prepareStatement(sql)) {
 
-	            ps.setInt(1, mov.getCuentaEmisor().getNroCuenta());
-	            ps.setInt(2, limite);
-	            ps.setInt(3, offset);
+	    	        ps.setInt(1, mov.getCuentaEmisor().getNroCuenta());
+	    	        ps.setInt(2, limite);
+	    	        ps.setInt(3, offset);
 
-	            try (ResultSet rs = ps.executeQuery()) {
-	                while (rs.next()) {
-	                    Movimiento m = new Movimiento();
+	    	        ResultSet rs = ps.executeQuery();
+	    	        while (rs.next()) {
+	    	            //Movimiento m = mapearMovimiento(rs);
+	    	           // lista.add(m);
+	    	        }
+	    	    } catch (Exception e) {
+	    	        e.printStackTrace();
+	    	    }
 
-	                    // Asegurate de completar estos datos según tu entidad
-	                    m.setIdMovimiento(rs.getInt("idMovimiento"));
-	                    m.setDetalle(rs.getString("detalle"));
-	                    m.setFecha(rs.getDate("fecha").toLocalDate());
-	                    m.setImporte(rs.getBigDecimal("importe"));
-	                    
-	                    // Si necesitas cargar más datos (tipoMovimiento, usuario, cuentaReceptor, etc.)
-	                    // deberás hacer joins o consultas adicionales.
-
-	                    Cuenta cuentaEmisor = new Cuenta();
-	                    cuentaEmisor.setNroCuenta(rs.getInt("nroCuentaEmisor"));
-	                    m.setCuentaEmisor(cuentaEmisor);
-
-	                    lista.add(m);
-	                }
-	            }
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-
-	        return lista;
+	    	    return lista;
 	    }
+	    
 	     
 	}

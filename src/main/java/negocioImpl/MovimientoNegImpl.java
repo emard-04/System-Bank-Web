@@ -17,28 +17,26 @@ public class MovimientoNegImpl implements MovimientoNeg {
 	private final CuentasNegImpl nCuenta= new CuentasNegImpl();
 	private final daoMovimiento dMov= new daoMovimiento();
 public boolean Agregar(Movimiento movReceptor, Movimiento movEmisor) {
-	//Verificar saldo mayor a importe
+	
 if(!(movEmisor.getCuentaEmisor().getSaldo().compareTo(movReceptor.getImporte()) >= 0))return false;
 BigDecimal saldoEmisor=movEmisor.getCuentaEmisor().getSaldo().subtract(movEmisor.getImporte());
 BigDecimal saldoReceptor=movReceptor.getCuentaEmisor().getSaldo().add(movReceptor.getImporte());
 Cuenta Emisor= new Cuenta();
 Cuenta receptor = new Cuenta();
-//Al que le transfieren SUMA
-//El que transfiere RESTA
-//Seteamos nuevos saldos luego de las operciones
+
 Emisor=movEmisor.getCuentaEmisor();
 Emisor.setSaldo(saldoEmisor);
 receptor=movEmisor.getCuentaReceptor();
 movEmisor.setImporte(movEmisor.getImporte().negate());
 receptor.setSaldo(saldoReceptor);
-//Verificamos que la cuenta no pertenezca al mismo usuario
+
 if(receptor.getUsuario().getIdUsuario()==Emisor.getUsuario().getIdUsuario())return false;
-//Modificamos los saldos y verioficamos que todo salga bien
+
 boolean exitoEmisor=nCuenta.Modificar(Emisor);
 boolean exitoReceptor = nCuenta.Modificar(receptor);
 if(!exitoEmisor)return false;
 if(!exitoReceptor)return false;
-//Agregamos los movimientos
+
 if(dMov.Agregar(movEmisor)&&dMov.Agregar(movReceptor)) {
 	return true;
 }

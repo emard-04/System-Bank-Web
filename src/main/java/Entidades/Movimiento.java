@@ -33,7 +33,7 @@ public class Movimiento {
         return idMovimiento;
     }
     public void setIdMovimiento(int idMovimiento) {
-        this.idMovimiento = idMovimiento;//skibidi
+        this.idMovimiento = idMovimiento;
     } 
     public Usuario getUsuario() {
         return usuario;

@@ -22,15 +22,15 @@ public class UsuarioNegImpl implements UsuarioNeg {
 	public boolean AgregarUsuario(Usuario usuario, Persona persona, List<TelefonoxPersona> listaTelefonos) {
 		negPersona = new PersonaNegImpl();
 		negTelefono = new TelefonoNegImpl();
-		// Validaciones de persona
+		
 		if (negPersona.verificarMail(persona.getCorreoElectronico()))
 			return false;
 		if (negPersona.existe(persona.getDni()))
 			return false;
-		// Validacion usuario
+		
 		if (daoUsuario.existe(usuario.getNombreUsuario()))
 			return false;
-		// Validacion telefono
+		
 		for (TelefonoxPersona telefono : listaTelefonos) {
 			if (telefono.getTelefono() != null) {
 				if (negTelefono.existe(telefono.getTelefono())) {
@@ -115,19 +115,19 @@ public class UsuarioNegImpl implements UsuarioNeg {
 			condicionesExtras.append(" and pais.idPais = ? ");
 			parametrosExtras.add(idPais);
 		}
-		// Agregar condición por provincia
+		
 		if (idProvincia > 0) {
 			condicionesExtras.append(" AND provincia.idProvincia = ? ");
 			parametrosExtras.add(idProvincia);
 		}
 
-		// Agregar condición por localidad
+		
 		if (idLocalidad > 0) {
 			condicionesExtras.append(" AND localidad.idLocalidad = ? ");
 			parametrosExtras.add(idLocalidad);
 		}
 
-		// Agregar condición por DNI (si viene algo escrito)
+		
 		if (dniParcial != null && !dniParcial.trim().isEmpty()) {
 			condicionesExtras.append(" AND usuarios.dni LIKE ? ");
 			parametrosExtras.add("%" + dniParcial + "%");

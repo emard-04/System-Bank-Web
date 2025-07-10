@@ -225,7 +225,7 @@ public class PrestamosNegImpl implements PrestamosNeg {
 		public Prestamos buscarPorId(int idPrestamo) {
 		    Prestamos p = null;
 		    try (Connection conn = Conexion.getConexion().getSQLConnection()) {
-		        p = new daoPrestamos().obtenerPorId(idPrestamo, conn); // <- Usás tu función existente
+		        p = new daoPrestamos().obtenerPorId(idPrestamo, conn); 
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		    }
@@ -234,7 +234,7 @@ public class PrestamosNegImpl implements PrestamosNeg {
 		
 		@Override
 		public List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado) {
-	        // Simplemente delega la llamada al DAO, ya que la lógica de consulta está allí
+	       
 	        return prestamoDao.obtenerPrestamosPorFechaYEstado(desde, hasta, estado);
 	    }
 		

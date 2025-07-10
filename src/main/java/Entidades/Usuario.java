@@ -5,7 +5,7 @@ public class Usuario {
 	    private int idUsuario;
 	    private String nombreUsuario;
 	    private String contrasena;
-	    private Persona persona;  // referencia a Persona
+	    private Persona persona;  
 	    private boolean tipoUsuario;
 	    private String estado;
 

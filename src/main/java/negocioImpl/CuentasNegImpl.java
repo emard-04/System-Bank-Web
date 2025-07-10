@@ -25,13 +25,13 @@ public class CuentasNegImpl implements CuentasNeg {
 	public boolean Agregar(Cuenta cuenta) {
 		PersonaNegImpl negPersona = new PersonaNegImpl();
 		nUsuario = new UsuarioNegImpl();
-		// Perosna no existe dni return false
+		
 		if (!negPersona.existe(cuenta.getUsuario().getPersona().getDni()))
 			return false;
-		// Usuario Administrador return false
+		
 		if (nUsuario.BuscarDni(cuenta.getUsuario().getPersona().getDni()).isTipoUsuario())
 			return false;
-		// persona tiene 3 cuentas return false
+		
 		if (dao.maximoCuentas(cuenta.getUsuario().getIdUsuario()) >= 3)
 			return false;
 		return dao.Agregar(cuenta);
@@ -126,7 +126,7 @@ public class CuentasNegImpl implements CuentasNeg {
 		if (ordenSaldo != null && (ordenSaldo.equalsIgnoreCase("ASC") || ordenSaldo.equalsIgnoreCase("DESC"))) {
 		    orden.append(" ORDER BY cuentas.Saldo ").append(ordenSaldo);
 		} else {
-		    orden.append(" ORDER BY cuentas.Saldo ASC"); // por defecto
+		    orden.append(" ORDER BY cuentas.Saldo ASC"); 
 		}
 		return dao.filtrar(condicionesExtras.toString(), orden.toString(), parametrosExtras);
 	}
