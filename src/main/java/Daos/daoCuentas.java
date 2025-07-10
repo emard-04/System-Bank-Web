@@ -558,6 +558,7 @@ public class daoCuentas implements inCuentas {
 
 	@Override
 	public int contarCuentasCreadasEnRango(Date desde, Date hasta) {
+<<<<<<< Updated upstream
 		int cantidad = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -588,6 +589,35 @@ public class daoCuentas implements inCuentas {
 		}
 		return cantidad;
 	}
+=======
+        int cantidad = 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = Conexion.getConexion().getSQLConnection();
+            String sql = "SELECT COUNT(*) AS totalCuentas FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); 
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); 
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                cantidad = rs.getInt("totalCuentas");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cantidad;
+    }
+>>>>>>> Stashed changes
 
 	@Override
 	public BigDecimal obtenerPromedioSaldoInicialEnRango(Date desde, Date hasta) {

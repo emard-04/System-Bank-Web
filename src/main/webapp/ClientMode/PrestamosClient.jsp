@@ -29,7 +29,9 @@ function confirmarLogout(e) {
     }
 }
 </script>
-<%Usuario usuario= (Usuario)session.getAttribute("usuarioLogueado"); %>
+<%
+Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden">
 	<div class="flex h-full">
@@ -38,43 +40,54 @@ function confirmarLogout(e) {
 			class="bg-white w-64 flex-shrink-0 p-4 border-r border-gray-200 flex flex-col items-center">
 
 			<%
-    String sexo = usuario.getPersona().getSexo();
-    String rutaFoto = "";
+			String sexo = usuario.getPersona().getSexo();
+			String rutaFoto = "";
 
-    if (sexo != null) {
-        if (sexo.equalsIgnoreCase("F") || sexo.equalsIgnoreCase("Femenino")) {
-            rutaFoto = request.getContextPath() + "/img/perfilMujer.avif";
-        } else if (sexo.equalsIgnoreCase("M") || sexo.equalsIgnoreCase("Masculino")) {
-            rutaFoto = request.getContextPath() + "/img/perfilHombre.avif";
-        }else {
-            rutaFoto = request.getContextPath() + "/img/perfilAdmi.webp";
-        }
-    }
-%>
+			if (sexo != null) {
+				if (sexo.equalsIgnoreCase("F") || sexo.equalsIgnoreCase("Femenino")) {
+					rutaFoto = request.getContextPath() + "/img/perfilMujer.avif";
+				} else if (sexo.equalsIgnoreCase("M") || sexo.equalsIgnoreCase("Masculino")) {
+					rutaFoto = request.getContextPath() + "/img/perfilHombre.avif";
+				} else {
+					rutaFoto = request.getContextPath() + "/img/perfilAdmi.webp";
+				}
+			}
+			%>
 
-			<img src="<%= rutaFoto %>" alt="Foto de perfil"
+			<img src="<%=rutaFoto%>" alt="Foto de perfil"
 				class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-300 shadow-md">
 
 
 			<h3 class="text-xl font-bold text-gray-800 text-center mb-1">
-				<%= usuario.getPersona().getNombre() %>
-				<%= usuario.getPersona().getApellido() %>
+				<%=usuario.getPersona().getNombre()%>
+				<%=usuario.getPersona().getApellido()%>
 			</h3>
 
-			<% Cuenta cuenta = null;
-			if(request.getSession().getAttribute("cuenta")!=null){
-			    cuenta =  (Cuenta)session.getAttribute("cuenta");
+			<%
+			Cuenta cuenta = null;
+			if (request.getSession().getAttribute("cuenta") != null) {
+				cuenta = (Cuenta) session.getAttribute("cuenta");
 			}
 			%>
-		<% if (cuenta != null) { %>
-    <p class="text-md text-gray-600 text-center mb-6">
-        <% if(cuenta.getSaldo() != null) { %>
-            Saldo: $<span id="saldoActual"><%=cuenta.getSaldo()%></span>
-        <% } else { %>
-            Saldo: $<span id="saldoActual">---</span>
-        <% } %>
-    </p>
-<% } %>
+			<%
+			if (cuenta != null) {
+			%>
+			<p class="text-md text-gray-600 text-center mb-6">
+				<%
+				if (cuenta.getSaldo() != null) {
+				%>
+				Saldo: $<span id="saldoActual"><%=cuenta.getSaldo()%></span>
+				<%
+				} else {
+				%>
+				Saldo: $<span id="saldoActual">---</span>
+				<%
+				}
+				%>
+			</p>
+			<%
+			}
+			%>
 
 
 
@@ -98,8 +111,8 @@ function confirmarLogout(e) {
 
 			<nav class="bg-gray-50 border-b border-gray-200 p-4">
 				<%
-    String paginaActual = "prestamos"; // Ejemplo: "movimientos", "transferencia", "prestamos", "personal", "home"
-%>
+				String paginaActual = "prestamos"; // Ejemplo: "movimientos", "transferencia", "prestamos", "personal", "home"
+				%>
 
 				<ul
 					class="flex items-center justify-between w-full px-4 py-2 bg-white shadow">
@@ -113,19 +126,27 @@ function confirmarLogout(e) {
 					<!-- Opciones centradas -->
 					<li class="flex space-x-6 mx-auto"><a
 						href="/BancoParcial/ClientMode/TransferenciaClient.jsp"
-						class="<%= paginaActual.equals("transferencia") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+						class="<%=paginaActual.equals("transferencia")
+		? "bg-blue-600 text-white"
+		: "hover:bg-blue-600 hover:text-white text-gray-700"%> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Transferencia </a> <a
 						href="/BancoParcial/ServletListarMovimientos?Actualizar=1"
-						class="<%= paginaActual.equals("movimientos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+						class="<%=paginaActual.equals("movimientos")
+		? "bg-blue-600 text-white"
+		: "hover:bg-blue-600 hover:text-white text-gray-700"%> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Movimientos </a> <a
 						href="/BancoParcial/ClientMode/PrestamosClient.jsp"
-						class="<%= paginaActual.equals("prestamos") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+						class="<%=paginaActual.equals("prestamos")
+		? "bg-blue-600 text-white"
+		: "hover:bg-blue-600 hover:text-white text-gray-700"%> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Prestamos </a> <a
 						href="<%=request.getContextPath()%>/ServletPersonalCliente"
-						class="<%= paginaActual.equals("personal") ? "bg-blue-600 text-white" : "hover:bg-blue-600 hover:text-white text-gray-700" %> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
+						class="<%=paginaActual.equals("personal")
+		? "bg-blue-600 text-white"
+		: "hover:bg-blue-600 hover:text-white text-gray-700"%> font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out">
 							Personal </a></li>
 
-					<li> </li>
+					<li></li>
 				</ul>
 			</nav>
 
@@ -142,11 +163,14 @@ function confirmarLogout(e) {
 
 			<div class="p-6 flex-1 flex flex-col items-center justify-center">
 				<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-					<% if (request.getAttribute("mensaje") != null) { %>
+					<%
+					if (request.getAttribute("mensaje") != null) {
+					%>
 					<div
 						class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center font-semibold">
-						<%= request.getAttribute("mensaje") %>
+						<%=request.getAttribute("mensaje")%>
 					</div>
+<<<<<<< Updated upstream
 					<% } %>
 					<form id="formCuenta"
     action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
@@ -175,14 +199,53 @@ function confirmarLogout(e) {
 	<form
 						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
 						method="post" class="space-y-6">
+=======
+					<%
+					}
+					%>
+					<form
+						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
+						method="post" class="space-y-6">
+
+						<label for="cuenta"
+							class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar
+							Cuenta</label> <select id="cuenta" name="cuenta"
+							onchange="this.form.submit()">
+							<%
+							if (cuenta != null) {
+							%>
+							<option value="<%=cuenta.getNroCuenta()%>" selected
+								data-saldo="<%=cuenta.getSaldo()%>">CBU:
+								<%=cuenta.getCbu()%>
+							</option>
+							<%
+							}
+							%>
+
+							<%
+							ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+							for (Cuenta c : listaCuenta) {
+								if (cuenta == null || cuenta.getNroCuenta() != c.getNroCuenta()) {
+							%>
+							<option value="<%=c.getNroCuenta()%>"
+								data-saldo="<%=c.getSaldo()%>">CBU:
+								<%=c.getCbu()%>
+							</option>
+							<%
+							}
+							}
+							%>
+						</select>
+
+>>>>>>> Stashed changes
 
 						<div
 							class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
 							<div class="flex-1">
 								<label for="monto_solicitar"
 									class="block text-gray-700 text-lg font-semibold mb-2">Monto
-									a solicitar</label> <input type="number" step="any" id="monto_solicitar"
-									name="monto_solicitar" placeholder=""
+									a solicitar</label> <input type="number" step="any"
+									id="monto_solicitar" name="monto_solicitar" placeholder=""
 									class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 									required>
 							</div>
