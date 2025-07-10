@@ -171,6 +171,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 						<%=request.getAttribute("mensaje")%>
 					</div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 					<% } %>
 					<form id="formCuenta"
     action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
@@ -199,6 +200,45 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 	<form
 						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
 						method="post" class="space-y-6">
+=======
+					<%
+					}
+					%>
+					<form
+						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
+						method="post" class="space-y-6">
+
+						<label for="cuenta"
+							class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar
+							Cuenta</label> <select id="cuenta" name="cuenta"
+							onchange="this.form.submit()">
+							<%
+							if (cuenta != null) {
+							%>
+							<option value="<%=cuenta.getNroCuenta()%>" selected
+								data-saldo="<%=cuenta.getSaldo()%>">CBU:
+								<%=cuenta.getCbu()%>
+							</option>
+							<%
+							}
+							%>
+
+							<%
+							ArrayList<Cuenta> listaCuenta = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+							for (Cuenta c : listaCuenta) {
+								if (cuenta == null || cuenta.getNroCuenta() != c.getNroCuenta()) {
+							%>
+							<option value="<%=c.getNroCuenta()%>"
+								data-saldo="<%=c.getSaldo()%>">CBU:
+								<%=c.getCbu()%>
+							</option>
+							<%
+							}
+							}
+							%>
+						</select>
+
+>>>>>>> Stashed changes
 =======
 					<%
 					}
