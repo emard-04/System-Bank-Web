@@ -142,7 +142,8 @@ function confirmarLogout(e) {
 						<div>
 							<label for="nombre_mod"
 								class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
-							<input type="text" id="nombre_mod" name="nombre_mod"
+							<input type="text" id="nombre_mod" name="nombre_mod" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios"
+  oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
 								class="p-3 border border-gray-300 rounded-md w-full text-lg"
 								required>
 						</div>

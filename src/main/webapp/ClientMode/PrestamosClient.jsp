@@ -148,12 +148,13 @@ function confirmarLogout(e) {
 						<%= request.getAttribute("mensaje") %>
 					</div>
 					<% } %>
-					<form
-						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
-						method="post" class="space-y-6">
+					<form id="formCuenta"
+    action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
+    method="get">
+    <input type="hidden" name="Actualizar" value="1">
 
 						<label for="cuenta" class="block text-gray-700 text-lg font-semibold mb-2">Seleccionar Cuenta</label>
-    <select id="cuenta" name="cuenta" onchange="this.form.submit()">
+    <select id="cuenta" name="cuenta"  onchange="document.getElementById('formCuenta').submit();">
     <% if (cuenta != null) { %>
         <option value="<%=cuenta.getNroCuenta()%>" selected data-saldo="<%=cuenta.getSaldo()%>">
             CBU: <%=cuenta.getCbu()%>
@@ -170,7 +171,10 @@ function confirmarLogout(e) {
         </option>
     <% }} %>
 </select>
-	
+</form>
+	<form
+						action="<%=request.getContextPath()%>/ServletPedirPrestamoCliente"
+						method="post" class="space-y-6">
 
 						<div
 							class="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">

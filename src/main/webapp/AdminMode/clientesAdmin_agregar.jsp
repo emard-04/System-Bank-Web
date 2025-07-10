@@ -111,14 +111,16 @@ function confirmarLogout(e) {
 						<div>
 							<label for="nombre"
 								class="block text-gray-700 text-lg font-semibold mb-2">Nombre</label>
-							<input type="text" id="nombre" name="nombre" placeholder=""
+							<input type="text" id="nombre" name="nombre" placeholder="" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios"
+  oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
 						<div>
 							<label for="apellido"
 								class="block text-gray-700 text-lg font-semibold mb-2">Apellido</label>
-							<input type="text" id="apellido" name="apellido" placeholder=""
+							<input type="text" id="apellido" name="apellido" placeholder="" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras y espacios"
+  oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>
 						</div>
@@ -134,7 +136,7 @@ function confirmarLogout(e) {
 						<div>
 							<label for="cuil"
 								class="block text-gray-700 text-lg font-semibold mb-2">CUIL</label>
-							<input type="text" id="cuil" name="cuil" placeholder=""
+							<input type="text" id="cuil" name="cuil" placeholder="" 
 								pattern="[0-9\-]+" title="Solo se permiten números"
 								class="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
 								required>

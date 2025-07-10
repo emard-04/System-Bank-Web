@@ -12,6 +12,8 @@ import negocio.*;
 import negocioImpl.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 import java.math.RoundingMode;
 /**
@@ -31,7 +33,37 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("usuarioLogueado") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        try {
+        	String cuentaParam = request.getParameter("cuenta");
+        	Cuenta cuentaSeleccionada = null;
+
+        	if (cuentaParam != null && !cuentaParam.isEmpty()) {
+        	    int nroCuenta = Integer.parseInt(cuentaParam);
+        	    cuentaSeleccionada = cuentaNeg.BuscarPorNro(nroCuenta);
+        	    if (cuentaSeleccionada != null) {
+        	        session.setAttribute("cuenta", cuentaSeleccionada);
+        	    }
+        	}
+
+        	if (session.getAttribute("cuenta") == null) {
+        	    @SuppressWarnings("unchecked")
+        	    ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
+        	    if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
+        	        session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
+        	        cuentaSeleccionada = cuentasUsuario.get(0);
+        	    }
+        	} else {
+        	    cuentaSeleccionada = (Cuenta) session.getAttribute("cuenta");
+        	}}catch(Exception e) {}
+        windowDefault(request, response, "/ClientMode/PrestamosClient.jsp");
+        
 	}
 
 	
@@ -48,13 +80,13 @@ public class ServletPedirPrestamoCliente extends HttpServlet {
 	        }
 
 	        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-	        String nroCuentaStr = request.getParameter("cuenta");
-	        if (nroCuentaStr == null || nroCuentaStr.isEmpty()) {
+	        Cuenta nroCuentaStr = (Cuenta) session.getAttribute("cuenta");
+	        if (nroCuentaStr == null) {
 	            request.setAttribute("mensaje", "❌ Debe seleccionar una cuenta.");
 	            windowDefault(request, response, "/ClientMode/PrestamosClient.jsp");
 	            return;
 	        }
-	        int nroCuenta = Integer.parseInt(nroCuentaStr);
+	        int nroCuenta = nroCuentaStr.getNroCuenta();
 	        boolean puedePedir = prestamoNeg.puedePedirPrestamo(nroCuenta);
 
 	        if (!puedePedir) {
