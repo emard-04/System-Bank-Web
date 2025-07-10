@@ -65,7 +65,7 @@ public class daoUsuario implements InUsuario {
 			query.append("INNER JOIN pais ON persona.idPais = pais.IdPais ");
 			query.append("INNER JOIN provincia ON persona.idprovincia = provincia.IdProvincia ");
 			query.append("INNER JOIN localidad ON persona.IdLocalidad = localidad.IdLocalidad ");
-			query.append("WHERE 1=1 and tipoUsuario=0"); // base para agregar condiciones dinámicas
+			query.append("WHERE 1=1 and tipoUsuario=0");
 			query.append(condicionesExtras);
 
 			ps = cn.prepareStatement(query.toString());
@@ -82,7 +82,7 @@ public class daoUsuario implements InUsuario {
 			ArrayList<Usuario> lista = new ArrayList<>();
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				lista.add(valoresUsuario(rs)); // método que mapea el ResultSet a un objeto Usuario
+				lista.add(valoresUsuario(rs));
 			}
 			return lista;
 		} catch (Exception e) {

@@ -45,114 +45,139 @@ public class daoPrestamos implements InPrestamos {
 		}
 		return false;
 	}
-	
+
 	public int BuscarxCuenta(int nrocuenta) {
-        Connection cn = null;
-        PreparedStatement ps = null;
-        ResultSet rs=null;
-        try {
-            cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(BuscarxCuenta);
-            ps.setInt(1,nrocuenta);
-             rs=ps.executeQuery();
-            if (rs.next() ) {
-                return rs.getInt("IdPrestamo");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        	try { if (rs != null) rs.close(); } catch (Exception e) {}
-            try { if (ps != null) ps.close(); } catch (Exception e) {}
-            try { if (cn != null) cn.close(); } catch (Exception e) {}
-        }
-        return -1;
-    }
-	
+		Connection cn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			cn = Conexion.getConexion().getSQLConnection();
+			ps = cn.prepareStatement(BuscarxCuenta);
+			ps.setInt(1, nrocuenta);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("IdPrestamo");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (cn != null)
+					cn.close();
+			} catch (Exception e) {
+			}
+		}
+		return -1;
+	}
+
 	public boolean EliminarxCuenta(int nrocuenta) {
-        Connection cn = null;
-        PreparedStatement ps = null;
-        try {
-            cn = Conexion.getConexion().getSQLConnection();
-            ps = cn.prepareStatement(EliminarxCuenta);
-            ps.setInt(1,nrocuenta);
-            if (ps.executeUpdate() > 0) {
-                cn.commit();
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { if (ps != null) ps.close(); } catch (Exception e) {}
-            try { if (cn != null) cn.close(); } catch (Exception e) {}
-        }
-        return false;
-    }
-	
+		Connection cn = null;
+		PreparedStatement ps = null;
+		try {
+			cn = Conexion.getConexion().getSQLConnection();
+			ps = cn.prepareStatement(EliminarxCuenta);
+			ps.setInt(1, nrocuenta);
+			if (ps.executeUpdate() > 0) {
+				cn.commit();
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (cn != null)
+					cn.close();
+			} catch (Exception e) {
+			}
+		}
+		return false;
+	}
+
 	public boolean EliminarxUsuario(int id) {
-	        Connection cn = null;
-	        PreparedStatement ps = null;
-	        try {
-	            cn = Conexion.getConexion().getSQLConnection();
-	            ps = cn.prepareStatement(EliminarxUsuario);
-	            ps.setInt(1,id);
-	            if (ps.executeUpdate() > 0) {
-	                cn.commit();
-	                return true;
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            try { if (ps != null) ps.close(); } catch (Exception e) {}
-	            try { if (cn != null) cn.close(); } catch (Exception e) {}
-	        }
-	        return false;
-	    }
-	
+		Connection cn = null;
+		PreparedStatement ps = null;
+		try {
+			cn = Conexion.getConexion().getSQLConnection();
+			ps = cn.prepareStatement(EliminarxUsuario);
+			ps.setInt(1, id);
+			if (ps.executeUpdate() > 0) {
+				cn.commit();
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (cn != null)
+					cn.close();
+			} catch (Exception e) {
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public List<Prestamos> obtenerTodos() {
-	    List<Prestamos> lista = new ArrayList<>();
-	    String query = """
-	        SELECT p.*, per.Nombre, per.Apellido, per.Dni, u.IdUsuario
-	        FROM Prestamos p
-	        INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario
-	        INNER JOIN Persona per ON u.Dni = per.Dni
-	    """;
+		List<Prestamos> lista = new ArrayList<>();
+		String query = """
+				     SELECT p.*, per.Nombre, per.Apellido, per.Dni, u.IdUsuario
+				     FROM Prestamos p
+				     INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario
+				     INNER JOIN Persona per ON u.Dni = per.Dni
+				""";
 
-	    try (Connection conn = Conexion.getConexion().getSQLConnection();
-	         PreparedStatement stmt = conn.prepareStatement(query);
-	         ResultSet rs = stmt.executeQuery()) {
+		try (Connection conn = Conexion.getConexion().getSQLConnection();
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery()) {
 
-	        while (rs.next()) {
-	            Prestamos p = new Prestamos();
+			while (rs.next()) {
+				Prestamos p = new Prestamos();
 
-	            p.setIdPrestamo(rs.getInt("IdPrestamo"));
-	            p.setFecha(rs.getDate("Fecha").toLocalDate());
-	            p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
-	            p.setImportePedido(rs.getBigDecimal("ImportePedido"));
-	            p.setPlazoDePago(rs.getString("PlazoDePago"));
-	            p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
-	            p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
-	            p.setEstadoPago(rs.getString("EstadoPago"));
+				p.setIdPrestamo(rs.getInt("IdPrestamo"));
+				p.setFecha(rs.getDate("Fecha").toLocalDate());
+				p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+				p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+				p.setPlazoDePago(rs.getString("PlazoDePago"));
+				p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+				p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
+				p.setEstadoPago(rs.getString("EstadoPago"));
 
-	            Usuario u = new Usuario();
-	            u.setIdUsuario(rs.getInt("IdUsuario"));
+				Usuario u = new Usuario();
+				u.setIdUsuario(rs.getInt("IdUsuario"));
+				Persona persona = new Persona();
 
-	            Persona persona = new Persona();
-	            persona.setNombre(rs.getString("Nombre"));
-	            persona.setApellido(rs.getString("Apellido"));
-	            persona.setDni(rs.getString("Dni"));
+				persona.setNombre(rs.getString("Nombre"));
+				persona.setApellido(rs.getString("Apellido"));
+				persona.setDni(rs.getString("Dni"));
 
-	            u.setPersona(persona);
-	            p.setUsuario(u);
-
-	            lista.add(p);
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return lista;
+				u.setPersona(persona);
+				p.setUsuario(u);
+				lista.add(p);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	@Override
@@ -161,7 +186,7 @@ public class daoPrestamos implements InPrestamos {
 		String query = "SELECT * FROM Prestamos WHERE IdUsuario = ?";
 
 		System.out.println("12 Obtener prestamos us");
-		
+
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
 				PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -176,7 +201,6 @@ public class daoPrestamos implements InPrestamos {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return lista;
 	}
 
@@ -184,11 +208,9 @@ public class daoPrestamos implements InPrestamos {
 		Prestamos p = new Prestamos();
 		daoCuentas dc = new daoCuentas();
 		p.setIdPrestamo(rs.getInt("IdPrestamo"));
-
 		Usuario u = new Usuario();
 		u.setIdUsuario(rs.getInt("IdUsuario"));
 		p.setUsuario(u);
-
 		p.setFecha(rs.getDate("Fecha").toLocalDate());
 		p.setImporteApagar(rs.getBigDecimal("ImporteAPagar"));
 		p.setImportePedido(rs.getBigDecimal("ImportePedido"));
@@ -239,36 +261,36 @@ public class daoPrestamos implements InPrestamos {
 				e.printStackTrace();
 			}
 		}
-
 		return null;
 	}
 
 	@Override
 	public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago, Connection conn) {
-	    String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-	        ps.setString(1, nuevoEstadoPago);
-	        ps.setInt(2, idPrestamo);
-	        int rows = ps.executeUpdate();
-	        return rows > 0;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuevoEstadoPago);
+			ps.setInt(2, idPrestamo);
+			int rows = ps.executeUpdate();
+			return rows > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
+
 	@Override
 	public boolean cambiarEstadoPago(int idPrestamo, String nuevoEstadoPago) {
-	    String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
-	    try (Connection conn = Conexion.getConexion().getSQLConnection();
-	    		PreparedStatement ps = conn.prepareStatement(sql)) {
-	        ps.setString(1, nuevoEstadoPago);
-	        ps.setInt(2, idPrestamo);
-	        int rows = ps.executeUpdate();
-	        return rows > 0;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		String sql = "UPDATE Prestamos SET EstadoPago = ? WHERE IdPrestamo = ?";
+		try (Connection conn = Conexion.getConexion().getSQLConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, nuevoEstadoPago);
+			ps.setInt(2, idPrestamo);
+			int rows = ps.executeUpdate();
+			return rows > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public boolean cambiarEstadoSolicitado(int idPrestamo, String nuevoEstado, Connection conn) {
@@ -338,19 +360,14 @@ public class daoPrestamos implements InPrestamos {
 		p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
 		p.setEstadoPago(rs.getString("EstadoPago"));
 
-		// Se usa para mapear Usuario
 		Usuario u = new Usuario();
 		u.setIdUsuario(rs.getInt("IdUsuario"));
 		u.setNombreUsuario(rs.getString("NombreUsuario"));
 
-		// Se usa para mapear Persona
 		Persona per = new Persona();
 		per.setDni(rs.getString("Dni"));
 		per.setNombre(rs.getString("Nombre"));
 		per.setApellido(rs.getString("Apellido"));
-		
-		// Si tu clase Persona tiene más campos, completalos aquí.
-		// XD
 
 		u.setPersona(per);
 		p.setUsuario(u);
@@ -378,7 +395,6 @@ public class daoPrestamos implements InPrestamos {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return lista;
 	}
 
@@ -402,13 +418,11 @@ public class daoPrestamos implements InPrestamos {
 
 	public int insertarYObtenerId(Prestamos p) {
 		String sql = "INSERT INTO Prestamos (IdUsuario, IdCuenta, Fecha, ImportePedido, ImporteApagar, PlazoDePago, MontoCuotasxMes, EstadoSolicitud, EstadoPago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
+
 		try (Connection conn = Conexion.getConexion().getSQLConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-			
 			conn.setAutoCommit(false);
-
 			stmt.setInt(1, p.getUsuario().getIdUsuario());
 			stmt.setInt(2, p.getCuenta().getNroCuenta());
 			stmt.setDate(3, Date.valueOf(p.getFecha()));
@@ -423,20 +437,17 @@ public class daoPrestamos implements InPrestamos {
 			if (rowsAffected == 0) {
 				throw new SQLException("Fallo al insertar el préstamo, no se afectó ninguna fila.");
 			}
-
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
 				if (rs.next()) {
 					int idGenerado = rs.getInt(1);
-					conn.commit(); 
+					conn.commit();
 					return idGenerado;
 				} else {
 					throw new SQLException("No se pudo obtener el ID generado.");
 				}
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
 		return -1;
 	}
@@ -454,9 +465,7 @@ public class daoPrestamos implements InPrestamos {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
-
 		return total;
 	}
 
@@ -477,13 +486,10 @@ public class daoPrestamos implements InPrestamos {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
-
 		return total;
 	}
 
@@ -534,20 +540,16 @@ public class daoPrestamos implements InPrestamos {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return lista;
 	}
 
 	@Override
 	public List<Prestamos> obtenerPrestamosPendientesPorDniPaginado(String dni, int pagina, int prestamosPorPagina) {
 		int offset = (pagina - 1) * prestamosPorPagina;
-		
-		String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni "
-		           + "FROM Prestamos p "
-		           + "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario "
-		           + "INNER JOIN Persona pe ON u.dni = pe.Dni "
-		           + "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? "
-		           + "LIMIT ? OFFSET ?";
+
+		String sql = "SELECT p.*, u.IdUsuario, pe.Nombre, pe.Apellido, pe.Dni " + "FROM Prestamos p "
+				+ "INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario " + "INNER JOIN Persona pe ON u.dni = pe.Dni "
+				+ "WHERE p.EstadoSolicitud = 'Pendiente' AND pe.Dni = ? " + "LIMIT ? OFFSET ?";
 
 		List<Prestamos> lista = new ArrayList<>();
 
@@ -585,17 +587,10 @@ public class daoPrestamos implements InPrestamos {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-				// Si querés rollback en caso de error
-				// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-				// abierta antes.
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// Si querés rollback en caso de error
-			// Tenés que manejar la conexión fuera o usar try-with-resources con conexión
-			// abierta antes.
 		}
-
 		return lista;
 	}
 
@@ -608,8 +603,6 @@ public class daoPrestamos implements InPrestamos {
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				Prestamos p = new Prestamos();
-				// Seteá los datos del préstamo, usuario y persona
-				// Asumimos que tenés las clases Usuario, Persona, etc.
 				Usuario u = new Usuario();
 				Persona persona = new Persona();
 				persona.setDni(rs.getString("Dni"));
@@ -624,7 +617,7 @@ public class daoPrestamos implements InPrestamos {
 				p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
 				p.setPlazoDePago(rs.getString("PlazoDePago"));
 				p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
-				p.setFecha(rs.getDate("Fecha").toLocalDate()); // si es tipo DATE
+				p.setFecha(rs.getDate("Fecha").toLocalDate());
 
 				return p;
 			}
@@ -665,81 +658,79 @@ public class daoPrestamos implements InPrestamos {
 		return -1;
 	}
 
-	
 	public List<Prestamos> obtenerPrestamosPorFechaYEstado(java.util.Date desde, java.util.Date hasta, String estado) {
-        List<Prestamos> lista = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+		List<Prestamos> lista = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 
-        try {
-            conn = Conexion.getConexion().getSQLConnection();
-            String sql = """
-                SELECT p.*, u.IdUsuario, pe.Dni, pe.Nombre, pe.Apellido, c.NroCuenta
-                FROM Prestamos p
-                INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario
-                INNER JOIN Persona pe ON u.Dni = pe.Dni
-                INNER JOIN Cuentas c ON p.IdCuenta = c.NroCuenta
-                WHERE p.Fecha BETWEEN ? AND ?
-                """;
-            
-            // Si el estado no es "todos" o es nulo/vacío, agregar la condición de estado
-            if (estado != null && !estado.isEmpty() && !estado.equalsIgnoreCase("todos")) {
-                sql += " AND p.EstadoSolicitud = ?";
-            }
-            sql += " ORDER BY p.Fecha DESC"; // Ordenar por fecha descendente
+		try {
+			conn = Conexion.getConexion().getSQLConnection();
+			String sql = """
+					SELECT p.*, u.IdUsuario, pe.Dni, pe.Nombre, pe.Apellido, c.NroCuenta
+					FROM Prestamos p
+					INNER JOIN Usuarios u ON p.IdUsuario = u.IdUsuario
+					INNER JOIN Persona pe ON u.Dni = pe.Dni
+					INNER JOIN Cuentas c ON p.IdCuenta = c.NroCuenta
+					WHERE p.Fecha BETWEEN ? AND ?
+					""";
 
-            stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(desde.getTime()));
-            stmt.setDate(2, new java.sql.Date(hasta.getTime()));
-            
-            if (estado != null && !estado.isEmpty() && !estado.equalsIgnoreCase("todos")) {
-                stmt.setString(3, estado);
-            }
+			if (estado != null && !estado.isEmpty() && !estado.equalsIgnoreCase("todos")) {
+				sql += " AND p.EstadoSolicitud = ?";
+			}
+			sql += " ORDER BY p.Fecha DESC";
 
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                Prestamos p = new Prestamos();
-                p.setIdPrestamo(rs.getInt("IdPrestamo"));
-                p.setFecha(rs.getDate("Fecha").toLocalDate()); // Usar toLocalDate()
-                p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
-                p.setImportePedido(rs.getBigDecimal("ImportePedido"));
-                p.setPlazoDePago(rs.getString("PlazoDePago")); // Asumo que es String o lo conviertes a String
-                p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
-                p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
-                p.setEstadoPago(rs.getString("EstadoPago"));
+			stmt = conn.prepareStatement(sql);
+			stmt.setDate(1, new java.sql.Date(desde.getTime()));
+			stmt.setDate(2, new java.sql.Date(hasta.getTime()));
 
-                // Mapear Usuario y Persona
-                Usuario u = new Usuario();
-                u.setIdUsuario(rs.getInt("IdUsuario"));
+			if (estado != null && !estado.isEmpty() && !estado.equalsIgnoreCase("todos")) {
+				stmt.setString(3, estado);
+			}
 
-                Persona persona = new Persona();
-                persona.setDni(rs.getString("Dni"));
-                persona.setNombre(rs.getString("Nombre"));
-                persona.setApellido(rs.getString("Apellido"));
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Prestamos p = new Prestamos();
+				p.setIdPrestamo(rs.getInt("IdPrestamo"));
+				p.setFecha(rs.getDate("Fecha").toLocalDate());
+				p.setImporteApagar(rs.getBigDecimal("ImporteApagar"));
+				p.setImportePedido(rs.getBigDecimal("ImportePedido"));
+				p.setPlazoDePago(rs.getString("PlazoDePago"));
+				p.setMontoCuotasxMes(rs.getBigDecimal("MontoCuotasxMes"));
+				p.setEstadoSolicitud(rs.getString("EstadoSolicitud"));
+				p.setEstadoPago(rs.getString("EstadoPago"));
 
-                u.setPersona(persona);
-                p.setUsuario(u);
-                
-                // Mapear Cuenta (si es necesario para el reporte, aunque no la mostremos explícitamente en la tabla de reportes)
-                Cuenta c = new Cuenta();
-                c.setNroCuenta(rs.getInt("NroCuenta"));
-                p.setCuenta(c); // Asegúrate de que tu clase Prestamos tiene un setCuenta
+				Usuario u = new Usuario();
+				u.setIdUsuario(rs.getInt("IdUsuario"));
 
-                lista.add(p);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return lista;
-    }
-    
+				Persona persona = new Persona();
+				persona.setDni(rs.getString("Dni"));
+				persona.setNombre(rs.getString("Nombre"));
+				persona.setApellido(rs.getString("Apellido"));
+
+				u.setPersona(persona);
+				p.setUsuario(u);
+
+				Cuenta c = new Cuenta();
+				c.setNroCuenta(rs.getInt("NroCuenta"));
+				p.setCuenta(c);
+
+				lista.add(p);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return lista;
+	}
 }
