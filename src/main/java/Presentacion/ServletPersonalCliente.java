@@ -52,27 +52,23 @@ public class ServletPersonalCliente extends HttpServlet {
             @SuppressWarnings("unchecked")
             ArrayList<Cuenta> cuentasUsuario = (ArrayList<Cuenta>) session.getAttribute("cuentasUsuario");
             if (cuentasUsuario != null && !cuentasUsuario.isEmpty()) {
-                session.setAttribute("cuenta", cuentasUsuario.get(0)); // Selecciona la primera cuenta
+                session.setAttribute("cuenta", cuentasUsuario.get(0)); 
             }
         }
 
-        // Obtener teléfono
-        //TelefonoxPersona telefono = telefonoNeg.buscarPorDni(usuario.getPersona().getDni());
         ArrayList<TelefonoxPersona> telefonosUsuario = telefonoNeg.listarTelefonos(usuario.getPersona().getDni());
-        //String telefonoUsuario = telefono != null ? telefono.getTelefono() : "";
-     // Obtener Provincia
+
         Provincia pro = proNeg.buscarPorId(usuario.getPersona().getProvincia().getIdProvincia());
         String proUsu = pro != null ? pro.getNombre() : "";
-     // Obtener Localidad
+
         Localidad loc = LocNeg.buscarPorId(usuario.getPersona().getLocalidad().getIdLocalidad(),pro.getIdProvincia());
         String locUsu = loc != null ? loc.getNombre() : "";
-        //Obtener Pais
+
         Pais pa = paisNeg.buscarXID(usuario.getPersona().getPais().getIdPais());
         String PaUsu = pa !=null ? pa.getNombre() : "";
 
-        // Pasar datos al JSP
         request.setAttribute("usuario", usuario);
-       // request.setAttribute("telefonoUsuario", telefonoUsuario);
+        
         request.setAttribute("telefonosUsuario", telefonosUsuario);
         
         String nombreProvincia = pro != null ? pro.getNombre() : "";
@@ -82,9 +78,7 @@ public class ServletPersonalCliente extends HttpServlet {
         request.setAttribute("nombreProvincia", nombreProvincia);
         request.setAttribute("nombreLocalidad", nombreLocalidad);
         request.setAttribute("nombrePais", nombrePais);
-        //System.out.println("¿País en persona?: " + usuario.getPersona().getPais());
 
-        // Forward al JSP que muestra la info personal
         request.getRequestDispatcher("/ClientMode/personalClient.jsp").forward(request, response);
     }
 
@@ -93,7 +87,6 @@ public class ServletPersonalCliente extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

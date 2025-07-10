@@ -29,73 +29,78 @@ import negocioImpl.TipoMovimientoNegImpl;
 @WebServlet("/ServletListarMovimientos")
 public class ServletListarMovimientos extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       private final MovimientoNeg nMov=new MovimientoNegImpl();
-       private final CuentasNeg nCue= new CuentasNegImpl();
-       private final TipoMovimientoNeg nTipMov= new TipoMovimientoNegImpl();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServletListarMovimientos() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private final MovimientoNeg nMov = new MovimientoNegImpl();
+	private final CuentasNeg nCue = new CuentasNegImpl();
+	private final TipoMovimientoNeg nTipMov = new TipoMovimientoNegImpl();
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("Actualizar")!=null) {
-		windowDefault(request, response);
-		}
-		if(request.getParameter("Filtrar")!=null) {
-		String nombre = request.getParameter("busqueda");
-		String operador = request.getParameter("tipoOperacion");
-		int tipoMovimiento= Integer.parseInt(request.getParameter("tipoMovimiento"));
-		String desdeStr = request.getParameter("fechaDesde");
-		String hastaStr = request.getParameter("fechaHasta");
-		Cuenta cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
-		Usuario usuario=(Usuario)(request.getSession().getAttribute("usuarioLogueado"));
-		Movimiento mov = new Movimiento();
-		mov.setCuentaEmisor(cuenta);
-		mov.setUsuario(usuario);
-		// Validar formatos y convertir
-		LocalDate desde = (desdeStr != null && !desdeStr.isEmpty()) ? LocalDate.parse(desdeStr) : null;
-		LocalDate hasta = (hastaStr != null && !hastaStr.isEmpty()) ? LocalDate.parse(hastaStr) : null;
+	public ServletListarMovimientos() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-		// Llamás a la capa de negocio
-		request.setAttribute("ListaFiltra",nMov.filtrar(mov, nombre, operador, desde, hasta,tipoMovimiento));
-		request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
-		RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
-		rd.forward(request, response);
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (request.getParameter("Actualizar") != null) {
+			windowDefault(request, response);
+		}
+		if (request.getParameter("Filtrar") != null) {
+			String nombre = request.getParameter("busqueda");
+			String operador = request.getParameter("tipoOperacion");
+			int tipoMovimiento = Integer.parseInt(request.getParameter("tipoMovimiento"));
+			String desdeStr = request.getParameter("fechaDesde");
+			String hastaStr = request.getParameter("fechaHasta");
+			Cuenta cuenta = (Cuenta) request.getSession().getAttribute("cuenta");
+			Usuario usuario = (Usuario) (request.getSession().getAttribute("usuarioLogueado"));
+			Movimiento mov = new Movimiento();
+			mov.setCuentaEmisor(cuenta);
+			mov.setUsuario(usuario);
+			LocalDate desde = (desdeStr != null && !desdeStr.isEmpty()) ? LocalDate.parse(desdeStr) : null;
+			LocalDate hasta = (hastaStr != null && !hastaStr.isEmpty()) ? LocalDate.parse(hastaStr) : null;
+
+			request.setAttribute("ListaFiltra", nMov.filtrar(mov, nombre, operador, desde, hasta, tipoMovimiento));
+			request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
+			RequestDispatcher rd = request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
+			rd.forward(request, response);
 		}
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
-private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	Cuenta cuenta=new Cuenta();
-	if(request.getParameter("cuentaSeleccionada")!=null) {
-	cuenta.setNroCuenta((Integer.parseInt(request.getParameter("cuentaSeleccionada"))));}
-	else{
-		cuenta=(Cuenta)request.getSession().getAttribute("cuenta");
+
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Cuenta cuenta = new Cuenta();
+		if (request.getParameter("cuentaSeleccionada") != null) {
+			cuenta.setNroCuenta((Integer.parseInt(request.getParameter("cuentaSeleccionada"))));
+		} else {
+			cuenta = (Cuenta) request.getSession().getAttribute("cuenta");
+		}
+		Usuario usuario = (Usuario) (request.getSession().getAttribute("usuarioLogueado"));
+		if (cuenta != null) {
+			if (cuenta.getNroCuenta() != 0) {
+				cuenta = nCue.BuscarPorNro(cuenta.getNroCuenta());
+				request.getSession().setAttribute("cuenta", cuenta);
+			}
+			Movimiento mov = new Movimiento();
+			mov.setCuentaEmisor(cuenta);
+			mov.setUsuario(usuario);
+			request.setAttribute("Lista", nMov.Listarxcuentas(mov));
+		}
+		request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
+		RequestDispatcher rd = request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
+		rd.forward(request, response);
 	}
-	Usuario usuario=(Usuario)(request.getSession().getAttribute("usuarioLogueado"));
-if(cuenta!=null) {
-	if(cuenta.getNroCuenta()!=0) {
-		cuenta=nCue.BuscarPorNro(cuenta.getNroCuenta());
-		request.getSession().setAttribute("cuenta", cuenta);
-	}
-	Movimiento mov = new Movimiento();
-	mov.setCuentaEmisor(cuenta);
-	mov.setUsuario(usuario);
-	request.setAttribute("Lista",nMov.Listarxcuentas(mov));
-}
-request.setAttribute("ListaTipoMov", nTipMov.listarTodo());
-	RequestDispatcher rd= request.getRequestDispatcher("ClientMode/movimientosClient.jsp");
-	rd.forward(request, response);
-}
 }

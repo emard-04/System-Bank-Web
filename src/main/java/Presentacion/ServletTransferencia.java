@@ -26,70 +26,78 @@ import negocioImpl.MovimientoNegImpl;
 @WebServlet("/ServletTransferencia")
 public class ServletTransferencia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final CuentasNegImpl nCuenta= new CuentasNegImpl();
-	private final MovimientoNeg nMovimiento= new MovimientoNegImpl();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServletTransferencia() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private final CuentasNegImpl nCuenta = new CuentasNegImpl();
+	private final MovimientoNeg nMovimiento = new MovimientoNegImpl();
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-				 HttpSession sesion = request.getSession();
-				    // Leer número de cuenta desde sesión
-				    int cuentaSeleccionada = Integer.parseInt(request.getParameter("cuentaSeleccionada"));
-				    System.out.println("get");
-				    if (cuentaSeleccionada > 0) {
-				    	Cuenta cuenta=nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
-					    request.setAttribute("nroCuenta", cuenta.getNroCuenta());
-						request.getSession().setAttribute("cuenta",cuenta);
-				}
-				RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
-				rd.forward(request, response);
+	public ServletTransferencia() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  System.out.println("post");
-		Movimiento movEmisor= new Movimiento();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession sesion = request.getSession();
+		// Leer número de cuenta desde sesión
+		int cuentaSeleccionada = Integer.parseInt(request.getParameter("cuentaSeleccionada"));
+		System.out.println("get");
+		if (cuentaSeleccionada > 0) {
+			Cuenta cuenta = nCuenta.BuscarPorNro(Integer.parseInt(request.getParameter("cuentaSeleccionada")));
+			request.setAttribute("nroCuenta", cuenta.getNroCuenta());
+			request.getSession().setAttribute("cuenta", cuenta);
+		}
+		RequestDispatcher rd = request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+		rd.forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		System.out.println("post");
+		Movimiento movEmisor = new Movimiento();
 		movEmisor.setDetalle(request.getParameter("referencia"));
-		TipoMovimiento tm= new TipoMovimiento();
+		TipoMovimiento tm = new TipoMovimiento();
 		tm.setIdTipoMovimiento(3);
 		movEmisor.setTipoMovimiento(tm);
 		movEmisor.setFecha(LocalDate.now());
-		movEmisor.setCuentaEmisor((Cuenta)request.getSession().getAttribute("cuenta"));
-		Cuenta c=nCuenta.cuentaxCbu(request.getParameter("alias_cbu"));
+		movEmisor.setCuentaEmisor((Cuenta) request.getSession().getAttribute("cuenta"));
+		Cuenta c = nCuenta.cuentaxCbu(request.getParameter("alias_cbu"));
 		System.out.println(request.getParameter("alias_cbu"));
-		if(c==null) {System.out.println("null");return;}
+		if (c == null) {
+			System.out.println("null");
+			return;
+		}
 		movEmisor.setCuentaReceptor(c);
 		BigDecimal monto = new BigDecimal(request.getParameter("monto"));
 		movEmisor.setImporte(monto);
-		movEmisor.setUsuario((Usuario)request.getSession().getAttribute("usuarioLogueado"));
+		movEmisor.setUsuario((Usuario) request.getSession().getAttribute("usuarioLogueado"));
 
-		Movimiento movReceptor= new Movimiento();
+		Movimiento movReceptor = new Movimiento();
 		movReceptor.setImporte(monto);
 		movReceptor.setDetalle(request.getParameter("referencia"));
 		movReceptor.setCuentaEmisor(c);
-		movReceptor.setCuentaReceptor((Cuenta)request.getSession().getAttribute("cuenta"));
+		movReceptor.setCuentaReceptor((Cuenta) request.getSession().getAttribute("cuenta"));
 		movReceptor.setUsuario(c.getUsuario());
 		movReceptor.setTipoMovimiento(tm);
 		movReceptor.setFecha(LocalDate.now());
-		boolean exitoReceptor=nMovimiento.Agregar(movReceptor, movEmisor);
-		if(exitoReceptor) {
+		boolean exitoReceptor = nMovimiento.Agregar(movReceptor, movEmisor);
+		if (exitoReceptor) {
 			request.setAttribute("mensaje", "✅ Transferencia realizada");
-			RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
 			rd.forward(request, response);
 			return;
 		}
 		request.setAttribute("mensaje", "❌ Error al realizar la transferencia.");
-		RequestDispatcher rd=request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("ClientMode/TransferenciaClient.jsp");
 		rd.forward(request, response);
 	}
 

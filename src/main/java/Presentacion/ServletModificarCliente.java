@@ -42,11 +42,10 @@ public class ServletModificarCliente extends HttpServlet {
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("openModificar") != null) {
-	        // Obtener lista de provincias
 
 	        String ventana = "AdminMode/clienteAdmin_modificar.jsp";
 	        windowdefault(request, response, ventana);
-	        return; // para que no siga ejecutando más código si hubiera
+	        return; 
 	    
 		}
 		if(request.getParameter("dniCliente")!=null) {

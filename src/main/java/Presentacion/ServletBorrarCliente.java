@@ -56,14 +56,14 @@ public class ServletBorrarCliente extends HttpServlet {
 			}
 
 		} catch (NumberFormatException e) {
-			// En caso de que el nroCuenta no es válido
+
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=NroCuenta inválido");
 		} catch (ErrorAlEliminarException e) {
-			// En caso de que haya un error al eliminar la cuenta
+
 			request.getSession().setAttribute("mensaje", " ❌ Hubo un error al eliminar la cuenta ❌ ");
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error al eliminar cuenta");
 		} catch (Exception e) {
-			// En caso de un error por fuera de los exceptions ya marcados
+
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/ServletBorrarCliente?error=Error inesperado");
 		}

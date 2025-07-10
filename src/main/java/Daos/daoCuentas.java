@@ -453,8 +453,8 @@ public class daoCuentas implements inCuentas{
             conn = Conexion.getConexion().getSQLConnection();
             String sql = "SELECT COUNT(*) AS totalCuentas FROM Cuentas WHERE FechaCreacion BETWEEN ? AND ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); // CAMBIO CLAVE
-            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); // CAMBIO CLAVE
+            stmt.setTimestamp(1, new java.sql.Timestamp(desde.getTime())); 
+            stmt.setTimestamp(2, new java.sql.Timestamp(hasta.getTime())); 
             rs = stmt.executeQuery();
             if (rs.next()) {
                 cantidad = rs.getInt("totalCuentas");

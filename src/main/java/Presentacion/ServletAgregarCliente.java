@@ -40,31 +40,6 @@ public class ServletAgregarCliente extends HttpServlet {
 	        return;
 	    }
 
-	    // Responder JSON con provincias si se pide
-	   /* if (request.getParameter("listarProvincias") != null) {
-	    	int idPais=Integer.parseInt(request.getParameter("idPais"));
-	        List<Provincia> provincias = ProvinciaNeg.listarProvinciasxPais(idPais);
-	        
-	        response.setContentType("application/json");
-	        response.setCharacterEncoding("UTF-8");
-
-	        StringBuilder json = new StringBuilder();
-	        json.append("[");
-	        for (int i = 0; i < provincias.size(); i++) {
-	            Provincia p = provincias.get(i);
-	            json.append("{");
-	            json.append("\"idProvincia\":").append(p.getIdProvincia()).append(",");
-	            json.append("\"nombre\":\"").append(p.getNombre().replace("\"", "\\\"")).append("\"");
-	            json.append("}");
-	            if (i < provincias.size() - 1) {
-	                json.append(",");
-	            }
-	        }
-	        json.append("]");
-
-	        response.getWriter().write(json.toString());
-	        return;
-	    }*/
 
 	    if (request.getParameter("listarProvincias") != null) {
 	    	int idPais = Integer.parseInt(request.getParameter("idPais").trim());
@@ -90,7 +65,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        response.getWriter().write(json.toString());
 	        return;
 	    }
-	    // Responder JSON con localidades si se pide
+
 	    if (request.getParameter("listarLocalidades") != null) {
 	    	int idProvincia = Integer.parseInt(request.getParameter("idProvincia").trim());
 	    	List<Localidad> localidades = localidadNeg.listarLocalidadesPorProvincia(idProvincia);
@@ -121,7 +96,6 @@ public class ServletAgregarCliente extends HttpServlet {
 	        throws ServletException, IOException {
 		System.out.println("provincia"+ request.getParameter("provincia"));
 	    try {
-	        // 1. Obtener datos del formulario
 	        String nombre = request.getParameter("nombre");
 	        String apellido = request.getParameter("apellido");
 	        String dni = request.getParameter("dni");
@@ -138,7 +112,6 @@ public class ServletAgregarCliente extends HttpServlet {
 	        String nombreUsuario = request.getParameter("usuario");
 	        String contrasena = request.getParameter("contrasena");
 
-	        // 2. Crear objeto Persona
 	        Persona persona = new Persona();
 	        persona.setDni(dni);
 	        persona.setCuil(cuil);
@@ -155,7 +128,7 @@ public class ServletAgregarCliente extends HttpServlet {
 	        persona.setCorreoElectronico(correo);
 	        persona.setSexo(sexo);
 	        persona.setEstado(true);
-	        // 3. Insertar persona
+
 		List<TelefonoxPersona> telefonosLista=new ArrayList<TelefonoxPersona>();
 		for(String numero: telefonos) {
 	        TelefonoxPersona telPersona = new TelefonoxPersona();
@@ -166,15 +139,15 @@ public class ServletAgregarCliente extends HttpServlet {
 	        }else break;
 	        }
 		
-	        // 4. Crear e insertar usuario
+
 	        Usuario usuario = new Usuario();
 	        usuario.setNombreUsuario(nombreUsuario);
 	        usuario.setContrasena(contrasena);
 	        usuario.setPersona(persona);
-	        usuario.setTipoUsuario(false); // asumimos que es cliente
+	        usuario.setTipoUsuario(false); 
 
 	        boolean usuarioCreado = negUsuario.AgregarUsuario(usuario, persona, telefonosLista);
-	        // 5. Insertar teléfono
+
 	        
 	        if ( usuarioCreado) {
 	            request.setAttribute("mensaje", "✅ Persona agregada correctamente.");

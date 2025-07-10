@@ -14,6 +14,7 @@ import negocioImpl.CuentasNegImpl;
 import negocioImpl.TipoCuentaNegImpl;
 
 import javax.servlet.RequestDispatcher;
+
 /**
  * Servlet implementation class ServletListarCuentas
  */
@@ -21,74 +22,74 @@ import javax.servlet.RequestDispatcher;
 public class ServletListarCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private CuentasNeg nCuenta = new CuentasNegImpl();
-   private TipoCuentaNeg nTipoCuenta= new TipoCuentaNegImpl();
-    public ServletListarCuentas() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private TipoCuentaNeg nTipoCuenta = new TipoCuentaNegImpl();
 
-	
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-    	if(request.getParameter("openListar")!=null) {
-    	windowDefault(request, response);
-    	}
-    	if(request.getParameter("Filtrar")!=null) {
-    		String dni=request.getParameter("busqueda");
-    		int TipoCuenta=0;
-    		String Orden="DESC";// orden descendente por defecto
-    		if(request.getParameter("TipoCuenta")!=null&&!request.getParameter("TipoCuenta").isEmpty())TipoCuenta=Integer.parseInt( request.getParameter("TipoCuenta"));
-    		if(request.getParameter("orden")!=null&&!request.getParameter("orden").isEmpty())Orden=request.getParameter("orden");
-    		Paginar(request, nCuenta.filtrar(dni, TipoCuenta, Orden));
-    		RequestDispatcher rd= request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
-    		rd.forward(request, response);
-    	}
+	public ServletListarCuentas() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (request.getParameter("openListar") != null) {
+			windowDefault(request, response);
+		}
+		if (request.getParameter("Filtrar") != null) {
+			String dni = request.getParameter("busqueda");
+			int TipoCuenta = 0;
+			String Orden = "DESC";
+			if (request.getParameter("TipoCuenta") != null && !request.getParameter("TipoCuenta").isEmpty())
+				TipoCuenta = Integer.parseInt(request.getParameter("TipoCuenta"));
+			if (request.getParameter("orden") != null && !request.getParameter("orden").isEmpty())
+				Orden = request.getParameter("orden");
+			Paginar(request, nCuenta.filtrar(dni, TipoCuenta, Orden));
+			RequestDispatcher rd = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
+			rd.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	private void windowDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    try {
-	        List<Cuenta> listaCuentas = nCuenta.ListarTodo();
-	        Paginar(request, listaCuentas);
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
-	        dispatcher.forward(request, response);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        response.sendRedirect("error.jsp");
-	    }
+
+	private void windowDefault(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			List<Cuenta> listaCuentas = nCuenta.ListarTodo();
+			Paginar(request, listaCuentas);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/AdminMode/cuentasAdmin.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("error.jsp");
+		}
 	}
-	public void Paginar(HttpServletRequest request, List<Cuenta> listaCuentas)throws ServletException, IOException {
+
+	public void Paginar(HttpServletRequest request, List<Cuenta> listaCuentas) throws ServletException, IOException {
 		int cuentasPorPagina = 10;
-        int paginaActual = 1;
+		int paginaActual = 1;
 
-        // Obtener número de página desde la URL
-        String pagParam = request.getParameter("pagina");
-        if (pagParam != null) {
-            try {
-                paginaActual = Integer.parseInt(pagParam);
-            } catch (NumberFormatException e) {
-                paginaActual = 1;
-            }
-        }
+		String pagParam = request.getParameter("pagina");
+		if (pagParam != null) {
+			try {
+				paginaActual = Integer.parseInt(pagParam);
+			} catch (NumberFormatException e) {
+				paginaActual = 1;
+			}
+		}
 
-        // Calcular índices
-        int totalCuentas = listaCuentas.size();
-        int totalPaginas = (int) Math.ceil((double) totalCuentas / cuentasPorPagina);
-        int desde = (paginaActual - 1) * cuentasPorPagina;
-        int hasta = Math.min(desde + cuentasPorPagina, totalCuentas);
+		int totalCuentas = listaCuentas.size();
+		int totalPaginas = (int) Math.ceil((double) totalCuentas / cuentasPorPagina);
+		int desde = (paginaActual - 1) * cuentasPorPagina;
+		int hasta = Math.min(desde + cuentasPorPagina, totalCuentas);
 
-        // Sublista de la página actual
-        List<Cuenta> cuentasPaginadas = listaCuentas.subList(desde, hasta);
+		List<Cuenta> cuentasPaginadas = listaCuentas.subList(desde, hasta);
 
-        // Setear atributos
-        request.setAttribute("cuentas", cuentasPaginadas);
-        request.setAttribute("paginaActual", paginaActual);
-        request.setAttribute("totalPaginas", totalPaginas);
-        request.setAttribute("listaTipoCuenta", nTipoCuenta.ListarTodo());
+		request.setAttribute("cuentas", cuentasPaginadas);
+		request.setAttribute("paginaActual", paginaActual);
+		request.setAttribute("totalPaginas", totalPaginas);
+		request.setAttribute("listaTipoCuenta", nTipoCuenta.ListarTodo());
 	}
-	}
-
+}
